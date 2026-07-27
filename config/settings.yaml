@@ -6,9 +6,13 @@ exchange:
 trading:
   timeframe: 4h
   direction: short                 # только шорты
-  leverage: 3
-  top_n_symbols: 20                # топ-20 по суточному объёму
-  min_volume_usdt: 10_000_000      # минимальный суточный объём для включения
+  leverage: 1
+  top_n_symbols: all               # брать все монеты, прошедшие фильтр
+  min_volume_usdt: 5_000_000       # снижен порог для волатильных альтов
+  min_btc_correlation: 0.4         # минимальная корреляция с BTC
+  exclude_symbols: ["ZEC/USDT:USDT", "XRP/USDT:USDT", "INJ/USDT:USDT", "1000SHIB/USDT:USDT", "SHIB1000/USDT:USDT", "SHIB/USDT:USDT", "AERO/USDT:USDT", "DIA/USDT:USDT", "MNT/USDT:USDT", "NIL/USDT:USDT", "PENGU/USDT:USDT", "PUMPFUN/USDT:USDT", "TAO/USDT:USDT", "USELESS/USDT:USDT", "VIRTUAL/USDT:USDT"] # черный список монет
+  use_experimental_weak_symbols: true
+  experimental_symbols: ["BTC/USDT:USDT", "PUMPFUN/USDT:USDT", "ONDO/USDT:USDT", "ENA/USDT:USDT", "WLD/USDT:USDT", "TAO/USDT:USDT", "FARTCOIN/USDT:USDT", "NIL/USDT:USDT", "PENGU/USDT:USDT", "WIF/USDT:USDT", "DIA/USDT:USDT", "COTI/USDT:USDT", "AERO/USDT:USDT", "VIRTUAL/USDT:USDT", "JTO/USDT:USDT", "SEI/USDT:USDT", "MNT/USDT:USDT", "TIA/USDT:USDT", "GALA/USDT:USDT", "ERA/USDT:USDT", "CRV/USDT:USDT", "VANRY/USDT:USDT", "JUP/USDT:USDT", "BOME/USDT:USDT", "PEOPLE/USDT:USDT", "USELESS/USDT:USDT", "STRK/USDT:USDT", "RENDER/USDT:USDT", "ETHFI/USDT:USDT", "EIGEN/USDT:USDT", "PYTH/USDT:USDT"]
   symbol_update_days: 7            # обновлять список монет каждые N дней
   # Bybit futures суффикс: /USDT:USDT
   base_currency: USDT
@@ -22,7 +26,7 @@ labeling:
 
 model:
   type: lightgbm
-  train_window_days: 365           # учим на последних 365 днях
+  train_window_days: 180           # учим на последних 6 месяцах (было 365)
   retrain_every_days: 7            # переучиваем каждую неделю
   min_samples: 500                 # минимум примеров для обучения
   min_confidence: 0.60             # порог уверенности для входа в шорт
@@ -30,7 +34,7 @@ model:
   drift_check_last_n: 30
   drift_precision_threshold: 0.45
   # Экспоненциальные веса: новые данные важнее
-  sample_weight_halflife_days: 90
+  sample_weight_halflife_days: 60  # было 90
 
   lgbm_params:
     n_estimators: 500
@@ -45,8 +49,8 @@ model:
     n_jobs: -1
 
 risk:
-  risk_per_trade_pct: 1.0          # 1% капитала на сделку
-  max_open_positions: 3
+  trade_size_usdt: 10.0            # Ровно $10 на каждую сделку
+  max_open_positions: 9999         # ОГРАНИЧЕНИЕ СНЯТО (было 3)
   max_drawdown_pct: 15.0           # стоп бота при -15% от пика
   atr_sl_mult: 1.5                 # стоп = 1.5 ATR от цены входа
   funding_blackout_minutes: 30     # не открывать за N мин до funding
@@ -56,7 +60,7 @@ backtest:
   commission_taker: 0.00055        # 0.055% Bybit taker
   commission_maker: 0.00020        # 0.020% Bybit maker
   slippage: 0.0005                 # 0.05% slippage
-  initial_capital: 10000           # стартовый капитал для бэктеста ($)
+  initial_capital: 1000            # стартовый капитал для бэктеста ($)
 
 data:
   history_days: 1095               # 3 года истории для загрузки

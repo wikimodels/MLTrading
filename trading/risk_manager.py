@@ -19,7 +19,20 @@ class RiskManager:
         self.max_positions = cfg["max_open_positions"]         # 3
         self.max_drawdown = cfg["max_drawdown_pct"] / 100     # 15% → 0.15
         self.sl_atr_mult = cfg["atr_sl_mult"]                 # 1.5
-        self.funding_blackout = cfg["funding_blackout_minutes""""[Translated]"""
+        self.funding_blackout = cfg["funding_blackout_minutes"]
+        self.labeler = TripleBarrierLabeler()
+        self.peak_capital: Optional[float] = None
+        self.open_positions: dict = {}
+
+    def calculate_position(
+        self,
+        symbol: str,
+        capital: float,
+        entry_price: float,
+        atr: float,
+        confidence: float,
+    ) -> dict:
+        """Calculates position sizing and TP/SL levels for a short entry."""
         check = self._pre_checks(symbol)
         if not check["allowed"]:
             return check

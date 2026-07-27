@@ -1,4 +1,4 @@
-"""[Translated]"""
+"""Walk-forward trainer and backtest trainer for LightGBM model."""
 
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ from features.engineer import FeatureEngineer
 
 
 class WalkForwardTrainer:
-    """[Translated]"""
+    """Trains a LightGBM classifier on a rolling window of data."""
 
     def __init__(self):
         cfg = get_config()
@@ -32,6 +32,7 @@ class WalkForwardTrainer:
         self.saved_dir.mkdir(parents=True, exist_ok=True)
 
     # ──────────────────────────────────────────────────────────────
+    # Training
     # ──────────────────────────────────────────────────────────────
 
     def train(
@@ -40,7 +41,7 @@ class WalkForwardTrainer:
         cutoff_date: Optional[datetime] = None,
         verbose: bool = True,
     ) -> lgb.LGBMClassifier:
-        """[Translated]"""
+        """Train model on data up to cutoff_date."""
         if cutoff_date is None:
             cutoff_date = datetime.now(timezone.utc)
 
@@ -54,22 +55,23 @@ class WalkForwardTrainer:
 
         if len(train_df) < self.mcfg["min_samples"]:
             raise ValueError(
-                f""
-                f""
+                f"Not enough training samples: {len(train_df)} < {self.mcfg['min_samples']} "
+                f"(window {start_date.date()} -> {cutoff_date.date()})"
             )
 
+        pos = (train_df["label"] == 1).sum()
+        neg = (train_df["label"] == 0).sum()
         logger.info(
-            f""
-            f""
-            f""
-            f""
+            f"Training window: {start_date.date()} -> {cutoff_date.date()} | "
+            f"rows={len(train_df)} | pos={pos} | neg={neg}"
         )
+
         feature_cols = FeatureEngineer.get_feature_columns(train_df)
         X = train_df[feature_cols].copy()
-        cat_cols = X.select_dtypes(include=['object', 'string']).columns
+        cat_cols = X.select_dtypes(include=["object", "string"]).columns
         for col in cat_cols:
-            X[col] = X[col].astype('category')
-                
+            X[col] = X[col].astype("category")
+
         y = train_df["label"].values
         sample_weights = self._compute_sample_weights(train_df["timestamp"])
         split_idx = int(len(train_df) * 0.8)
@@ -77,9 +79,7 @@ class WalkForwardTrainer:
         y_train, y_val = y[:split_idx], y[split_idx:]
         w_train = sample_weights[:split_idx]
 
-        # ── LightGBM ─────────────────────────────────────────────
         params = dict(self.mcfg["lgbm_params"])
-
         model = lgb.LGBMClassifier(**params)
 
         model.fit(
@@ -91,6 +91,7 @@ class WalkForwardTrainer:
                 lgb.log_evaluation(period=-1),
             ],
         )
+
         if verbose:
             y_pred = model.predict(X_val)
             y_proba = model.predict_proba(X_val)[:, 1]
@@ -107,26 +108,22 @@ class WalkForwardTrainer:
                 f"Recall={recall:.3f} | AUC={auc:.3f} | "
                 f"Best iteration: {model.best_iteration_}"
             )
-            if verbose:
-                logger.info("\n" + classification_report(y_val, y_pred, target_names=["No Short", "Short"]))
+            logger.info("\n" + classification_report(y_val, y_pred, target_names=["No Short", "Short"]))
             self._log_feature_importance(model, feature_cols)
 
         return model
 
     # ──────────────────────────────────────────────────────────────
+    # Sample weights
     # ──────────────────────────────────────────────────────────────
 
     def _compute_sample_weights(self, timestamps: pd.Series) -> np.ndarray:
-        """[Translated]"""
+        """Exponential decay weights: more recent samples weigh more."""
         halflife = self.mcfg["sample_weight_halflife_days"]
-
         latest = timestamps.max()
         days_ago = (latest - timestamps).dt.total_seconds() / 86400
-
-        # w = 2^(-days_ago / halflife)
         weights = np.power(2.0, -days_ago.values / halflife)
         weights = weights / weights.sum() * len(weights)
-
         return weights
 
     # ──────────────────────────────────────────────────────────────
@@ -140,17 +137,18 @@ class WalkForwardTrainer:
             model.feature_importances_, index=feature_names
         ).sort_values(ascending=False)
 
-        logger.info("")
+        logger.info("Top 20 features by importance:")
         for feat, imp in importance.head(20).items():
             logger.info(f"  {feat:40s} {imp:6.0f}")
 
     # ──────────────────────────────────────────────────────────────
+    # Model persistence
     # ──────────────────────────────────────────────────────────────
 
     def save_model(
         self, model: lgb.LGBMClassifier, feature_cols: list[str]
     ) -> Path:
-        """[Translated]"""
+        """Save model to disk (timestamped + latest symlink)."""
         ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
         path = self.saved_dir / f"model_{ts}.pkl"
 
@@ -166,16 +164,16 @@ class WalkForwardTrainer:
         with open(latest_path, "wb") as f:
             pickle.dump(payload, f)
 
-        logger.info(f"")
+        logger.info(f"Model saved: {path}")
         return path
 
     def load_latest_model(self) -> tuple[lgb.LGBMClassifier, list[str]]:
-        """[Translated]"""
+        """Load the most recently saved model."""
         path = self.saved_dir / "model_latest.pkl"
 
         if not path.exists():
             raise FileNotFoundError(
-                ""
+                "No trained model found. Run: "
                 "poetry run python -m scripts.initial_train"
             )
 
@@ -183,15 +181,16 @@ class WalkForwardTrainer:
             payload = pickle.load(f)
 
         trained_at = payload.get("trained_at", "unknown")
-        logger.info(f"")
+        logger.info(f"Loaded model trained at: {trained_at}")
 
         return payload["model"], payload["feature_cols"]
 
     # ──────────────────────────────────────────────────────────────
+    # Drift detection
     # ──────────────────────────────────────────────────────────────
 
     def check_drift(self, recent_trades: pd.DataFrame) -> bool:
-        """[Translated]"""
+        """Returns True if model precision has dropped below threshold (drift detected)."""
         n = self.mcfg["drift_check_last_n"]
         threshold = self.mcfg["drift_precision_threshold"]
 
@@ -205,17 +204,17 @@ class WalkForwardTrainer:
 
         if precision < threshold:
             logger.warning(
-                f""
-                f""
+                f"Drift detected: precision={precision:.3f} < threshold={threshold} "
+                f"on last {n} trades"
             )
             return True
 
-        logger.debug(f"")
+        logger.debug(f"No drift: precision={precision:.3f} on last {n} trades")
         return False
 
 
 class WalkForwardBacktestTrainer:
-    """[Translated]"""
+    """Runs a walk-forward backtest: train on N days, predict on next M days, step forward."""
 
     def __init__(self):
         self.trainer = WalkForwardTrainer()
@@ -229,14 +228,14 @@ class WalkForwardBacktestTrainer:
         start_date: datetime,
         end_date: datetime,
     ) -> list[dict]:
-        """[Translated]"""
+        """Run the full walk-forward loop, returns list of window results."""
         results = []
         current = start_date + timedelta(days=self.train_window)
 
         df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
 
         while current <= end_date:
-            logger.info(f"")
+            logger.info(f"Walk-forward window: cutoff={current.date()}")
 
             try:
                 model = self.trainer.train(df, cutoff_date=current, verbose=False)
@@ -247,11 +246,11 @@ class WalkForwardBacktestTrainer:
 
                 if len(val_df) > 0:
                     X_val = val_df[feature_cols].copy()
-                    
-                    cat_cols = X_val.select_dtypes(include=['object', 'string']).columns
+
+                    cat_cols = X_val.select_dtypes(include=["object", "string"]).columns
                     for col in cat_cols:
-                        X_val[col] = X_val[col].astype('category')
-                        
+                        X_val[col] = X_val[col].astype("category")
+
                     val_df["prediction"] = model.predict(X_val)
                     val_df["confidence"] = model.predict_proba(X_val)[:, 1]
 
@@ -265,9 +264,9 @@ class WalkForwardBacktestTrainer:
                     })
 
             except ValueError as e:
-                logger.warning(f"")
+                logger.warning(f"Skipping window {current.date()}: {e}")
 
             current += timedelta(days=self.step_days)
 
-        logger.info(f"")
+        logger.info(f"Walk-forward complete: {len(results)} windows processed")
         return results

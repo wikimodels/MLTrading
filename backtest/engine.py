@@ -88,9 +88,9 @@ class BacktestEngine:
         self.commission_taker = bcfg["commission_taker"]   # 0.00055
         self.commission_maker = bcfg["commission_maker"]   # 0.00020
         self.slippage = bcfg["slippage"]                   # 0.0005
-        self.leverage = cfg["trading"]["leverage"]          # 3
+        self.leverage = cfg["trading"]["leverage"]          # 1
 
-        self.risk_pct = rcfg["risk_per_trade_pct"] / 100
+        self.trade_size_usdt = rcfg.get("trade_size_usdt", 10.0)
         self.sl_atr_mult = rcfg["atr_sl_mult"]
         self.max_positions = rcfg["max_open_positions"]
         self.min_confidence = cfg["model"]["min_confidence"]
@@ -101,7 +101,7 @@ class BacktestEngine:
         capital = self.initial_capital
         equity_rows = []
 
-        logger.info(f"")
+        logger.info(f"Starting simulation: {len(wf_results)} walk-forward windows, capital=${self.initial_capital:,.0f}")
 
         for window in wf_results:
             val_df = window["val_df"].copy()
@@ -128,56 +128,101 @@ class BacktestEngine:
         return results
 
     def _simulate_window(self, df: pd.DataFrame, capital: float) -> list[Trade]:
-        """[Translated]"""
+        """Simulates trades for one walk-forward window."""
         trades = []
         open_positions: dict[str, dict] = {}
+        current_capital = capital
+
+        # Pre-group rows by symbol for fast per-symbol exit checks
+        if "symbol" in df.columns:
+            symbol_rows: dict = {sym: grp for sym, grp in df.groupby("symbol")}
+        else:
+            symbol_rows = {"UNKNOWN": df}
+            
+        # Pre-compute concurrency (number of valid entry signals per timestamp)
+        signal_mask = (df.get("prediction", 0) == 1) & (df.get("confidence", 0) >= self.min_confidence)
+        if signal_mask.any():
+            concurrency_map = df[signal_mask].groupby("timestamp").size().to_dict()
+        else:
+            concurrency_map = {}
 
         for i, row in df.iterrows():
             symbol = row.get("symbol", "UNKNOWN")
             ts = row["timestamp"]
-            for sym in list(open_positions.keys()):
-                pos = open_positions[sym]
-                sym_rows = df[(df.get("symbol", "UNKNOWN") == sym) if "symbol" in df.columns else df.index >= 0]
-                trade = self._check_exit(pos, row, sym)
+
+            # Check exits — only evaluate positions whose symbol matches this row
+            if symbol in open_positions:
+                pos = open_positions[symbol]
+                trade = self._check_exit(pos, row, symbol)
                 if trade:
                     trades.append(trade)
-                    capital += trade.net_pnl_usdt
-                    del open_positions[sym]
+                    current_capital += trade.net_pnl_usdt
+                    del open_positions[symbol]
+
+            # Entry signal
             if (
                 row.get("prediction", 0) == 1
                 and row.get("confidence", 0) >= self.min_confidence
                 and symbol not in open_positions
                 and len(open_positions) < self.max_positions
                 and "atr_14" in row.index
+                and row["atr_14"] > 0
             ):
-                entry_price = row["close"] * (1 + self.slippage)  # slippage
+                entry_price = row["close"] * (1 - self.slippage)
                 atr = row["atr_14"]
 
-                sl_price = entry_price + atr * self.sl_atr_mult
-                tp_dist = atr * get_config()["labeling"]["tp_atr_mult"]
-                tp_price = entry_price - tp_dist
+                sl_pct = atr * self.sl_atr_mult / entry_price          # stop distance as % of price
+                tp_pct = atr * get_config()["labeling"]["tp_atr_mult"] / entry_price
 
-                sl_dist = sl_price - entry_price
-                risk_usdt = capital * self.risk_pct * min(1.0, row.get("confidence", 1.0))
-                qty = risk_usdt / sl_dist if sl_dist > 0 else 0
+                sl_price = entry_price * (1 + sl_pct)                  # short: SL is above entry
+                tp_price = entry_price * (1 - tp_pct)                  # short: TP is below entry
 
-                if qty > 0:
+                if sl_pct <= 0:
+                    continue
+
+                # Dynamic Position Sizing based on Concurrency
+                concurrent_signals = concurrency_map.get(ts, 1)
+                
+                if concurrent_signals >= 15:
+                    notional = self.trade_size_usdt * 3.0   # High concurrency (e.g. 15+ -> $30)
+                elif concurrent_signals >= 5:
+                    notional = self.trade_size_usdt * 1.0   # Medium concurrency (e.g. 5-14 -> $10)
+                else:
+                    notional = self.trade_size_usdt * 0.5   # Low concurrency (e.g. 1-4 -> $5)
+
+                # Global margin check across all open positions
+                used_margin = sum(p["notional"] for p in open_positions.values()) / self.leverage
+                available_margin = current_capital - used_margin
+                
+                if available_margin < (notional / self.leverage):
+                    continue
+
+                # qty only used for commission calculation
+                qty = notional / entry_price
+
+                if notional > 0:
                     open_positions[symbol] = {
                         "symbol": symbol,
                         "entry_time": ts,
                         "entry_price": entry_price,
+                        "notional": notional,
                         "qty": qty,
                         "sl_price": sl_price,
                         "tp_price": tp_price,
+                        "sl_pct": sl_pct,
                         "bars_held": 0,
                         "confidence": row.get("confidence", 1.0),
                         "funding_rate": row.get("funding_rate", 0.0),
                         "max_bars": get_config()["labeling"]["max_bars"],
                     }
+
+        # Force-close any remaining open positions at the last bar
         for sym, pos in open_positions.items():
-            last_row = df.iloc[-1]
-            exit_price = last_row["close"] * (1 - self.slippage)
-            trade = self._close_trade(pos, exit_price, df.iloc[-1]["timestamp"], "forced")
+            # Get the last row specific to this symbol, or fallback to the general last row
+            sym_df = symbol_rows.get(sym, df)
+            last_row = sym_df.iloc[-1]
+            exit_price = last_row["close"] * (1 + self.slippage)
+            trade = self._close_trade(pos, exit_price, last_row["timestamp"], "forced")
             trades.append(trade)
 
         return trades
@@ -188,13 +233,13 @@ class BacktestEngine:
         low = row.get("low", row["close"])
         high = row.get("high", row["close"])
         if low <= pos["tp_price"]:
-            exit_price = pos["tp_price"] * (1 - self.slippage)
+            exit_price = pos["tp_price"] * (1 + self.slippage)
             return self._close_trade(pos, exit_price, row["timestamp"], "tp")
         if high >= pos["sl_price"]:
             exit_price = pos["sl_price"] * (1 + self.slippage)
             return self._close_trade(pos, exit_price, row["timestamp"], "sl")
         if pos["bars_held"] >= pos["max_bars"]:
-            exit_price = row["close"] * (1 - self.slippage)
+            exit_price = row["close"] * (1 + self.slippage)
             return self._close_trade(pos, exit_price, row["timestamp"], "timeout")
 
         return None
@@ -202,14 +247,21 @@ class BacktestEngine:
     def _close_trade(
         self, pos: dict, exit_price: float, exit_time, outcome: str
     ) -> Trade:
-        """[Translated]"""
+        """Closes a trade and calculates PnL in dollar terms."""
         entry_price = pos["entry_price"]
+        notional = pos.get("notional", pos["qty"] * entry_price)  # fallback for old format
         qty = pos["qty"]
         bars_held = pos["bars_held"]
-        pnl_usdt = (entry_price - exit_price) * qty
-        pnl_pct = (entry_price - exit_price) / entry_price
-        notional = qty * entry_price
+
+        # All PnL in USD — short profits when price drops
+        price_return = (entry_price - exit_price) / entry_price
+        pnl_usdt = notional * price_return
+        pnl_pct = price_return
+
+        # Commission: taker on both legs (open + close), based on notional
         commission = notional * self.commission_taker * 2
+
+        # Funding: paid/received every 8h (2 bars of 4H), based on notional
         funding_payments = bars_held // 2
         funding_usdt = pos.get("funding_rate", 0) * notional * funding_payments
 
@@ -247,7 +299,7 @@ class BacktestEngine:
         t = results
 
         if not t.trades:
-            logger.warning("")
+            logger.warning("No trades to report.")
             return
 
         final_capital = self.initial_capital + t.total_pnl
@@ -280,7 +332,7 @@ class BacktestEngine:
         try:
             from fpdf import FPDF
         except ImportError:
-            logger.error("")
+            logger.error("fpdf2 not installed. Run: poetry add fpdf2")
             return
 
         pdf = FPDF()
@@ -349,6 +401,6 @@ class BacktestEngine:
             
         try:
             pdf.output(path)
-            logger.info(f"")
+            logger.info(f"PDF report saved: {path}")
         except Exception as e:
-            logger.error(f"")
+            logger.error(f"Failed to save PDF: {e}")

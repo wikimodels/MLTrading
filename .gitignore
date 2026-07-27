@@ -10,3 +10,12 @@ notebooks/.ipynb_checkpoints/
 .venv/
 *.pkl
 *.pt
+
+# Trash / Scratch files
+backtest/*.csv
+backtest/*.pdf
+weak_coins_*.csv
+debug*.txt
+recalc.py
+get_list.py
+check_volume.py

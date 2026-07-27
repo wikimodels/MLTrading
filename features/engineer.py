@@ -70,12 +70,14 @@ class FeatureEngineer:
             df = self._add_multitf_1h(df, df_1h)
         else:
             df["trend_1h"] = 0
+            df["rsi_1h"] = 50.0
 
         if df_1d is not None:
             df = self._add_multitf_1d(df, df_1d)
         else:
             df["trend_1d"] = 0
             df["rsi_1d"] = 50.0
+            
         df["symbol_id"] = symbol_id
         feat_cols = [c for c in df.columns if c not in ("timestamp", "open", "high", "low", "close", "volume")]
         df = df.dropna(subset=feat_cols).reset_index(drop=True)
@@ -89,14 +91,12 @@ class FeatureEngineer:
     def _add_trend(self, df: pd.DataFrame) -> pd.DataFrame:
         close = df["close"]
 
+        self.ema_periods = [21, 50, 200]
         for period in self.ema_periods:
             col = f"ema_{period}"
             df[col] = ta.trend.ema_indicator(close, window=period)
             df[f"price_vs_ema_{period}"] = (close - df[col]) / df[col]
-        for period in self.ema_periods:
-            col = f"ema_{period}"
             df[f"ema_{period}_slope"] = df[col].pct_change(3)
-        df["above_ema200"] = (close > df["ema_200"]).astype(int)
 
         # EMA crossovers
         df["ema21_vs_ema50"] = (df["ema_21"] > df["ema_50"]).astype(int)
@@ -112,6 +112,14 @@ class FeatureEngineer:
         close = df["close"]
         high = df["high"]
         low = df["low"]
+
+        # ADX & DMI
+        adx = ta.trend.ADXIndicator(high, low, close, window=14)
+        df["adx"] = adx.adx()
+        df["adx_pos"] = adx.adx_pos()
+        df["adx_neg"] = adx.adx_neg()
+        df["adx_strong"] = (df["adx"] > 25).astype(int)
+        df["adx_chop"] = (df["adx"] < 20).astype(int)
 
         # RSI
         df["rsi_14"] = ta.momentum.rsi(close, window=14)
@@ -171,6 +179,9 @@ class FeatureEngineer:
         kc = ta.volatility.KeltnerChannel(high, low, close, window=20)
         df["kc_upper"] = kc.keltner_channel_hband()
         df["kc_lower"] = kc.keltner_channel_lband()
+        
+        # TTM Squeeze (BB inside KC)
+        df["ttm_squeeze"] = ((df["bb_upper"] < df["kc_upper"]) & (df["bb_lower"] > df["kc_lower"])).astype(int)
 
         return df
 
@@ -182,16 +193,19 @@ class FeatureEngineer:
         close = df["close"]
         volume = df["volume"]
         df["volume_ratio"] = volume / volume.rolling(20).mean()
-        df["obv"] = ta.volume.OnBalanceVolumeIndicator(close, volume).on_balance_volume()
-        df["obv_slope"] = df["obv"].pct_change(5)
-        df["mfi"] = ta.volume.MFIIndicator(
-            df["high"], df["low"], close, volume, window=14
-        ).money_flow_index()
+        
+        # VZO (Volume Zone Oscillator)
+        sign = np.sign(close - close.shift(1))
+        r = sign * volume
+        vp = ta.trend.ema_indicator(r, window=14)
+        tv = ta.trend.ema_indicator(volume, window=14)
+        df["vzo"] = (100 * (vp / tv)).fillna(0)
+        
+        # Cumulative Volume Delta (CVD) - Восстановлено!
         body = df["close"] - df["open"]
         candle_range = (df["high"] - df["low"]).replace(0, np.nan)
         df["cvd_proxy"] = (body / candle_range * volume).fillna(0)
         df["cvd_cumsum"] = df["cvd_proxy"].rolling(20).sum()
-        df["bearish_volume"] = ((body < 0) * volume / volume.rolling(20).mean()).clip(0, 10)
 
         return df
 
@@ -301,7 +315,6 @@ class FeatureEngineer:
     # ──────────────────────────────────────────────────────────────
 
     def _add_multitf_1h(self, df_4h: pd.DataFrame, df_1h: pd.DataFrame) -> pd.DataFrame:
-        """[Translated]"""
         df_1h = df_1h.copy().sort_values("timestamp")
         df_1h["timestamp"] = pd.to_datetime(df_1h["timestamp"], utc=True)
         ema50_1h = ta.trend.ema_indicator(df_1h["close"], window=50)
@@ -313,16 +326,11 @@ class FeatureEngineer:
         df_4h["timestamp"] = pd.to_datetime(df_4h["timestamp"], utc=True)
         ts_index_4h = pd.DatetimeIndex(df_4h["timestamp"])
         for col in ["trend_1h", "rsi_1h"]:
-            df_4h[col] = (
-                df_1h[col]
-                .reindex(ts_index_4h, method="ffill")
-                .values
-            )
-
+            df_4h[col] = df_1h[col].reindex(ts_index_4h, method="ffill").values
+            df_4h[col] = df_4h[col].fillna(0)
         return df_4h
 
     def _add_multitf_1d(self, df_4h: pd.DataFrame, df_1d: pd.DataFrame) -> pd.DataFrame:
-        """[Translated]"""
         df_1d = df_1d.copy().sort_values("timestamp")
         df_1d["timestamp"] = pd.to_datetime(df_1d["timestamp"], utc=True)
         ema200_1d = ta.trend.ema_indicator(df_1d["close"], window=200)
@@ -330,17 +338,12 @@ class FeatureEngineer:
         df_1d["trend_1d"] = np.where(df_1d["close"] > ema200_1d, 1, -1)
         df_1d["rsi_1d"] = rsi_1d
         df_1d = df_1d.set_index("timestamp")[["trend_1d", "rsi_1d"]]
-
         df_4h = df_4h.sort_values("timestamp")
         df_4h["timestamp"] = pd.to_datetime(df_4h["timestamp"], utc=True)
         ts_index_4h = pd.DatetimeIndex(df_4h["timestamp"])
         for col in ["trend_1d", "rsi_1d"]:
-            df_4h[col] = (
-                df_1d[col]
-                .reindex(ts_index_4h, method="ffill")
-                .values
-            )
-
+            df_4h[col] = df_1d[col].reindex(ts_index_4h, method="ffill").values
+            df_4h[col] = df_4h[col].fillna(0)
         return df_4h
 
     # ──────────────────────────────────────────────────────────────
