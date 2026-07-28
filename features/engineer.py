@@ -18,7 +18,7 @@ class FeatureEngineer:
         self.atr_period = feat_cfg["atr_period"]
         self.rsi_period = feat_cfg["rsi_period"]
         self.ema_periods = feat_cfg["ema_periods"]   # [21, 50, 200]
-        self.vwma_periods = feat_cfg.get("vwma_periods", [21, 50, 200])
+        self.vwma_periods = feat_cfg.get("vwma_periods", [21, 50])  # 200 не используем — режет историю
         self.bb_period = feat_cfg["bb_period"]
         self.macd_fast = feat_cfg["macd_fast"]
         self.macd_slow = feat_cfg["macd_slow"]
@@ -126,19 +126,30 @@ class FeatureEngineer:
             df["ema50_vs_ema200"] = (df["ema_50"] > df["ema_200"]).astype(int)
 
         # VWMA (Volume Weighted Moving Average)
+        # Считаем только для периодов из vwma_periods (по умолчанию [21, 50])
+        # Период 200 намеренно исключён: требует 800+ 4H-баров, сильно режет начало истории
+        vwma_periods = getattr(self, "vwma_periods", [21, 50])
         volume = df["volume"]
         price_vol = close * volume
-        for period in getattr(self, "vwma_periods", []):
+        for period in vwma_periods:
             vwma_col = f"vwma_{period}"
             df[vwma_col] = price_vol.rolling(window=period).sum() / volume.rolling(window=period).sum()
+
+            # 1. Позиция цены относительно VWMA: >0 = цена выше объёмного центра → перегрев
             df[f"price_vs_vwma_{period}"] = (close - df[vwma_col]) / df[vwma_col]
-            
-            # Разница между ценовой средней и объемной (показывает, подкреплен ли тренд объемами)
-            if period in getattr(self, "ema_periods", []):
-                ema_col = f"ema_{period}"
-                df[f"ema_vs_vwma_{period}"] = (df[ema_col] - df[vwma_col]) / df[vwma_col]
+
+            # 2. Разрыв EMA vs VWMA: >0 = ценовой тренд идёт без объёмной поддержки → слабый тренд
+            if period in self.ema_periods:
+                df[f"ema_vs_vwma_{period}"] = (df[f"ema_{period}"] - df[vwma_col]) / df[vwma_col]
+
+            # 3. Наклон VWMA: <0 = объёмный тренд падающий → давление вниз
+            df[f"vwma_slope_{period}"] = df[vwma_col].pct_change(3)
+
+            # Удаляем сырую VWMA из фич — она нужна только как промежуточное значение
+            df.drop(columns=[vwma_col], inplace=True)
 
         return df
+
 
     # ──────────────────────────────────────────────────────────────
     # 2. MOMENTUM
