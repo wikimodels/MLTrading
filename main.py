@@ -50,6 +50,8 @@ def cmd_train():
     collector = BybitCollector()
     active_symbols = set(collector.get_top_symbols("all"))
 
+    from config_loader import get_config
+    cfg = get_config()
     global_exclude = set(cfg.get("global_exclude_symbols", []))
     symbols = storage.list_symbols("4h")
     symbols = [s for s in symbols if s in active_symbols and s not in global_exclude]
@@ -159,6 +161,18 @@ def cmd_backtest():
     logger.info(f"Walk-forward: {start_date.date()} -> {end_date.date()}")
     wf_results = wf_trainer.run(combined, start_date, end_date)
 
+    # Save raw predictions for fast simulation later
+    if wf_results:
+        all_val_dfs = [res["val_df"] for res in wf_results if "val_df" in res and not res["val_df"].empty]
+        if all_val_dfs:
+            import pandas as pd
+            predictions_df = pd.concat(all_val_dfs, ignore_index=True)
+            # Retain only necessary columns to keep file size small
+            cols_to_keep = ["timestamp", "symbol", "open", "high", "low", "close", "volume", "prediction", "confidence", "atr_14", "funding_rate"]
+            predictions_df = predictions_df[[c for c in cols_to_keep if c in predictions_df.columns]]
+            predictions_df.to_parquet("backtest/predictions_history.parquet", index=False)
+            logger.info(f"Saved {len(predictions_df)} raw predictions to backtest/predictions_history.parquet")
+
     engine = BacktestEngine()
     results = engine.run(wf_results)
     engine.print_report(results)
@@ -192,6 +206,55 @@ def cmd_backtest():
         logger.info(f"Saved {len(trades_data)} trades to backtest/trades_history.csv")
 
 
+def cmd_simulate():
+    """Fast simulation using saved predictions without retraining."""
+    import pandas as pd
+    import os
+    from backtest.engine import BacktestEngine
+    
+    path = "backtest/predictions_history.parquet"
+    if not os.path.exists(path):
+        logger.error(f"Predictions file not found: {path}. Run 'backtest' first.")
+        sys.exit(1)
+        
+    logger.info(f"Loading predictions from {path}")
+    df = pd.read_parquet(path)
+    
+    # Repackage for BacktestEngine which expects list of dicts with 'val_df'
+    wf_results = [{"val_df": df}]
+    
+    engine = BacktestEngine()
+    logger.info(f"Starting fast simulation for {len(df)} candles...")
+    results = engine.run(wf_results)
+    engine.print_report(results)
+    engine.save_pdf_report(results, "backtest/backtest_report.pdf")
+    
+    if not results.equity_curve.empty:
+        results.equity_curve.to_csv("backtest/equity_curve.csv", index=False)
+        logger.info("Equity curve saved to backtest/equity_curve.csv")
+        
+    if results.trades:
+        trades_data = []
+        for t in results.trades:
+            trades_data.append({
+                "symbol": t.symbol,
+                "entry_time": t.entry_time,
+                "exit_time": t.exit_time,
+                "entry_price": t.entry_price,
+                "exit_price": t.exit_price,
+                "qty": t.qty,
+                "side": t.side,
+                "outcome": t.outcome,
+                "pnl_usdt": t.pnl_usdt,
+                "pnl_pct": t.pnl_pct,
+                "commission_usdt": t.commission_usdt,
+                "funding_usdt": t.funding_usdt,
+                "net_pnl_usdt": t.net_pnl_usdt
+            })
+        pd.DataFrame(trades_data).to_csv("backtest/trades_history.csv", index=False)
+        logger.info(f"Saved {len(trades_data)} trades to backtest/trades_history.csv")
+
+
 def cmd_run():
     """Start the live trading scheduler."""
     from scheduler import BotScheduler
@@ -215,6 +278,7 @@ COMMANDS = {
     "collect": cmd_collect,
     "train": cmd_train,
     "backtest": cmd_backtest,
+    "simulate": cmd_simulate,
     "run": cmd_run,
     "status": cmd_status,
 }

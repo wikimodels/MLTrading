@@ -56,12 +56,10 @@ class FeatureEngineer:
 
         # ── 2. Momentum ───────────────────────────────────────────
         df = self._add_momentum(df)
-
-        # ── 3. Volatility ─────────────────────────────────────────
         df = self._add_volatility(df)
-
-        # ── 4. Volume ─────────────────────────────────────────────
         df = self._add_volume(df)
+        df = self._add_candlesticks(df)
+        df = self._add_time_features(df)
 
         # ── 5. Market Structure ───────────────────────────────────
         df = self._add_structure(df)
@@ -72,9 +70,6 @@ class FeatureEngineer:
         else:
             df["funding_rate"] = 0.0
             df["funding_cumsum_24h"] = 0.0
-
-        # ── 7. Time Features ──────────────────────────────────────
-        df = self._add_time_features(df)
 
         # ── 8. Multi-TF: 1H and 1D ────────────────────────────────
         if df_1h is not None:
@@ -161,9 +156,16 @@ class FeatureEngineer:
         df["rsi_14"] = ta.momentum.rsi(close, window=14)
         df["rsi_overbought"] = (df["rsi_14"] > 70).astype(int)
         df["rsi_oversold"] = (df["rsi_14"] < 30).astype(int)
-        price_chg = close.pct_change(5)
-        rsi_chg = df["rsi_14"].diff(5)
-        df["rsi_bearish_div"] = ((price_chg > 0) & (rsi_chg < 0)).astype(int)
+        
+        # Bearish Divergence (5-candle window)
+        # Price is higher than 5 candles ago, but RSI is lower, AND RSI is in overbought territory (>60)
+        price_higher = close > close.shift(5)
+        rsi_lower = df["rsi_14"] < df["rsi_14"].shift(5)
+        df["rsi_bear_div_5"] = (price_higher & rsi_lower & (df["rsi_14"] > 60)).astype(int)
+        
+        # Remove old rsi_bearish_div if it existed to avoid confusion
+        if "rsi_bearish_div" in df.columns:
+            df.drop(columns=["rsi_bearish_div"], inplace=True)
 
         # MACD
         macd = ta.trend.MACD(close,
@@ -210,6 +212,10 @@ class FeatureEngineer:
         df["bb_width"] = (df["bb_upper"] - df["bb_lower"]) / df["bb_middle"]
         df["bb_pct"] = bb.bollinger_pband()
         df["bb_squeeze"] = (df["bb_width"] < df["bb_width"].rolling(50).mean() * 0.7).astype(int)
+        
+        # BB Squeeze Breakdown: Was in a squeeze recently (last 3 candles) but just broke lower band
+        recent_squeeze = df["bb_squeeze"].rolling(3).max() == 1
+        df["bb_squeeze_breakdown"] = (recent_squeeze & (close < df["bb_lower"])).astype(int)
         log_ret = np.log(close / close.shift(1))
         df["hist_vol_20"] = log_ret.rolling(20).std() * np.sqrt(20)
         kc = ta.volatility.KeltnerChannel(high, low, close, window=20)
@@ -246,7 +252,43 @@ class FeatureEngineer:
         return df
 
     # ──────────────────────────────────────────────────────────────
-    # 5. MARKET STRUCTURE
+    # 5. CANDLESTICK PATTERNS
+    # ──────────────────────────────────────────────────────────────
+
+    def _add_candlesticks(self, df: pd.DataFrame) -> pd.DataFrame:
+        open_ = df["open"]
+        close = df["close"]
+        high = df["high"]
+        low = df["low"]
+        
+        body_size = (close - open_).abs()
+        candle_size = (high - low)
+        upper_wick = high - df[["open", "close"]].max(axis=1)
+        lower_wick = df[["open", "close"]].min(axis=1) - low
+        
+        # 1. Bearish Engulfing
+        prev_open = open_.shift(1)
+        prev_close = close.shift(1)
+        prev_is_green = prev_close > prev_open
+        curr_is_red = close < open_
+        engulfing = prev_is_green & curr_is_red & (open_ > prev_close) & (close < prev_open)
+        df["bearish_engulfing"] = engulfing.astype(int)
+        
+        # 2. Shooting Star / Pin Bar (Bearish)
+        # Small body (<= 50% of total), long upper wick (>= 2x body), very short lower wick (<= 10% of total)
+        small_body = body_size <= (candle_size * 0.5)
+        long_upper = upper_wick >= (body_size * 2)
+        short_lower = lower_wick <= (candle_size * 0.1)
+        df["shooting_star"] = (small_body & long_upper & short_lower & (candle_size > 0)).astype(int)
+        
+        # 3. Doji
+        # Body is extremely small (<= 10% of total candle size)
+        df["doji"] = ((body_size <= (candle_size * 0.1)) & (candle_size > 0)).astype(int)
+        
+        return df
+
+    # ──────────────────────────────────────────────────────────────
+    # 6. MARKET BREADTH / BTC
     # ──────────────────────────────────────────────────────────────
 
     def _add_structure(self, df: pd.DataFrame) -> pd.DataFrame:
@@ -321,6 +363,9 @@ class FeatureEngineer:
         df["funding_cumsum_24h"] = df["funding_rate"].rolling(6).sum()
         df["funding_extreme"] = (df["funding_rate"] > df["funding_rate"].rolling(100).mean()
                                  + 2 * df["funding_rate"].rolling(100).std()).astype(int)
+        
+        # Funding Rate Spike (Derivative over 3 candles)
+        df["funding_spike_3"] = df["funding_rate"].diff(3).fillna(0.0)
 
         return df
 
