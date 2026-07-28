@@ -170,12 +170,11 @@ features:
   timeframes_extra: [1h, 1d]
   # Market breadth window
   breadth_rolling_corr_window: 30
-  # VWMA periods (только 21 и 50 — 200 режет слишком много начала истории)
-  vwma_periods: [21, 50]
   # Индикаторы
   atr_period: 14
   rsi_period: 14
   ema_periods: [21, 50, 200]
+  vwma_periods: [21, 50, 200]
   bb_period: 20
   macd_fast: 12
   macd_slow: 26
