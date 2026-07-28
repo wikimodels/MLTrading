@@ -231,11 +231,18 @@ class WalkForwardBacktestTrainer:
         """Run the full walk-forward loop, returns list of window results."""
         results = []
         current = start_date + timedelta(days=self.train_window)
+        
+        # Вычисляем ожидаемое количество окон
+        expected_windows = int((end_date - current).days / self.step_days) + 1
+        if expected_windows > 0:
+            logger.info(f"Starting walk-forward: {expected_windows} windows expected")
 
         df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
+        window_idx = 1
 
         while current <= end_date:
-            logger.info(f"Walk-forward window: cutoff={current.date()}")
+            logger.info(f"Walk-forward window [{window_idx}/{expected_windows}]: cutoff={current.date()}")
+            window_idx += 1
 
             try:
                 model = self.trainer.train(df, cutoff_date=current, verbose=False)

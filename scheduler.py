@@ -77,6 +77,8 @@ class BotScheduler:
 
             storage = DataStorage()
             symbols = storage.list_symbols("4h")
+            global_exclude = set(self.cfg.get("global_exclude_symbols", []))
+            symbols = [s for s in symbols if s not in global_exclude]
 
             if symbols:
                 collector = BybitCollector(testnet=False)
@@ -95,10 +97,9 @@ class BotScheduler:
         try:
             from data.collector import BybitCollector
             collector = BybitCollector(testnet=False)
-            top_symbols = collector.get_top_symbols(
-                n=self.cfg["trading"]["top_n_symbols"]
-            )
-            logger.info(f"")
+            # get_top_symbols() reads active_group from symbol_universe config internally
+            top_symbols = collector.get_top_symbols()
+            logger.info(f"Retrain: collected {len(top_symbols)} symbols from active group")
             collector.collect_all(symbols=top_symbols, incremental=True)
             from models.trainer import WalkForwardTrainer
             from features.engineer import FeatureEngineer
@@ -127,9 +128,10 @@ class BotScheduler:
             for sym_id, (sym, df_4h) in enumerate(all_symbols_ohlcv.items()):
                 df_1h = storage.load_ohlcv(sym, "1h")
                 df_1d = storage.load_ohlcv(sym, "1d")
+                df_1w = storage.load_ohlcv(sym, "1w")
                 funding_df = storage.load_funding(sym)
 
-                df_feat = engineer.compute(df_4h, df_1h, df_1d, funding_df, symbol_id=sym_id)
+                df_feat = engineer.compute(df_4h, df_1h, df_1d, funding_df, df_1w=df_1w, symbol_id=sym_id)
                 df_feat = breadth_calc.add_symbol_specific(df_feat, breadth_df, all_symbols_ohlcv, sym)
                 df_labeled = labeler.label(df_feat)
                 df_labeled["symbol"] = sym

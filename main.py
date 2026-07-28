@@ -50,8 +50,9 @@ def cmd_train():
     collector = BybitCollector()
     active_symbols = set(collector.get_top_symbols("all"))
 
+    global_exclude = set(cfg.get("global_exclude_symbols", []))
     symbols = storage.list_symbols("4h")
-    symbols = [s for s in symbols if s in active_symbols]
+    symbols = [s for s in symbols if s in active_symbols and s not in global_exclude]
     if not symbols:
         logger.error("No symbols found in storage. Run 'collect' first.")
         sys.exit(1)
@@ -71,9 +72,10 @@ def cmd_train():
 
         df_1h = storage.load_ohlcv(sym, "1h")
         df_1d = storage.load_ohlcv(sym, "1d")
+        df_1w = storage.load_ohlcv(sym, "1w")
         funding_df = storage.load_funding(sym)
 
-        df_feat = engineer.compute(df_4h, df_1h, df_1d, funding_df, symbol_id=sym_id)
+        df_feat = engineer.compute(df_4h, df_1h, df_1d, funding_df, df_1w=df_1w, symbol_id=sym_id)
         df_feat = breadth_calc.add_symbol_specific(df_feat, breadth_df, all_symbols_ohlcv, sym)
         df_labeled = labeler.label(df_feat)
         df_labeled["symbol"] = sym
@@ -109,14 +111,14 @@ def cmd_backtest():
 
     from config_loader import get_config
     cfg = get_config()
-    exclude_symbols = set(cfg["trading"].get("exclude_symbols", []))
+    global_exclude = set(cfg.get("global_exclude_symbols", []))
 
     from data.collector import BybitCollector
     collector = BybitCollector()
     active_symbols = set(collector.get_top_symbols("all"))
 
     symbols = storage.list_symbols("4h")
-    symbols = [s for s in symbols if s in active_symbols and s not in exclude_symbols]
+    symbols = [s for s in symbols if s in active_symbols and s not in global_exclude]
 
     if not symbols:
         logger.error("No symbols found in storage. Run 'collect' first.")
@@ -136,9 +138,10 @@ def cmd_backtest():
         logger.info(f"  [{sym_id+1}/{len(all_symbols_ohlcv)}] Processing {sym}...")
         df_1h = storage.load_ohlcv(sym, "1h")
         df_1d = storage.load_ohlcv(sym, "1d")
+        df_1w = storage.load_ohlcv(sym, "1w")
         funding_df = storage.load_funding(sym)
 
-        df_feat = engineer.compute(df_4h, df_1h, df_1d, funding_df, symbol_id=sym_id)
+        df_feat = engineer.compute(df_4h, df_1h, df_1d, funding_df, df_1w=df_1w, symbol_id=sym_id)
         df_feat = breadth_calc.add_symbol_specific(df_feat, breadth_df, all_symbols_ohlcv, sym)
         df_labeled = labeler.label(df_feat)
         df_labeled["symbol"] = sym

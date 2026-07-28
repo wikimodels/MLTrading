@@ -95,6 +95,24 @@ class BacktestEngine:
         self.max_positions = rcfg["max_open_positions"]
         self.min_confidence = cfg["model"]["min_confidence"]
 
+        # ── Exit mode ─────────────────────────────────────────────
+        self.exit_mode = cfg.get("exit_mode", "partial_tp")
+        exit_params_all = cfg.get("exit_params", {})
+        self.exit_params = exit_params_all.get(self.exit_mode, {})
+
+        # Resolve TP/SL multipliers from exit_params or labeling fallback
+        lab = cfg.get("labeling", {})
+        self.tp_atr_mult = self.exit_params.get("tp_atr_mult", lab.get("tp_atr_mult", 2.0))
+        self.ep_sl_atr_mult = self.exit_params.get("sl_atr_mult", lab.get("sl_atr_mult", 1.5))
+        self.partial_close_pct = self.exit_params.get("partial_close_pct", 0.5)
+        self.ce_atr_mult = self.exit_params.get("ce_atr_mult", 2.0)
+
+        logger.info(
+            f"BacktestEngine: exit_mode={self.exit_mode} | "
+            f"TP={self.tp_atr_mult}xATR | SL={self.ep_sl_atr_mult}xATR | "
+            f"CE={self.ce_atr_mult}xATR"
+        )
+
     def run(self, wf_results: list[dict]) -> BacktestResults:
         """[Translated]"""
         results = BacktestResults()
@@ -134,7 +152,21 @@ class BacktestEngine:
         current_capital = capital
 
         # Pre-group rows by symbol for fast per-symbol exit checks
+        import ta
+        # Calculate CE short per symbol
         if "symbol" in df.columns:
+            if not df.empty:
+                dfs = []
+                for sym, grp in df.groupby("symbol"):
+                    grp = grp.copy().sort_values("timestamp")
+                    if len(grp) >= 14:
+                        atr = ta.volatility.AverageTrueRange(grp["high"], grp["low"], grp["close"], window=14).average_true_range()
+                        hh = grp["high"].rolling(14).max()
+                        grp["ce_short"] = hh - atr * 2.0
+                    else:
+                        grp["ce_short"] = float('nan')
+                    dfs.append(grp)
+                df = pd.concat(dfs).sort_values("timestamp").reset_index(drop=True)
             symbol_rows: dict = {sym: grp for sym, grp in df.groupby("symbol")}
         else:
             symbol_rows = {"UNKNOWN": df}
@@ -153,10 +185,11 @@ class BacktestEngine:
             # Check exits — only evaluate positions whose symbol matches this row
             if symbol in open_positions:
                 pos = open_positions[symbol]
-                trade = self._check_exit(pos, row, symbol)
-                if trade:
-                    trades.append(trade)
-                    current_capital += trade.net_pnl_usdt
+                new_trades = self._check_exit(pos, row, symbol)
+                for t in new_trades:
+                    trades.append(t)
+                    current_capital += t.net_pnl_usdt
+                if pos.get("closed", False):
                     del open_positions[symbol]
 
             # Entry signal
@@ -214,6 +247,9 @@ class BacktestEngine:
                         "confidence": row.get("confidence", 1.0),
                         "funding_rate": row.get("funding_rate", 0.0),
                         "max_bars": get_config()["labeling"]["max_bars"],
+                        "partial_tp_hit": False,
+                        "closed": False,
+                        "atr": atr,  # store ATR for trailing_only mode
                     }
 
         # Force-close any remaining open positions at the last bar
@@ -227,22 +263,131 @@ class BacktestEngine:
 
         return trades
 
-    def _check_exit(self, pos: dict, row: pd.Series, symbol: str) -> Optional[Trade]:
-        """[Translated]"""
+    def _check_exit(self, pos: dict, row: pd.Series, symbol: str) -> list[Trade]:
+        """
+        Route exit logic based on exit_mode:
+          'simple'       — fixed TP and SL, full close
+          'partial_tp'   — 50% close at TP, trailing SL for remainder (Chandelier Exit)
+          'trailing_only'— no fixed TP, trailing SL from entry
+        """
         pos["bars_held"] += 1
-        low = row.get("low", row["close"])
+        low  = row.get("low",  row["close"])
         high = row.get("high", row["close"])
+        trades = []
+
+        if self.exit_mode == "simple":
+            trades = self._exit_simple(pos, row, low, high)
+        elif self.exit_mode == "partial_tp":
+            trades = self._exit_partial_tp(pos, row, low, high)
+        elif self.exit_mode == "trailing_only":
+            trades = self._exit_trailing_only(pos, row, low, high)
+        else:
+            # Unknown mode — fallback to partial_tp
+            trades = self._exit_partial_tp(pos, row, low, high)
+
+        return trades
+
+    # ── Exit mode: SIMPLE ─────────────────────────────────────────
+
+    def _exit_simple(self, pos: dict, row: pd.Series, low: float, high: float) -> list[Trade]:
+        """Fixed TP and SL. Full close on first hit. No trailing."""
+        trades = []
+
+        # TP hit
         if low <= pos["tp_price"]:
             exit_price = pos["tp_price"] * (1 + self.slippage)
-            return self._close_trade(pos, exit_price, row["timestamp"], "tp")
+            trades.append(self._close_trade(pos, exit_price, row["timestamp"], "tp"))
+            pos["closed"] = True
+            return trades
+
+        # SL hit
         if high >= pos["sl_price"]:
             exit_price = pos["sl_price"] * (1 + self.slippage)
-            return self._close_trade(pos, exit_price, row["timestamp"], "sl")
+            trades.append(self._close_trade(pos, exit_price, row["timestamp"], "sl"))
+            pos["closed"] = True
+            return trades
+
+        # Timeout
         if pos["bars_held"] >= pos["max_bars"]:
             exit_price = row["close"] * (1 + self.slippage)
-            return self._close_trade(pos, exit_price, row["timestamp"], "timeout")
+            trades.append(self._close_trade(pos, exit_price, row["timestamp"], "timeout"))
+            pos["closed"] = True
 
-        return None
+        return trades
+
+    # ── Exit mode: PARTIAL TP + TRAILING SL ───────────────────────
+
+    def _exit_partial_tp(self, pos: dict, row: pd.Series, low: float, high: float) -> list[Trade]:
+        """Close partial_close_pct at TP, then trail remainder with Chandelier Exit."""
+        ce_val = row.get("ce_short")
+        ce_short = ce_val if pd.notna(ce_val) else pos["sl_price"]
+        trades = []
+
+        # 1. Partial TP
+        if not pos.get("partial_tp_hit", False) and low <= pos["tp_price"]:
+            exit_price = pos["tp_price"] * (1 + self.slippage)
+            partial_pos = pos.copy()
+            partial_pos["notional"] = pos["notional"] * self.partial_close_pct
+            partial_pos["qty"]     = pos["qty"]     * self.partial_close_pct
+            trades.append(self._close_trade(partial_pos, exit_price, row["timestamp"], "tp_50"))
+            pos["partial_tp_hit"] = True
+            pos["notional"] *= (1 - self.partial_close_pct)
+            pos["qty"]      *= (1 - self.partial_close_pct)
+
+        # 2. Trailing SL after partial TP
+        if pos.get("partial_tp_hit", False):
+            if "trail_sl_price" not in pos:
+                pos["trail_sl_price"] = min(pos["sl_price"], ce_short)
+            else:
+                pos["trail_sl_price"] = min(pos["trail_sl_price"], ce_short)
+
+            if high >= pos["trail_sl_price"]:
+                exit_price = pos["trail_sl_price"] * (1 + self.slippage)
+                trades.append(self._close_trade(pos, exit_price, row["timestamp"], "trail_sl"))
+                pos["closed"] = True
+        else:
+            # Normal SL before partial TP hit
+            if high >= pos["sl_price"]:
+                exit_price = pos["sl_price"] * (1 + self.slippage)
+                trades.append(self._close_trade(pos, exit_price, row["timestamp"], "sl"))
+                pos["closed"] = True
+
+        # 3. Timeout
+        if not pos.get("closed", False) and pos["bars_held"] >= pos["max_bars"]:
+            exit_price = row["close"] * (1 + self.slippage)
+            trades.append(self._close_trade(pos, exit_price, row["timestamp"], "timeout"))
+            pos["closed"] = True
+
+        return trades
+
+    # ── Exit mode: TRAILING ONLY ──────────────────────────────────
+
+    def _exit_trailing_only(self, pos: dict, row: pd.Series, low: float, high: float) -> list[Trade]:
+        """No fixed TP. Chandelier Exit trailing stop from the first bar."""
+        ce_val = row.get("ce_short")
+        ce_short = ce_val if pd.notna(ce_val) else pos["sl_price"]
+        trades = []
+
+        # Initialise or tighten the trailing stop
+        if "trail_sl_price" not in pos:
+            pos["trail_sl_price"] = pos["sl_price"]  # first bar: use initial SL
+        else:
+            pos["trail_sl_price"] = min(pos["trail_sl_price"], ce_short)
+
+        # Trail SL hit
+        if high >= pos["trail_sl_price"]:
+            exit_price = pos["trail_sl_price"] * (1 + self.slippage)
+            trades.append(self._close_trade(pos, exit_price, row["timestamp"], "trail_sl"))
+            pos["closed"] = True
+            return trades
+
+        # Timeout
+        if pos["bars_held"] >= pos["max_bars"]:
+            exit_price = row["close"] * (1 + self.slippage)
+            trades.append(self._close_trade(pos, exit_price, row["timestamp"], "timeout"))
+            pos["closed"] = True
+
+        return trades
 
     def _close_trade(
         self, pos: dict, exit_price: float, exit_time, outcome: str

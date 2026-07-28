@@ -25,6 +25,7 @@ class BybitCollector:
         "1h": 3_600_000,
         "4h": 14_400_000,
         "1d": 86_400_000,
+        "1w": 604_800_000,   # 7 days — required for incremental 1W updates
     }
 
     def __init__(self, testnet: bool = True):
@@ -71,21 +72,51 @@ class BybitCollector:
 
     def get_top_symbols(self, n: int | str = "all") -> list[str]:
         """
-        Symbol universe selection pipeline:
-          1. All Bybit linear perps ending in /USDT:USDT
-          2. Exclude stablecoins, leveraged tokens, stocks, ETFs, commodities
-          3. Keep only those with >= 3 years of history  → top 100
-          4. Sort by 24h quote volume                    → top 50
-          5. Sort by 90-day BTC return correlation        → top N
+        Symbol universe selection pipeline.
+        Reads active_group from symbol_universe config:
+          - 'experimental': returns fixed list of symbols
+          - 'main': auto-select via volume → history → BTC correlation
+
+        global_exclude_symbols is ALWAYS applied regardless of the active group.
         """
         logger.info("Fetching symbol universe from Bybit...")
-        
-        # Check if experimental mode is enabled
-        use_experimental = self.cfg["trading"].get("use_experimental_weak_symbols", False)
-        if use_experimental:
-            experimental_symbols = self.cfg["trading"].get("experimental_symbols", [])
-            logger.warning(f"⚠️ EXPERIMENTAL MODE ACTIVE ⚠️ Using fixed list of {len(experimental_symbols)} weak coins.")
-            return experimental_symbols
+
+        universe_cfg = self.cfg.get("symbol_universe", {})
+        active_group = universe_cfg.get("active_group", "experimental")
+        groups = universe_cfg.get("groups", {})
+
+        # ── Global blacklist — applied to ALL groups ───────────────
+        global_exclude = set(self.cfg.get("global_exclude_symbols", []))
+        if global_exclude:
+            logger.info(f"Global blacklist: {len(global_exclude)} symbols excluded from all groups")
+
+        # ── Experimental group: fixed list ────────────────────────
+        if active_group == "experimental":
+            exp_cfg = groups.get("experimental", {})
+            symbols = exp_cfg.get("symbols", [])
+            if not symbols:
+                # Fallback to legacy key
+                symbols = self.cfg.get("trading", {}).get("experimental_symbols", [])
+            before = len(symbols)
+            symbols = [s for s in symbols if s not in global_exclude]
+            removed = before - len(symbols)
+            if removed:
+                logger.warning(f"Global blacklist removed {removed} symbols from experimental group")
+            logger.warning(
+                f"⚠️  SYMBOL GROUP: experimental — {len(symbols)} монет (фиксированный список)"
+            )
+            return symbols
+
+        # ── Main group: auto-selection pipeline ───────────────────
+        main_cfg = groups.get("main", {})
+        min_volume = main_cfg.get("min_volume_usdt", self.cfg["trading"].get("min_volume_usdt", 5_000_000))
+        min_corr = main_cfg.get("min_btc_correlation", self.cfg["trading"].get("min_btc_correlation", 0.4))
+        min_history_days = main_cfg.get("history_days_required", self.cfg["data"]["history_days"])
+        top_n = main_cfg.get("top_n", "all")
+        user_exclude = set(main_cfg.get("exclude_symbols", self.cfg["trading"].get("exclude_symbols", [])))
+        user_exclude |= global_exclude   # merge global blacklist into main group's exclude set
+
+        logger.info(f"SYMBOL GROUP: main — volume≥{min_volume/1e6:.0f}M, corr≥{min_corr}, history≥{min_history_days}d")
 
         # Exclude stablecoins, leveraged tokens, stocks/ETFs, commodities, meme indices
         EXCLUDE = {
@@ -108,8 +139,6 @@ class BybitCollector:
         btc_sym = "BTC/USDT:USDT"
         tickers = self.exchange.fetch_tickers()
 
-        user_exclude = set(self.cfg["trading"].get("exclude_symbols", []))
-
         valid_symbols = []
         for symbol, ticker in tickers.items():
             if symbol in user_exclude:
@@ -120,15 +149,14 @@ class BybitCollector:
             if base in EXCLUDE:
                 continue
             volume_usdt = ticker.get("quoteVolume") or 0
-            if volume_usdt < self.cfg["trading"]["min_volume_usdt"]:
+            if volume_usdt < min_volume:
                 continue
             valid_symbols.append((symbol, volume_usdt))
 
         valid_symbols.sort(key=lambda x: x[1], reverse=True)
         logger.info(f"Found {len(valid_symbols)} candidate symbols after basic filtering")
 
-        # ── Step 1: filter by 3-year history ──────────────────────
-        min_history_days = self.cfg["data"]["history_days"]  # 1095 = 3 years
+        # ── Step 1: filter by history ─────────────────────────────
         check_since = int(
             (datetime.now(timezone.utc).timestamp() - min_history_days * 86400) * 1000
         )
@@ -206,7 +234,6 @@ class BybitCollector:
             except Exception:
                 continue
 
-        min_corr = self.cfg["trading"].get("min_btc_correlation", 0.4)
         ranked = sorted(correlations.items(), key=lambda x: x[1], reverse=True)
         top: list[str] = [btc_sym]
         for sym, corr in ranked:
@@ -214,7 +241,7 @@ class BybitCollector:
                 continue
             if corr < min_corr:
                 continue
-            if n != "all" and len(top) >= int(n):
+            if top_n != "all" and len(top) >= int(top_n):
                 break
             top.append(sym)
 
@@ -348,9 +375,11 @@ class BybitCollector:
         timeframes: Optional[list[str]] = None,
         incremental: bool = True,
     ) -> None:
-        """[Translated]"""
+        """Collect OHLCV for all required timeframes (4h, 1h, 1d, optionally 1w)."""
         if timeframes is None:
             timeframes = ["4h", "1h", "1d"]
+            if self.cfg.get("features", {}).get("use_weekly_tf", False):
+                timeframes.append("1w")
 
         for tf in timeframes:
             since_ts = None
@@ -386,10 +415,9 @@ class BybitCollector:
         symbols: Optional[list[str]] = None,
         incremental: bool = True,
     ) -> list[str]:
-        """[Translated]"""
+        """Collect all symbols from the active group (or provided list)."""
         if symbols is None:
-            n = self.cfg["trading"]["top_n_symbols"]
-            symbols = self.get_top_symbols(n)
+            symbols = self.get_top_symbols()
 
         success = []
         for i, symbol in enumerate(symbols, 1):

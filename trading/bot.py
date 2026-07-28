@@ -46,7 +46,9 @@ class TradingBot:
             return
 
         logger.info(f"")
+        global_exclude = set(self.cfg.get("global_exclude_symbols", []))
         symbols = self.storage.list_symbols("4h")
+        symbols = [s for s in symbols if s not in global_exclude]
         if not symbols:
             logger.warning("")
             return
@@ -83,12 +85,13 @@ class TradingBot:
             return
         df_1h = self.storage.load_ohlcv(symbol, "1h")
         df_1d = self.storage.load_ohlcv(symbol, "1d")
+        df_1w = self.storage.load_ohlcv(symbol, "1w")
         funding_df = self.storage.load_funding(symbol)
 
         sym_id = list(all_symbols_ohlcv.keys()).index(symbol)
         df_feat = self.engineer.compute(
             df_4h.tail(300),
-            df_1h, df_1d, funding_df, symbol_id=sym_id
+            df_1h, df_1d, funding_df, df_1w=df_1w, symbol_id=sym_id
         )
         df_feat = self.breadth_calc.add_symbol_specific(
             df_feat, breadth_df, all_symbols_ohlcv, symbol

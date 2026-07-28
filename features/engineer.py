@@ -1,4 +1,4 @@
-"""[Translated]"""
+"""Feature engineering for ML Trading Bot."""
 
 from __future__ import annotations
 
@@ -10,19 +10,23 @@ from config_loader import get_config
 
 
 class FeatureEngineer:
-    """[Translated]"""
+    """Computes all features for the ML model."""
 
     def __init__(self):
-        cfg = get_config()["features"]
-        self.atr_period = cfg["atr_period"]
-        self.rsi_period = cfg["rsi_period"]
-        self.ema_periods = cfg["ema_periods"]   # [21, 50, 200]
-        self.bb_period = cfg["bb_period"]
-        self.macd_fast = cfg["macd_fast"]
-        self.macd_slow = cfg["macd_slow"]
-        self.macd_signal = cfg["macd_signal"]
+        cfg = get_config()
+        feat_cfg = cfg["features"]
+        self.atr_period = feat_cfg["atr_period"]
+        self.rsi_period = feat_cfg["rsi_period"]
+        self.ema_periods = feat_cfg["ema_periods"]   # [21, 50, 200]
+        self.vwma_periods = feat_cfg.get("vwma_periods", [21, 50, 200])
+        self.bb_period = feat_cfg["bb_period"]
+        self.macd_fast = feat_cfg["macd_fast"]
+        self.macd_slow = feat_cfg["macd_slow"]
+        self.macd_signal = feat_cfg["macd_signal"]
+        self.use_weekly_tf = feat_cfg.get("use_weekly_tf", False)
 
     # ──────────────────────────────────────────────────────────────
+    # Main entry point
     # ──────────────────────────────────────────────────────────────
 
     def compute(
@@ -31,12 +35,19 @@ class FeatureEngineer:
         df_1h: pd.DataFrame | None = None,
         df_1d: pd.DataFrame | None = None,
         funding_df: pd.DataFrame | None = None,
+        df_1w: pd.DataFrame | None = None,
         symbol_id: int = 0,
     ) -> pd.DataFrame:
-        """[Translated]"""
+        """
+        Compute all features for one symbol.
+
+        Weekly TF note: df_1w uses only COMPLETED weekly candles (shift=1).
+        Any 4H bar inside week N will see week N-1 features, never the
+        current forming week. See _add_multitf_1w() for details.
+        """
         df = df_4h.copy()
         required = {"timestamp", "open", "high", "low", "close", "volume"}
-        assert required.issubset(df.columns), f""
+        assert required.issubset(df.columns), f"Missing columns: {required - set(df.columns)}"
 
         df = df.sort_values("timestamp").reset_index(drop=True)
 
@@ -65,7 +76,7 @@ class FeatureEngineer:
         # ── 7. Time Features ──────────────────────────────────────
         df = self._add_time_features(df)
 
-        # ── 8. Multi-TF Features ──────────────────────────────────
+        # ── 8. Multi-TF: 1H and 1D ────────────────────────────────
         if df_1h is not None:
             df = self._add_multitf_1h(df, df_1h)
         else:
@@ -77,7 +88,18 @@ class FeatureEngineer:
         else:
             df["trend_1d"] = 0
             df["rsi_1d"] = 50.0
-            
+
+        # ── 9. Weekly TF (only COMPLETED weeks) ───────────────────
+        if df_1w is not None and self.use_weekly_tf:
+            df = self._add_multitf_1w(df, df_1w)
+        else:
+            # Neutral defaults when weekly data is absent or disabled
+            df["week_candle_bearish"] = 0
+            df["week_rsi"] = 50.0
+            df["week_trend"] = 0
+            df["week_price_vs_ema21"] = 0.0
+            df["week_body_ratio"] = 0.5
+
         df["symbol_id"] = symbol_id
         feat_cols = [c for c in df.columns if c not in ("timestamp", "open", "high", "low", "close", "volume")]
         df = df.dropna(subset=feat_cols).reset_index(drop=True)
@@ -91,7 +113,6 @@ class FeatureEngineer:
     def _add_trend(self, df: pd.DataFrame) -> pd.DataFrame:
         close = df["close"]
 
-        self.ema_periods = [21, 50, 200]
         for period in self.ema_periods:
             col = f"ema_{period}"
             df[col] = ta.trend.ema_indicator(close, window=period)
@@ -99,8 +120,23 @@ class FeatureEngineer:
             df[f"ema_{period}_slope"] = df[col].pct_change(3)
 
         # EMA crossovers
-        df["ema21_vs_ema50"] = (df["ema_21"] > df["ema_50"]).astype(int)
-        df["ema50_vs_ema200"] = (df["ema_50"] > df["ema_200"]).astype(int)
+        if 21 in self.ema_periods and 50 in self.ema_periods:
+            df["ema21_vs_ema50"] = (df["ema_21"] > df["ema_50"]).astype(int)
+        if 50 in self.ema_periods and 200 in self.ema_periods:
+            df["ema50_vs_ema200"] = (df["ema_50"] > df["ema_200"]).astype(int)
+
+        # VWMA (Volume Weighted Moving Average)
+        volume = df["volume"]
+        price_vol = close * volume
+        for period in getattr(self, "vwma_periods", []):
+            vwma_col = f"vwma_{period}"
+            df[vwma_col] = price_vol.rolling(window=period).sum() / volume.rolling(window=period).sum()
+            df[f"price_vs_vwma_{period}"] = (close - df[vwma_col]) / df[vwma_col]
+            
+            # Разница между ценовой средней и объемной (показывает, подкреплен ли тренд объемами)
+            if period in getattr(self, "ema_periods", []):
+                ema_col = f"ema_{period}"
+                df[f"ema_vs_vwma_{period}"] = (df[ema_col] - df[vwma_col]) / df[vwma_col]
 
         return df
 
@@ -172,14 +208,14 @@ class FeatureEngineer:
         df["bb_lower"] = bb.bollinger_lband()
         df["bb_middle"] = bb.bollinger_mavg()
         df["bb_width"] = (df["bb_upper"] - df["bb_lower"]) / df["bb_middle"]
-        df["bb_pct"] = bb.bollinger_pband()        
+        df["bb_pct"] = bb.bollinger_pband()
         df["bb_squeeze"] = (df["bb_width"] < df["bb_width"].rolling(50).mean() * 0.7).astype(int)
         log_ret = np.log(close / close.shift(1))
         df["hist_vol_20"] = log_ret.rolling(20).std() * np.sqrt(20)
         kc = ta.volatility.KeltnerChannel(high, low, close, window=20)
         df["kc_upper"] = kc.keltner_channel_hband()
         df["kc_lower"] = kc.keltner_channel_lband()
-        
+
         # TTM Squeeze (BB inside KC)
         df["ttm_squeeze"] = ((df["bb_upper"] < df["kc_upper"]) & (df["bb_lower"] > df["kc_lower"])).astype(int)
 
@@ -193,15 +229,15 @@ class FeatureEngineer:
         close = df["close"]
         volume = df["volume"]
         df["volume_ratio"] = volume / volume.rolling(20).mean()
-        
+
         # VZO (Volume Zone Oscillator)
         sign = np.sign(close - close.shift(1))
         r = sign * volume
         vp = ta.trend.ema_indicator(r, window=14)
         tv = ta.trend.ema_indicator(volume, window=14)
         df["vzo"] = (100 * (vp / tv)).fillna(0)
-        
-        # Cumulative Volume Delta (CVD) - Восстановлено!
+
+        # Cumulative Volume Delta (CVD)
         body = df["close"] - df["open"]
         candle_range = (df["high"] - df["low"]).replace(0, np.nan)
         df["cvd_proxy"] = (body / candle_range * volume).fillna(0)
@@ -269,7 +305,7 @@ class FeatureEngineer:
     # ──────────────────────────────────────────────────────────────
 
     def _add_funding(self, df: pd.DataFrame, funding_df: pd.DataFrame) -> pd.DataFrame:
-        """[Translated]"""
+        """Merge funding rate history into OHLCV using forward-fill."""
         funding_df = funding_df.sort_values("timestamp").copy()
         funding_df["timestamp"] = pd.to_datetime(funding_df["timestamp"], utc=True)
         funding_df = funding_df.set_index("timestamp")
@@ -311,7 +347,7 @@ class FeatureEngineer:
         return df
 
     # ──────────────────────────────────────────────────────────────
-    # 8. MULTI-TIMEFRAME
+    # 8. MULTI-TIMEFRAME: 1H and 1D
     # ──────────────────────────────────────────────────────────────
 
     def _add_multitf_1h(self, df_4h: pd.DataFrame, df_1h: pd.DataFrame) -> pd.DataFrame:
@@ -347,11 +383,86 @@ class FeatureEngineer:
         return df_4h
 
     # ──────────────────────────────────────────────────────────────
+    # 9. WEEKLY TF — only COMPLETED candles
+    #
+    # Key insight: shift(1) ensures we always use the PREVIOUS
+    # completed week, NEVER the current forming week.
+    #
+    # Timeline example:
+    #   Week 1: Mon Jan 01 → Sun Jan 07 (closes Sunday)
+    #   Week 2: Mon Jan 08 → Sun Jan 14
+    #
+    #   4H bars during week 2 see ONLY week 1 features:
+    #   - Mon Jan 08 00:00 → week 1 features  ✓
+    #   - Thu Jan 11 12:00 → week 1 features  ✓
+    #   - Sun Jan 14 20:00 → week 1 features  ✓
+    #   - Mon Jan 15 00:00 → week 2 features  ✓ (new week started)
+    #
+    # Implementation:
+    #   1. Compute indicators on raw 1W OHLCV
+    #   2. shift(1) — each weekly bar now carries PREV week's values
+    #   3. reindex(4H timestamps, ffill) — spreads prev week's values
+    #      across all 4H bars until the next weekly bar appears
+    # ──────────────────────────────────────────────────────────────
+
+    def _add_multitf_1w(self, df_4h: pd.DataFrame, df_1w: pd.DataFrame) -> pd.DataFrame:
+        """
+        Merge weekly features into 4H bars using only completed weekly candles.
+        Uses shift(1) to prevent lookahead bias on the weekly timeframe.
+        """
+        WEEKLY_FEAT_COLS = [
+            "week_candle_bearish",   # 1 = last closed week was red (strong short signal)
+            "week_rsi",              # RSI(14) on weekly closes
+            "week_trend",            # 1 = above EMA21(W), -1 = below
+            "week_price_vs_ema21",   # (close - EMA21) / EMA21 — magnitude of deviation
+            "week_body_ratio",       # |close - open| / (high - low) — candle strength
+        ]
+
+        df_1w = df_1w.copy().sort_values("timestamp").reset_index(drop=True)
+        df_1w["timestamp"] = pd.to_datetime(df_1w["timestamp"], utc=True)
+
+        # ── Compute weekly indicators on actual price data ─────────
+        ema21_1w = ta.trend.ema_indicator(df_1w["close"], window=21)
+        rsi_1w   = ta.momentum.rsi(df_1w["close"], window=14)
+        candle_range = (df_1w["high"] - df_1w["low"]).replace(0, np.nan)
+
+        df_1w["week_candle_bearish"] = (df_1w["close"] < df_1w["open"]).astype(int)
+        df_1w["week_rsi"]            = rsi_1w
+        df_1w["week_trend"]          = np.where(df_1w["close"] > ema21_1w, 1, -1)
+        df_1w["week_price_vs_ema21"] = ((df_1w["close"] - ema21_1w) / ema21_1w).fillna(0)
+        df_1w["week_body_ratio"]     = ((df_1w["close"] - df_1w["open"]).abs() / candle_range).fillna(0)
+
+        # ── SHIFT(1): push features forward by one weekly bar ──────
+        # After shift, the row at timestamp T (start of week N) contains
+        # the features of week N-1 (the last COMPLETED week).
+        # The current forming week's data is NEVER used.
+        df_1w[WEEKLY_FEAT_COLS] = df_1w[WEEKLY_FEAT_COLS].shift(1)
+
+        # ── Reindex into 4H resolution via forward-fill ────────────
+        # ffill propagates week N-1 features across all 4H bars of week N
+        # until the weekly bar for week N+1 appears (at which point
+        # week N features take over — but again shifted, so they are week N).
+        df_1w_indexed = df_1w.set_index("timestamp")[WEEKLY_FEAT_COLS]
+
+        df_4h = df_4h.sort_values("timestamp")
+        df_4h["timestamp"] = pd.to_datetime(df_4h["timestamp"], utc=True)
+        ts_index_4h = pd.DatetimeIndex(df_4h["timestamp"])
+
+        for col in WEEKLY_FEAT_COLS:
+            values = df_1w_indexed[col].reindex(ts_index_4h, method="ffill").values
+            # Fill NaN at the very beginning (before first completed week)
+            default = 50.0 if col == "week_rsi" else 0.0
+            df_4h[col] = pd.Series(values, index=df_4h.index).fillna(default)
+
+        return df_4h
+
+    # ──────────────────────────────────────────────────────────────
+    # Feature column list
     # ──────────────────────────────────────────────────────────────
 
     @staticmethod
     def get_feature_columns(df: pd.DataFrame) -> list[str]:
         exclude = {"timestamp", "open", "high", "low", "close", "volume",
                    "label", "label_return", "label_outcome", "label_bars",
-                   "tp_price", "sl_price"}
+                   "tp_price", "sl_price", "symbol"}
         return [c for c in df.columns if c not in exclude]
