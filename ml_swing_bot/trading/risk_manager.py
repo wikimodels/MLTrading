@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 
 from loguru import logger
 
-from config_loader import get_config
+from shared.config_loader import get_config
 from labeling.triple_barrier import TripleBarrierLabeler
 
 

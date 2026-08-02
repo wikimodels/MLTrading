@@ -10,7 +10,7 @@ import ccxt
 from dotenv import load_dotenv
 from loguru import logger
 
-from config_loader import get_config
+from shared.config_loader import get_config
 
 
 class OrderExecutor:

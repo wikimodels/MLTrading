@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from loguru import logger
 
-from config_loader import get_config
+from shared.config_loader import get_config
 
 
 class TripleBarrierLabeler:

@@ -7,7 +7,7 @@ import pandas as pd
 import ta
 from loguru import logger
 
-from config_loader import get_config
+from shared.config_loader import get_config
 
 
 class MarketBreadthCalculator:

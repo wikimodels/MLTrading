@@ -7,8 +7,20 @@ from __future__ import annotations
 
 import re
 import time
+import os
+import sys
 from datetime import datetime
 from pathlib import Path
+
+_root = Path(__file__).resolve().parent.parent
+_bot_dir = Path(__file__).resolve().parent
+if str(_root) not in sys.path:
+    sys.path.insert(0, str(_root))
+if str(_bot_dir) not in sys.path:
+    sys.path.insert(0, str(_bot_dir))
+os.chdir(_bot_dir)
+from shared.config_loader import set_active_bot
+set_active_bot("ml_swing_bot")
 
 import pandas as pd
 import plotly.express as px

@@ -11,8 +11,8 @@ import ccxt
 import pandas as pd
 from loguru import logger
 
-from data.storage import DataStorage
-from config_loader import get_config
+from shared.data.storage import DataStorage
+from shared.config_loader import get_config
 
 
 class BybitCollector:

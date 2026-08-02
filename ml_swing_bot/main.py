@@ -2,7 +2,20 @@
 
 from __future__ import annotations
 
+import os
 import sys
+from pathlib import Path
+
+_root = Path(__file__).resolve().parent.parent
+_bot_dir = Path(__file__).resolve().parent
+if str(_root) not in sys.path:
+    sys.path.insert(0, str(_root))
+if str(_bot_dir) not in sys.path:
+    sys.path.insert(0, str(_bot_dir))
+os.chdir(_bot_dir)
+from shared.config_loader import set_active_bot
+set_active_bot("ml_swing_bot")
+
 from loguru import logger
 logger.remove()
 logger.add(
@@ -22,7 +35,7 @@ logger.add(
 
 def cmd_collect():
     """Collect OHLCV + funding data from Bybit for the selected universe."""
-    from data.collector import BybitCollector
+    from shared.data.collector import BybitCollector
     logger.info("Starting data collection...")
     collector = BybitCollector(testnet=False)
     symbols = collector.collect_all(incremental=False)
@@ -32,7 +45,7 @@ def cmd_collect():
 def cmd_train():
     """Train the walk-forward LightGBM model on all collected data."""
     import pandas as pd
-    from data.storage import DataStorage
+    from shared.data.storage import DataStorage
     from features.engineer import FeatureEngineer
     from features.market_breadth import MarketBreadthCalculator
     from labeling.triple_barrier import TripleBarrierLabeler
@@ -46,11 +59,11 @@ def cmd_train():
     labeler = TripleBarrierLabeler()
     trainer = WalkForwardTrainer()
 
-    from data.collector import BybitCollector
+    from shared.data.collector import BybitCollector
     collector = BybitCollector()
     active_symbols = set(collector.get_top_symbols("all"))
 
-    from config_loader import get_config
+    from shared.config_loader import get_config
     cfg = get_config()
     global_exclude = set(cfg.get("global_exclude_symbols", []))
     symbols = storage.list_symbols("4h")
@@ -97,7 +110,7 @@ def cmd_backtest():
     """Run walk-forward backtest and generate PDF report."""
     import pandas as pd
     from datetime import datetime, timezone, timedelta
-    from data.storage import DataStorage
+    from shared.data.storage import DataStorage
     from features.engineer import FeatureEngineer
     from features.market_breadth import MarketBreadthCalculator
     from labeling.triple_barrier import TripleBarrierLabeler
@@ -111,11 +124,11 @@ def cmd_backtest():
     breadth_calc = MarketBreadthCalculator()
     labeler = TripleBarrierLabeler()
 
-    from config_loader import get_config
+    from shared.config_loader import get_config
     cfg = get_config()
     global_exclude = set(cfg.get("global_exclude_symbols", []))
 
-    from data.collector import BybitCollector
+    from shared.data.collector import BybitCollector
     collector = BybitCollector()
     active_symbols = set(collector.get_top_symbols("all"))
 
@@ -265,7 +278,7 @@ def cmd_run():
 
 def cmd_status():
     """Show summary of collected data."""
-    from data.storage import DataStorage
+    from shared.data.storage import DataStorage
     storage = DataStorage()
     df = storage.status()
     if df.empty:

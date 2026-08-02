@@ -8,7 +8,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 from loguru import logger
 
-from config_loader import get_config
+from shared.config_loader import get_config
 
 
 class BotScheduler:
@@ -72,8 +72,8 @@ class BotScheduler:
         """[Translated]"""
         logger.info("")
         try:
-            from data.collector import BybitCollector
-            from data.storage import DataStorage
+            from shared.data.collector import BybitCollector
+            from shared.data.storage import DataStorage
 
             storage = DataStorage()
             symbols = storage.list_symbols("4h")
@@ -95,7 +95,7 @@ class BotScheduler:
         """[Translated]"""
         logger.info("")
         try:
-            from data.collector import BybitCollector
+            from shared.data.collector import BybitCollector
             collector = BybitCollector(testnet=False)
             # get_top_symbols() reads active_group from symbol_universe config internally
             top_symbols = collector.get_top_symbols()
@@ -105,7 +105,7 @@ class BotScheduler:
             from features.engineer import FeatureEngineer
             from features.market_breadth import MarketBreadthCalculator
             from labeling.triple_barrier import TripleBarrierLabeler
-            from data.storage import DataStorage
+            from shared.data.storage import DataStorage
 
             storage = DataStorage()
             engineer = FeatureEngineer()

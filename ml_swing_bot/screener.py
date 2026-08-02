@@ -2,7 +2,19 @@ import ccxt
 import pandas as pd
 from datetime import datetime, timezone, timedelta
 from loguru import logger
-from config_loader import get_config
+import os
+import sys
+from pathlib import Path
+_root = Path(__file__).resolve().parent.parent
+_bot_dir = Path(__file__).resolve().parent
+if str(_root) not in sys.path:
+    sys.path.insert(0, str(_root))
+if str(_bot_dir) not in sys.path:
+    sys.path.insert(0, str(_bot_dir))
+os.chdir(_bot_dir)
+
+from shared.config_loader import get_config, set_active_bot
+set_active_bot("ml_swing_bot")
 import os
 from dotenv import load_dotenv
 

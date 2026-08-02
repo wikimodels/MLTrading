@@ -7,8 +7,8 @@ from datetime import datetime, timezone
 import pandas as pd
 from loguru import logger
 
-from config_loader import get_config
-from data.storage import DataStorage
+from shared.config_loader import get_config
+from shared.data.storage import DataStorage
 from features.engineer import FeatureEngineer
 from features.market_breadth import MarketBreadthCalculator
 from models.predictor import Predictor

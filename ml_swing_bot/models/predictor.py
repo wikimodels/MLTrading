@@ -8,7 +8,7 @@ import pandas as pd
 from loguru import logger
 
 from models.trainer import WalkForwardTrainer
-from config_loader import get_config
+from shared.config_loader import get_config
 
 
 class Predictor:

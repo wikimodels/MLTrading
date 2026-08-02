@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import ta
 
-from config_loader import get_config
+from shared.config_loader import get_config
 
 
 class FeatureEngineer:

@@ -18,7 +18,7 @@ from sklearn.metrics import (
     roc_auc_score,
 )
 
-from config_loader import get_config
+from shared.config_loader import get_config
 from features.engineer import FeatureEngineer
 
 

@@ -8,7 +8,7 @@ from typing import Optional
 import pandas as pd
 from loguru import logger
 
-from config_loader import get_config
+from shared.config_loader import get_config, get_project_root
 
 
 class DataStorage:
@@ -16,7 +16,7 @@ class DataStorage:
 
     def __init__(self):
         cfg = get_config()
-        self.raw_dir = Path(cfg["data"]["raw_dir"])
+        self.raw_dir = get_project_root() / cfg["data"]["raw_dir"]
         self.raw_dir.mkdir(parents=True, exist_ok=True)
 
     def _symbol_dir(self, symbol: str) -> Path:
