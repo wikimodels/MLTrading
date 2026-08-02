@@ -120,9 +120,9 @@ class BacktestEngine:
         current_sl: float = 0.0
 
         for idx, row in df.iterrows():
-            # If in an active short trade, check trailing stop / exit
+            # If in an active short trade, check stop loss / theory exit
             if active_trade is not None and active_trade.direction == "short":
-                # Check if price hit stop loss
+                # 1. Check if price hit Initial Stop Loss intraday
                 if row["high"] >= current_sl:
                     exit_price = current_sl * (1.0 + self.slippage)
                     raw_return = (active_trade.entry_price - exit_price) / active_trade.entry_price
@@ -133,27 +133,45 @@ class BacktestEngine:
                     active_trade.exit_price = exit_price
                     active_trade.return_pct = net_return
                     active_trade.pnl_usdt = net_return * self.trade_size_usdt
-                    active_trade.exit_reason = "trailing_stop"
+                    active_trade.exit_reason = "stop_loss_hit"
                     try:
                         active_trade.bars_held = (pd.to_datetime(row["timestamp"]) - pd.to_datetime(active_trade.entry_time)).days
                     except Exception:
                         active_trade.bars_held = 0
                     trades.append(active_trade)
                     active_trade = None
-                else:
-                    # Update Chandelier Trailing Stop (short moves SL downward only)
-                    candidate_sl = row["low"] + self.trailing_mult * row["atr_14"]
-                    if candidate_sl < current_sl:
-                        current_sl = candidate_sl
+                    continue
+
+                # 2. Check Theory Exits (Markov State Change on daily close):
+                # Return above short-term average (C > EMA5) OR Bullish absorption CLV >= 0.85
+                ema5_val = row.get("ema5", 1e9)
+                clv_val = row.get("clv", 0.5)
+                if row["close"] > ema5_val or clv_val >= 0.85:
+                    reason = "ema5_reverted" if row["close"] > ema5_val else "clv_reverted"
+                    exit_price = row["close"] * (1.0 + self.slippage)
+                    raw_return = (active_trade.entry_price - exit_price) / active_trade.entry_price
+                    net_return = raw_return - (2 * self.taker_fee)
+                    
+                    active_trade.exit_time = row["timestamp"]
+                    active_trade.exit_price = exit_price
+                    active_trade.return_pct = net_return
+                    active_trade.pnl_usdt = net_return * self.trade_size_usdt
+                    active_trade.exit_reason = reason
+                    try:
+                        active_trade.bars_held = (pd.to_datetime(row["timestamp"]) - pd.to_datetime(active_trade.entry_time)).days
+                    except Exception:
+                        active_trade.bars_held = 0
+                    trades.append(active_trade)
+                    active_trade = None
+                    continue
                 continue
 
             # If no active trade, check entry signal
             if active_trade is None and row["signal_short"] == 1:
                 entry_price = row["close"] * (1.0 - self.slippage)
                 current_sl = row["initial_sl"]
-                prev_idx = idx - 1 if idx > 0 else idx
-                entry_tr = float(df.loc[prev_idx, "tr_zscore"]) if "tr_zscore" in df.columns and prev_idx in df.index else float(row.get("tr_zscore", 0.0))
-                entry_clv_val = float(df.loc[prev_idx, "clv"]) if "clv" in df.columns and prev_idx in df.index else float(row.get("clv", 0.0))
+                entry_tr = float(row.get("tr_zscore", 0.0))
+                entry_clv_val = float(row.get("clv", 0.0))
                 active_trade = Trade(
                     symbol=symbol,
                     direction="short",

@@ -15,11 +15,11 @@ data:
 
 strategy:
   # Quantitative screening thresholds
-  hurst_min: 0.35         # Trend persistence vs random walk (adjusted for crypto market dynamics)
+  hurst_min: 0.25         # Trend persistence vs random walk (adjusted for real altcoin dynamics on 180d window)
   kurtosis_min: 5.0       # Heavy tails property in return distribution (K > 5.0)
   
-  # Entry trigger thresholds on D-1 / D
-  tr_zscore_min: 2.5      # Volatility transition threshold (Z-Score of True Range)
+  # Entry trigger thresholds on D1 close
+  tr_zscore_min: 2.5      # Volatility transition threshold (Z-Score of True Range >= 2.5)
   clv_short_max: 0.25     # Close Location Value near bottom for short breakdown (<= 0.25)
   clv_long_min: 0.75      # Close Location Value near top for bullish breakout (>= 0.75)
   

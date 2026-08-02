@@ -35,35 +35,30 @@ class SignalGenerator:
         df["atr_14"] = tr.rolling(14, min_periods=7).mean().replace(0, 1e-8)
         df["tr_zscore"] = compute_tr_zscore(df, window=30)
         df["clv"] = compute_clv(df["high"], df["low"], df["close"])
-
-        # Lagged variables for Day D-1 and confirmation Day D
-        tr_z_prev = df["tr_zscore"].shift(1)
-        clv_prev = df["clv"].shift(1)
-        close_prev = df["close"].shift(1)
+        df["q01"] = df["close"].rolling(window=90, min_periods=30).apply(lambda x: np.quantile(x, 0.01), raw=True)
+        df["ema5"] = df["close"].ewm(span=5, adjust=False).mean()
 
         # Initialize signal columns
         df["signal_short"] = 0
         df["signal_long"] = 0
         df["initial_sl"] = np.nan
 
-        # Short Trigger: Day D-1 extreme volatility explosion & close near bottom; Day D continuation
+        # Short Trigger per theory: Z-Score of TR >= threshold, CLV <= max (capitulation), and Close <= 90d 1% Quantile
         if self.allow_short:
             cond_short = (
-                (tr_z_prev >= self.tr_zscore_min) &
-                (clv_prev <= self.clv_short_max) &
-                (df["close"] < close_prev) &
-                (df["clv"] <= 0.40)
+                (df["tr_zscore"] >= self.tr_zscore_min) &
+                (df["clv"] <= self.clv_short_max) &
+                (df["close"] <= df["q01"])
             )
             df.loc[cond_short, "signal_short"] = 1
             df.loc[cond_short, "initial_sl"] = df.loc[cond_short, "close"] + self.sl_mult * df.loc[cond_short, "atr_14"]
 
-        # Long Trigger (optional)
+        # Long Trigger (optional reversal)
         if self.allow_long:
             cond_long = (
-                (tr_z_prev >= self.tr_zscore_min) &
-                (clv_prev >= self.clv_long_min) &
-                (df["close"] > close_prev) &
-                (df["clv"] >= 0.60)
+                (df["tr_zscore"] >= self.tr_zscore_min) &
+                (df["clv"] >= self.clv_long_min) &
+                (df["close"] >= df["close"].rolling(window=90, min_periods=30).apply(lambda x: np.quantile(x, 0.99), raw=True))
             )
             df.loc[cond_long, "signal_long"] = 1
             df.loc[cond_long, "initial_sl"] = df.loc[cond_long, "close"] - self.sl_mult * df.loc[cond_long, "atr_14"]
