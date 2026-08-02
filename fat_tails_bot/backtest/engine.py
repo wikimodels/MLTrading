@@ -23,11 +23,15 @@ class Trade:
     direction: str
     entry_time: datetime | pd.Timestamp
     entry_price: float
+    entry_tr_zscore: float = 0.0
+    entry_clv: float = 0.0
+    initial_sl: float = 0.0
     exit_time: datetime | pd.Timestamp | None = None
     exit_price: float | None = None
     pnl_usdt: float = 0.0
     return_pct: float = 0.0
     exit_reason: str = "open"
+    bars_held: int = 0
 
 
 class BacktestEngine:
@@ -85,8 +89,12 @@ class BacktestEngine:
                 "direction": t.direction,
                 "entry_time": t.entry_time,
                 "entry_price": round(t.entry_price, 6),
+                "initial_sl": round(t.initial_sl, 6),
+                "entry_tr_zscore": round(t.entry_tr_zscore, 2),
+                "entry_clv": round(t.entry_clv, 3),
                 "exit_time": t.exit_time,
                 "exit_price": round(t.exit_price, 6) if t.exit_price else None,
+                "bars_held": t.bars_held,
                 "pnl_usdt": round(t.pnl_usdt, 4),
                 "return_pct": round(t.return_pct, 4),
                 "exit_reason": t.exit_reason,
@@ -126,6 +134,10 @@ class BacktestEngine:
                     active_trade.return_pct = net_return
                     active_trade.pnl_usdt = net_return * self.trade_size_usdt
                     active_trade.exit_reason = "trailing_stop"
+                    try:
+                        active_trade.bars_held = (pd.to_datetime(row["timestamp"]) - pd.to_datetime(active_trade.entry_time)).days
+                    except Exception:
+                        active_trade.bars_held = 0
                     trades.append(active_trade)
                     active_trade = None
                 else:
@@ -139,11 +151,17 @@ class BacktestEngine:
             if active_trade is None and row["signal_short"] == 1:
                 entry_price = row["close"] * (1.0 - self.slippage)
                 current_sl = row["initial_sl"]
+                prev_idx = idx - 1 if idx > 0 else idx
+                entry_tr = float(df.loc[prev_idx, "tr_zscore"]) if "tr_zscore" in df.columns and prev_idx in df.index else float(row.get("tr_zscore", 0.0))
+                entry_clv_val = float(df.loc[prev_idx, "clv"]) if "clv" in df.columns and prev_idx in df.index else float(row.get("clv", 0.0))
                 active_trade = Trade(
                     symbol=symbol,
                     direction="short",
                     entry_time=row["timestamp"],
                     entry_price=entry_price,
+                    entry_tr_zscore=entry_tr,
+                    entry_clv=entry_clv_val,
+                    initial_sl=current_sl,
                 )
 
         # Close open trade at end of data
@@ -156,6 +174,10 @@ class BacktestEngine:
             active_trade.return_pct = raw_return
             active_trade.pnl_usdt = raw_return * self.trade_size_usdt
             active_trade.exit_reason = "end_of_data"
+            try:
+                active_trade.bars_held = (pd.to_datetime(last_row["timestamp"]) - pd.to_datetime(active_trade.entry_time)).days
+            except Exception:
+                active_trade.bars_held = 0
             trades.append(active_trade)
 
         return trades

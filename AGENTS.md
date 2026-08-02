@@ -33,6 +33,7 @@ poetry run python ml_swing_bot/main.py run         # Запуск live-бота 
 # ── Fat Tails D1 Bot (D1 / Quant Strategy) ──
 poetry run python fat_tails_bot/main.py screener   # Математический отбор монет по Hurst и Kurtosis
 poetry run python fat_tails_bot/main.py backtest   # Бэктест стратегии на D1 с Chandelier Trailing
+poetry run streamlit run fat_tails_bot/monitor.py  # ⭐ Streamlit-дашборд и визуальный аудит Fat Tails бота
 poetry run python fat_tails_bot/main.py status     # Сводка по доступным данным из базы
 poetry run python fat_tails_bot/main.py run        # Запуск live-цикла Fat Tails бота
 ```
@@ -66,6 +67,7 @@ MLTrading/
 │
 ├── fat_tails_bot/           # ⭐ Fat Tails D1 Bot (Quant Strategy)
 │   ├── main.py              # Точка входа: screener / backtest / run / status
+│   ├── monitor.py           # ⭐ Streamlit-дашборд и интерактивный рентген сделок
 │   ├── config/settings.yaml # Конфигурация порогов Hurst, Kurtosis, Z-Score TR, CLV
 │   ├── screener/screener.py # Фильтрация активов по Hurst > 0.35 и Kurtosis > 5.0
 │   ├── strategy/signals.py  # Генерация D1 сигналов и динамических стоп-лоссов
