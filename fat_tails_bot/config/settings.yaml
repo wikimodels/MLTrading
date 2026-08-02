@@ -1,0 +1,47 @@
+# Fat Tails D1 Trading Bot Configuration
+# Based on Mathematical Theory of Heavy Tails and Volatility Phase Transitions
+
+symbol_universe:
+  active_group: "main"
+  groups:
+    main:
+      description: "Automatically screened universe of coins with heavy tails and persistence"
+      max_symbols: 30
+
+data:
+  raw_dir: "data/storage/raw"
+  timeframe: "1d"
+  fallback_to_4h_resample: true
+
+strategy:
+  # Quantitative screening thresholds
+  hurst_min: 0.35         # Trend persistence vs random walk (adjusted for crypto market dynamics)
+  kurtosis_min: 5.0       # Heavy tails property in return distribution (K > 5.0)
+  
+  # Entry trigger thresholds on D-1 / D
+  tr_zscore_min: 2.5      # Volatility transition threshold (Z-Score of True Range)
+  clv_short_max: 0.25     # Close Location Value near bottom for short breakdown (<= 0.25)
+  clv_long_min: 0.75      # Close Location Value near top for bullish breakout (>= 0.75)
+  
+  allow_short: true
+  allow_long: false       # Keep short-focused by default per overall project philosophy
+
+risk:
+  trade_size_usdt: 10.0   # Fixed $10 position size per trade
+  max_leverage: 1
+  stop_loss_atr_mult: 1.5 # Initial Stop Loss based on ATR
+  trailing_atr_mult: 2.0  # Dynamic trailing exit without static Target Profit
+
+backtest:
+  initial_capital: 200.0
+  maker_fee: 0.0002
+  taker_fee: 0.0005
+  slippage: 0.0003
+  start_date: "2024-01-01"
+  end_date: "2026-07-27"
+
+global_exclude_symbols:
+  - "BTC/USDT:USDT"
+  - "USDC/USDT:USDT"
+  - "BUSD/USDT:USDT"
+  - "DAI/USDT:USDT"
