@@ -33,11 +33,9 @@ def walk_forward(train_window_days: int = 365,
         df = load_daily_ohlcv(storage, sym)
         if df is None or len(df) < 50:
             continue
-        sig_df = generator.compute_signals(df)
-        if not sig_df.empty:
-            prepared_data[sym] = sig_df
+        prepared_data[sym] = df
 
-    all_dates = sorted(set().union(*[set(df.index) for df in prepared_data.values()]))
+    all_dates = sorted(set().union(*[set(pd.to_datetime(df['timestamp'])) for df in prepared_data.values()]))
     if not all_dates:
         return pd.DataFrame()
         
@@ -53,10 +51,19 @@ def walk_forward(train_window_days: int = 365,
         if test_end > end_date:
             break
 
-        test_data = {
-            symbol: df[(df.index > train_end) & (df.index <= test_end)]
-            for symbol, df in prepared_data.items()
-        }
+        # Compute signals ONLY on data up to test_end (no future info leaks in)
+        test_data = {}
+        for symbol, df in prepared_data.items():
+            df_up_to_test = df[pd.to_datetime(df['timestamp']) <= test_end].copy()
+            if len(df_up_to_test) < 50:
+                continue
+            sig_df = generator.compute_signals(df_up_to_test)
+            if sig_df is None or sig_df.empty:
+                continue
+            sig_df['timestamp'] = pd.to_datetime(sig_df['timestamp'])
+            sig_df.set_index('timestamp', inplace=True)
+            test_data[symbol] = sig_df[(sig_df.index > train_end) & (sig_df.index <= test_end)]
+
         test_data = {s: df for s, df in test_data.items() if len(df) > 0}
 
         if test_data:
@@ -81,8 +88,8 @@ def walk_forward(train_window_days: int = 365,
 
 
 def sensitivity_analysis(kurt_thresholds: List[float] = [3.0, 5.0, 7.0],
-                         hurst_thresholds: List[float] = [0.55, 0.65, 0.70],
-                         z_tr_thresholds: List[float] = [2.5, 3.0, 3.5],
+                         hurst_thresholds: List[float] = [0.25, 0.35, 0.45],
+                         tr_percentiles: List[float] = [0.75, 0.85, 0.90],
                          clv_thresholds: List[float] = [0.10, 0.15, 0.20],
                          max_concurrent_positions: int = 100) -> pd.DataFrame:
     """Runs a parameter grid search to evaluate strategy robustness."""
@@ -101,24 +108,26 @@ def sensitivity_analysis(kurt_thresholds: List[float] = [3.0, 5.0, 7.0],
         if df is not None and len(df) >= 50:
             raw_data[sym] = df
             
-    grid = list(itertools.product(kurt_thresholds, hurst_thresholds, z_tr_thresholds, clv_thresholds))
+    grid = list(itertools.product(kurt_thresholds, hurst_thresholds, tr_percentiles, clv_thresholds))
     logger.info(f"Total combinations to test: {len(grid)}")
 
     rows = []
     
-    for i, (kurt_th, hurst_th, z_th, clv_th) in enumerate(grid, 1):
-        logger.info(f"[{i}/{len(grid)}] Testing K={kurt_th}, H={hurst_th}, Z={z_th}, CLV={clv_th}")
+    for i, (kurt_th, hurst_th, tr_pct, clv_th) in enumerate(grid, 1):
+        logger.info(f"[{i}/{len(grid)}] Testing K={kurt_th}, H={hurst_th}, TR_P={tr_pct}, CLV={clv_th}")
         
         generator = SignalGenerator()
         generator.kurtosis_min = kurt_th
         generator.hurst_min = hurst_th
-        generator.tr_zscore_min = z_th
+        generator.tr_percentile = tr_pct
         generator.clv_short_max = clv_th
         
         prepared = {}
         for symbol, df in raw_data.items():
             sig_df = generator.compute_signals(df)
             if not sig_df.empty:
+                sig_df['timestamp'] = pd.to_datetime(sig_df['timestamp'])
+                sig_df.set_index('timestamp', inplace=True)
                 prepared[symbol] = sig_df
 
         res = engine.multi_asset_backtest(
@@ -130,7 +139,7 @@ def sensitivity_analysis(kurt_thresholds: List[float] = [3.0, 5.0, 7.0],
         summary.update({
             'kurt_threshold': kurt_th,
             'hurst_threshold': hurst_th,
-            'z_tr_threshold': z_th,
+            'tr_percentile': tr_pct,
             'clv_threshold': clv_th,
         })
         rows.append(summary)
@@ -139,7 +148,7 @@ def sensitivity_analysis(kurt_thresholds: List[float] = [3.0, 5.0, 7.0],
     if not df_res.empty:
         logger.info("\n=== SENSITIVITY RESULTS (TOP 10 BY PNL) ===")
         print(df_res.sort_values('total_pnl', ascending=False).head(10)[
-            ['kurt_threshold', 'hurst_threshold', 'z_tr_threshold', 'clv_threshold', 'total_trades', 'total_pnl', 'profit_factor']
+            ['kurt_threshold', 'hurst_threshold', 'tr_percentile', 'clv_threshold', 'total_trades', 'total_pnl', 'profit_factor']
         ].to_string(index=False))
         
     return df_res

@@ -27,26 +27,24 @@ def get_hurst_exponent(price_series: np.ndarray | pd.Series, min_lag: int = 8, m
     if len(log_ret) < max_lag:
         return 0.5
 
+    n_ret = len(log_ret)
     valid_lags = []
     rs_values = []
 
     for lag in range(min_lag, max_lag):
-        num_blocks = len(log_ret) // lag
+        num_blocks = n_ret // lag
         if num_blocks < 1:
             continue
 
-        rs_block = []
-        for i in range(num_blocks):
-            chunk = log_ret[i * lag:(i + 1) * lag]
-            mean_chunk = np.mean(chunk)
-            deviations = np.cumsum(chunk - mean_chunk)
-            R = deviations.max() - deviations.min()
-            S = np.std(chunk, ddof=1)
-            if S > 1e-12:
-                rs_block.append(R / S)
-
-        if rs_block:
-            rs_values.append(np.mean(rs_block))
+        # Vectorized block processing: reshape into (num_blocks, lag)
+        blocks = log_ret[:num_blocks * lag].reshape(num_blocks, lag)
+        means = blocks.mean(axis=1, keepdims=True)
+        deviations = np.cumsum(blocks - means, axis=1)
+        R = deviations.max(axis=1) - deviations.min(axis=1)
+        S = blocks.std(axis=1, ddof=1)
+        mask = S > 1e-12
+        if mask.any():
+            rs_values.append(np.mean(R[mask] / S[mask]))
             valid_lags.append(lag)
 
     if len(valid_lags) < 2:

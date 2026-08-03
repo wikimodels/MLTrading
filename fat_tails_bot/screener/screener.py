@@ -77,9 +77,9 @@ class FatTailsScreener:
             if len(returns) < 100:
                 continue
 
-            # Calculate metrics
-            hurst = get_hurst_exponent(df["close"].tail(180).values, max_lag=20)
-            excess_kurt = float(kurtosis(returns.tail(180), fisher=True, bias=True))
+            # Calculate metrics (180d window per theory: H(180) > 0.65)
+            hurst = get_hurst_exponent(df["close"].tail(180).values, max_lag=100)
+            excess_kurt = float(kurtosis(returns.tail(365), fisher=True, bias=True))
 
             passed = (hurst >= self.hurst_min) and (excess_kurt >= self.kurtosis_min)
             results.append({

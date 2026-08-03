@@ -24,7 +24,7 @@ class Trade:
     direction: str
     entry_time: datetime | pd.Timestamp
     entry_price: float
-    entry_tr_zscore: float = 0.0
+    entry_tr: float = 0.0
     entry_clv: float = 0.0
     initial_sl: float = 0.0
     exit_time: datetime | pd.Timestamp | None = None
@@ -35,6 +35,9 @@ class Trade:
     bars_held: int = 0
     size: float = 0.0
     stop_price: float = 0.0
+    trailing_stop: float = 0.0
+    highest_high: float = 0.0
+    lowest_low: float = 1e12
 
     @property
     def entry_date(self) -> pd.Timestamp:
@@ -104,24 +107,18 @@ class BacktestEngine:
         self.clv_long_min = strat_cfg.get("clv_long_min", 0.75)
 
     def run_backtest(self, max_concurrent_positions: int = 100) -> pd.DataFrame:
-        """Legacy API: runs full pipeline from screener to trades_history.csv"""
+        """Legacy API: runs full pipeline from stored data to trades_history.csv"""
         logger.info("Starting Bot Farm time-series backtest...")
         
-        screen_df = self.screener.screen_universe()
-        if screen_df is None or screen_df.empty:
-            logger.warning("Screener returned no symbols.")
+        symbols = self.storage.list_symbols("4h")
+        symbols = [s for s in symbols if s not in self.exclude]
+        if not symbols:
+            logger.warning("No symbols in storage.")
             return pd.DataFrame()
             
-        qualifying = screen_df[screen_df["selected"] == True]
-        if qualifying.empty:
-            logger.warning("No symbols met strict criteria. Testing top ones.")
-            symbols_to_test = screen_df.head(10)["symbol"].tolist()
-        else:
-            symbols_to_test = qualifying.head(max_concurrent_positions)["symbol"].tolist()
-            
-        logger.info(f"Loading {len(symbols_to_test)} symbols for Bot Farm simulation...")
+        logger.info(f"Loading {len(symbols)} symbols for Bot Farm simulation...")
         data = {}
-        for sym in symbols_to_test:
+        for sym in symbols:
             df = load_daily_ohlcv(self.storage, sym)
             if df is not None and len(df) >= 50:
                 df = self.generator.compute_signals(df)
@@ -199,7 +196,7 @@ class BacktestEngine:
                         initial_sl=stop_price,
                         stop_price=stop_price,
                         size=size,
-                        entry_tr_zscore=row.get("tr_zscore", 0.0),
+                        entry_tr=row.get("tr", 0.0),
                         entry_clv=row.get("clv", 0.0)
                     )
                     capital -= entry_price * size * self.taker_fee
@@ -216,6 +213,14 @@ class BacktestEngine:
                     continue
                 row = df.loc[current_date]
                 trade = open_trades[symbol]
+
+                # Update Chandelier trailing stop (short): follows lowest low down, never above initial SL
+                trade.lowest_low = min(trade.lowest_low, row["low"])
+                if trade.lowest_low < 1e11:
+                    atr_t = row.get("atr_14", np.nan)
+                    if not pd.isna(atr_t):
+                        trailing = trade.lowest_low + self.trailing_mult * atr_t
+                        trade.stop_price = min(trade.initial_sl, trailing)
 
                 # Stop loss hit (check HIGH for short)
                 if row["high"] >= trade.stop_price:
@@ -288,7 +293,7 @@ class BacktestEngine:
                             initial_sl=stop_price,
                             stop_price=stop_price,
                             size=size,
-                            entry_tr_zscore=row.get("tr_zscore", 0.0),
+                            entry_tr=row.get("tr", 0.0),
                             entry_clv=row.get("clv", 0.0)
                         )
                         capital -= entry_price * size * self.taker_fee
@@ -325,6 +330,11 @@ class BacktestEngine:
         return result
 
     def _trades_to_dataframe(self, trades: list[Trade]) -> pd.DataFrame:
+        columns = [
+            "symbol", "direction", "entry_time", "entry_price", "initial_sl",
+            "entry_tr", "entry_clv", "exit_time", "exit_price",
+            "bars_held", "pnl_usdt", "return_pct", "exit_reason",
+        ]
         trades_data = [
             {
                 "symbol": t.symbol,
@@ -332,7 +342,7 @@ class BacktestEngine:
                 "entry_time": t.entry_time,
                 "entry_price": round(t.entry_price, 6),
                 "initial_sl": round(t.initial_sl, 6),
-                "entry_tr_zscore": round(t.entry_tr_zscore, 2),
+                "entry_tr": round(t.entry_tr, 6),
                 "entry_clv": round(t.entry_clv, 3),
                 "exit_time": t.exit_time,
                 "exit_price": round(t.exit_price, 6) if t.exit_price else None,
@@ -343,6 +353,8 @@ class BacktestEngine:
             }
             for t in trades if t.exit_time is not None
         ]
+        if not trades_data:
+            return pd.DataFrame(columns=columns)
         return pd.DataFrame(trades_data).sort_values("exit_time").reset_index(drop=True)
 
     def _save_trades(self, df_trades: pd.DataFrame) -> None:

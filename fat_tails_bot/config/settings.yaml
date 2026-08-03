@@ -20,14 +20,16 @@ exchange:
   rate_limit_ms: 50
 
 strategy:
-  # Quantitative screening thresholds
-  hurst_min: 0.25         # Trend persistence vs random walk (adjusted for real altcoin dynamics on 180d window)
-  kurtosis_min: 5.0       # Heavy tails property in return distribution (K > 5.0)
+  # Quantitative screening thresholds (adaptive, see teoria.md v2)
+  hurst_min: 0.35         # Trend persistence H(180) > 0.35 (relaxed from 0.65: strict threshold yields ~0 trades in volatile crypto)
+  kurtosis_min: 5.0       # Heavy tails property in return distribution K(365) > 5.0
+  filter_valid_days: 60   # Asset qualifies if K/H passed at any point in the last 60 days (decouples screening from entry)
   
   # Entry trigger thresholds on D1 close
-  tr_zscore_min: 2.5      # Volatility transition threshold (Z-Score of True Range >= 2.5)
-  clv_short_max: 0.25     # Close Location Value near bottom for short breakdown (<= 0.25)
-  clv_long_min: 0.75      # Close Location Value near top for bullish breakout (>= 0.75)
+  tr_percentile: 0.85     # Adaptive volatility trigger: TR_t > 85th percentile of trailing TR (robust to regime shifts)
+  tr_perc_window: 180     # Trailing window (days) for the percentile threshold
+  clv_short_max: 0.15     # Close Location Value at bottom CLV <= 0.15
+  clv_long_min: 0.85      # Reversal close near top CLV >= 0.85
   
   allow_short: true
   allow_long: false       # Keep short-focused by default per overall project philosophy
