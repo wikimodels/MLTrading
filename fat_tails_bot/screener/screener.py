@@ -14,26 +14,39 @@ from shared.indicators import get_hurst_exponent
 
 def load_daily_ohlcv(storage: DataStorage, symbol: str) -> pd.DataFrame | None:
     """Loads 1D OHLCV data from storage, with automatic fallback to resampled 4H data."""
-    df_1d = storage.load_ohlcv(symbol, "1d")
-    if df_1d is not None and len(df_1d) >= 100:
-        return df_1d
+    df = storage.load_ohlcv(symbol, "1d")
+    
+    if df is None or len(df) < 100:
+        df_4h = storage.load_ohlcv(symbol, "4h")
+        if df_4h is not None and len(df_4h) >= 400:
+            logger.debug(f"Resampling 4H data to 1D for {symbol}")
+            df_4h = df_4h.copy()
+            df_4h["date"] = df_4h["timestamp"].dt.floor("D")
+            df = df_4h.groupby("date").agg({
+                "open": "first",
+                "high": "max",
+                "low": "min",
+                "close": "last",
+                "volume": "sum",
+                "timestamp": "last"
+            }).reset_index(drop=True)
+        else:
+            df = None
 
-    df_4h = storage.load_ohlcv(symbol, "4h")
-    if df_4h is None or len(df_4h) < 400:
+    if df is None:
         return None
 
-    logger.debug(f"Resampling 4H data to 1D for {symbol}")
-    df_4h = df_4h.copy()
-    df_4h["date"] = df_4h["timestamp"].dt.floor("D")
-    resampled = df_4h.groupby("date").agg({
-        "open": "first",
-        "high": "max",
-        "low": "min",
-        "close": "last",
-        "volume": "sum",
-        "timestamp": "last"
-    }).reset_index(drop=True)
-    return resampled if len(resampled) >= 100 else None
+    # Clean data and enforce constraints
+    df = df.dropna(subset=["close", "volume"])
+    
+    if len(df) < 365:
+        return None
+        
+    # Max history 3 years (1095 days)
+    if len(df) > 1095:
+        df = df.tail(1095).reset_index(drop=True)
+        
+    return df
 
 
 class FatTailsScreener:
@@ -42,8 +55,8 @@ class FatTailsScreener:
     def __init__(self):
         self.cfg = get_config()
         self.storage = DataStorage()
-        self.hurst_min = self.cfg.get("strategy", {}).get("hurst_min", 0.55)
-        self.kurtosis_min = self.cfg.get("strategy", {}).get("kurtosis_min", 4.0)
+        self.hurst_min = self.cfg.get("strategy", {}).get("hurst_min", 0.25)
+        self.kurtosis_min = self.cfg.get("strategy", {}).get("kurtosis_min", 5.0)
         self.exclude = set(self.cfg.get("global_exclude_symbols", []))
 
     def screen_universe(self) -> pd.DataFrame:
@@ -66,7 +79,7 @@ class FatTailsScreener:
 
             # Calculate metrics
             hurst = get_hurst_exponent(df["close"].tail(180).values, max_lag=20)
-            excess_kurt = float(kurtosis(returns.tail(365), fisher=True, bias=True))
+            excess_kurt = float(kurtosis(returns.tail(180), fisher=True, bias=True))
 
             passed = (hurst >= self.hurst_min) and (excess_kurt >= self.kurtosis_min)
             results.append({

@@ -6,12 +6,18 @@ symbol_universe:
   groups:
     main:
       description: "Automatically screened universe of coins with heavy tails and persistence"
-      max_symbols: 30
+      top_n: "all"
+      min_volume_usdt: 3000000
+      history_days_required: 365
 
 data:
   raw_dir: "data/storage/raw"
   timeframe: "1d"
   fallback_to_4h_resample: true
+  history_days: 1095
+
+exchange:
+  rate_limit_ms: 50
 
 strategy:
   # Quantitative screening thresholds

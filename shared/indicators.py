@@ -7,29 +7,53 @@ import pandas as pd
 from scipy.stats import kurtosis
 
 
-def get_hurst_exponent(time_series: np.ndarray | pd.Series, max_lag: int = 20) -> float:
-    """Computes the Hurst Exponent (H) to evaluate trend persistence vs random walk.
+def get_hurst_exponent(price_series: np.ndarray | pd.Series, min_lag: int = 8, max_lag: int = 100) -> float:
+    """Computes the Hurst Exponent (H) using classical Rescaled Range (R/S) analysis.
 
     H > 0.5 indicates persistence (trending memory).
     H ~ 0.5 indicates random walk.
     H < 0.5 indicates mean reversion.
     """
-    ts = np.asarray(time_series)
-    if len(ts) < max_lag * 2:
-        return 0.5  # default to random walk if too short
-
-    lags = range(2, max_lag)
-    tau = []
-    for lag in lags:
-        diff = np.subtract(ts[lag:], ts[:-lag])
-        std_diff = np.std(diff)
-        tau.append(np.sqrt(std_diff) if std_diff > 0 else 1e-8)
-
-    if not tau or any(t == 0 for t in tau):
+    price_series = np.asarray(price_series, dtype=float)
+    n = len(price_series)
+    if n < 20:
         return 0.5
 
-    poly = np.polyfit(np.log(list(lags)), np.log(tau), 1)
-    return float(poly[0] * 2.0)
+    max_lag = min(max_lag, n // 2)
+    if max_lag <= min_lag:
+        return 0.5
+
+    log_ret = np.diff(np.log(price_series))
+    if len(log_ret) < max_lag:
+        return 0.5
+
+    valid_lags = []
+    rs_values = []
+
+    for lag in range(min_lag, max_lag):
+        num_blocks = len(log_ret) // lag
+        if num_blocks < 1:
+            continue
+
+        rs_block = []
+        for i in range(num_blocks):
+            chunk = log_ret[i * lag:(i + 1) * lag]
+            mean_chunk = np.mean(chunk)
+            deviations = np.cumsum(chunk - mean_chunk)
+            R = deviations.max() - deviations.min()
+            S = np.std(chunk, ddof=1)
+            if S > 1e-12:
+                rs_block.append(R / S)
+
+        if rs_block:
+            rs_values.append(np.mean(rs_block))
+            valid_lags.append(lag)
+
+    if len(valid_lags) < 2:
+        return 0.5
+
+    poly = np.polyfit(np.log(valid_lags), np.log(rs_values), 1)
+    return float(poly[0])
 
 
 def compute_clv(high: pd.Series, low: pd.Series, close: pd.Series) -> pd.Series:

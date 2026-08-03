@@ -109,11 +109,13 @@ class BybitCollector:
 
         # ── Main group: auto-selection pipeline ───────────────────
         main_cfg = groups.get("main", {})
-        min_volume = main_cfg.get("min_volume_usdt", self.cfg["trading"].get("min_volume_usdt", 5_000_000))
-        min_corr = main_cfg.get("min_btc_correlation", self.cfg["trading"].get("min_btc_correlation", 0.4))
-        min_history_days = main_cfg.get("history_days_required", self.cfg["data"]["history_days"])
+        trading_cfg = self.cfg.get("trading", {})
+        
+        min_volume = main_cfg.get("min_volume_usdt", trading_cfg.get("min_volume_usdt", 5_000_000))
+        min_corr = main_cfg.get("min_btc_correlation", trading_cfg.get("min_btc_correlation", 0.4))
+        min_history_days = main_cfg.get("history_days_required", self.cfg.get("data", {}).get("history_days", 365))
         top_n = main_cfg.get("top_n", "all")
-        user_exclude = set(main_cfg.get("exclude_symbols", self.cfg["trading"].get("exclude_symbols", [])))
+        user_exclude = set(main_cfg.get("exclude_symbols", trading_cfg.get("exclude_symbols", [])))
         user_exclude |= global_exclude   # merge global blacklist into main group's exclude set
 
         logger.info(f"SYMBOL GROUP: main — volume≥{min_volume/1e6:.0f}M, corr≥{min_corr}, history≥{min_history_days}d")

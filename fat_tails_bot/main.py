@@ -54,10 +54,22 @@ def cmd_backtest():
     from fat_tails_bot.backtest.engine import BacktestEngine
     logger.info("Starting D1 strategy backtest...")
     engine = BacktestEngine()
-    df = engine.run_backtest()
+    df = engine.run_backtest(max_concurrent_positions=100)
     if not df.empty:
         print("\n=== RECENT TRADES SAMPLE ===")
         print(df.tail(15).to_string(index=False))
+
+
+def cmd_walk_forward():
+    """Run walk-forward validation across fixed thresholds."""
+    from fat_tails_bot.backtest.validation import walk_forward
+    walk_forward()
+
+
+def cmd_sensitivity():
+    """Run parameter grid search to evaluate strategy robustness."""
+    from fat_tails_bot.backtest.validation import sensitivity_analysis
+    sensitivity_analysis()
 
 
 def cmd_run():
@@ -77,11 +89,22 @@ def cmd_status():
         print(df.to_string(index=False))
 
 
+def cmd_collect():
+    """Download OHLCV and funding data from Bybit."""
+    from shared.data.collector import BybitCollector
+    logger.info("Starting data collection for Fat Tails Bot...")
+    collector = BybitCollector(testnet=False)
+    collector.collect_all()
+
+
 COMMANDS = {
     "screener": cmd_screener,
     "backtest": cmd_backtest,
+    "walk_forward": cmd_walk_forward,
+    "sensitivity": cmd_sensitivity,
     "run": cmd_run,
     "status": cmd_status,
+    "collect": cmd_collect,
 }
 
 
