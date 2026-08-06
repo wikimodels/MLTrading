@@ -5,27 +5,17 @@ __pycache__/
 data/storage/
 models/saved/
 logs/
-backtest/equity_curve.csv
 notebooks/.ipynb_checkpoints/
 .venv/
 *.pkl
 *.pt
 
-# Trash / Scratch files
-.env
-*.pyc
-__pycache__/
-.pytest_cache/
-data/storage/
-models/saved/
-logs/
-backtest/equity_curve.csv
-notebooks/.ipynb_checkpoints/
-.venv/
-*.pkl
-*.pt
+# Data & Parquet
+*.parquet
+trend_detector_lab/data/
+trend_detector_lab/exit_report/
 
-# Trash / Scratch files
+# Backtest outputs
 backtest/*.csv
 backtest/*.pdf
 */backtest/*.csv
@@ -35,5 +25,4 @@ debug*.txt
 recalc.py
 get_list.py
 check_volume.py
-*.parquet
 _*

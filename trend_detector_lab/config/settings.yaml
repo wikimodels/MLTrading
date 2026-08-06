@@ -1,0 +1,30 @@
+﻿detector: chandelier
+
+chandelier:
+  atr_period: 21
+  multiplier: 2.5
+  timeframe: "4h"
+
+stop:
+  mode: chandelier                # "chandelier" | "fixed"
+  sl_atr_mult: 1.5                # только для режима fixed
+
+data:
+  source_dir: "../data/storage/raw"
+  output_dir: "data"
+  forward_bars_window: 60
+
+features:
+  look_back_windows: [3, 4, 5, 6, 7, 8, 10]
+  short_thresholds: [4, 5, 6, 8, 10, 12]
+  big_trend_thresholds: [15, 25, 50]
+
+analysis:
+  target_bars: [10, 15, 25, 50]
+  target_atr_mult: [2, 3, 5, 8]
+  random_baseline_iterations: 1000
+  walk_forward_months: 6
+
+backtest:
+  commission: 0.00055
+  slippage: 0.0005

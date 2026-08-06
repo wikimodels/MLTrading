@@ -1,0 +1,23 @@
+﻿name: "streak_with_distance"
+description: "Add distance_to_previous_big_trend as a third axis. How long has the market been ranging?"
+
+grid:
+  streak_threshold: [5, 6, 8]
+  streak_count: [3, 4, 5]
+  bars_since_last_big: [30, 50, 100, 150]
+
+filters:
+  min_count: 20
+
+targets:
+  - bars_gt_15
+  - bars_gt_25
+  - reached_5atr
+
+random_baseline:
+  iterations: 1000
+
+walk_forward:
+  window_months: 6
+
+output: "output/streak_with_distance.xlsx"

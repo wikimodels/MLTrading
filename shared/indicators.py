@@ -94,3 +94,110 @@ def compute_excess_kurtosis(returns_series: pd.Series, window: int = 365) -> pd.
     return returns_series.rolling(window=window, min_periods=min(180, window)).apply(
         lambda x: kurtosis(x, fisher=True, bias=True), raw=True
     )
+
+
+def _wilder_rma(series: pd.Series, period: int) -> pd.Series:
+    """Wilder's smoothed moving average (RMA). Identical to ta.atr() in TradingView."""
+    alpha = 1.0 / period
+    result = np.full(len(series), np.nan)
+    first_valid = series.first_valid_index()
+    if first_valid is None:
+        return pd.Series(result, index=series.index)
+    start_idx = series.index.get_loc(first_valid)
+    if start_idx + period - 1 >= len(series):
+        return pd.Series(result, index=series.index)
+    result[start_idx + period - 1] = series.iloc[start_idx : start_idx + period].mean()
+    for i in range(start_idx + period, len(series)):
+        result[i] = alpha * series.iloc[i] + (1 - alpha) * result[i - 1]
+    return pd.Series(result, index=series.index)
+
+
+def compute_chandelier_exit(df: pd.DataFrame, period: int = 22, mult: float = 3.0, use_close: bool = True) -> pd.DataFrame:
+    """
+    Computes Pine Script Chandelier Exit (Alex Orekhov, GPL-3.0) with trailing logic.
+    Returns DataFrame with new columns: atr, ce_long, ce_short, ce_dir, ce_signal
+    """
+    df = df.copy()
+    n = len(df)
+
+    tr = compute_true_range(df)
+    atr_raw = _wilder_rma(tr, period)
+    atr = mult * atr_raw
+    df["atr"] = atr_raw
+
+    if use_close:
+        hh = df["close"].rolling(period).max()
+        ll = df["close"].rolling(period).min()
+    else:
+        hh = df["high"].rolling(period).max()
+        ll = df["low"].rolling(period).min()
+
+    long_raw = (hh - atr).values
+    short_raw = (ll + atr).values
+    close_arr = df["close"].values
+
+    long_stop = np.full(n, np.nan)
+    short_stop = np.full(n, np.nan)
+    direction = np.ones(n, dtype=int)
+
+    first_valid = 0
+    while first_valid < n and np.isnan(long_raw[first_valid]):
+        first_valid += 1
+
+    if first_valid < n:
+        long_stop[first_valid] = long_raw[first_valid]
+        short_stop[first_valid] = short_raw[first_valid]
+
+    for i in range(first_valid + 1, n):
+        if np.isnan(long_raw[i]):
+            continue
+
+        prev_ls = long_stop[i - 1]
+        prev_ss = short_stop[i - 1]
+        prev_c = close_arr[i - 1]
+        cur_c = close_arr[i]
+
+        if not np.isnan(prev_ls):
+            if prev_c > prev_ls:
+                long_stop[i] = max(long_raw[i], prev_ls)
+            else:
+                long_stop[i] = long_raw[i]
+        else:
+            long_stop[i] = long_raw[i]
+
+        if not np.isnan(prev_ss):
+            if prev_c < prev_ss:
+                short_stop[i] = min(short_raw[i], prev_ss)
+            else:
+                short_stop[i] = short_raw[i]
+        else:
+            short_stop[i] = short_raw[i]
+
+        prev_dir = direction[i - 1]
+        if not np.isnan(prev_ss) and cur_c > prev_ss:
+            direction[i] = 1
+        elif not np.isnan(prev_ls) and cur_c < prev_ls:
+            direction[i] = -1
+        else:
+            direction[i] = prev_dir
+
+    df["ce_long"] = long_stop
+    df["ce_short"] = short_stop
+    df["ce_dir"] = direction
+    df["ce_signal"] = (df["ce_dir"] != df["ce_dir"].shift(1)) & df["atr"].notna()
+
+    return df
+
+
+def compute_donchian_channel(df: pd.DataFrame, period: int = 20) -> pd.DataFrame:
+    """Computes Donchian Channel max, min, and width percentage."""
+    df = df.copy()
+    df["donchian_max"] = df["high"].rolling(window=period).max()
+    df["donchian_min"] = df["low"].rolling(window=period).min()
+    df["donchian_width"] = df["donchian_max"] - df["donchian_min"]
+    
+    # Avoid div by zero, use mid price
+    mid = (df["donchian_max"] + df["donchian_min"]) / 2
+    mid = mid.replace(0, 1e-8)
+    df["donchian_width_pct"] = df["donchian_width"] / mid
+    return df

@@ -1,0 +1,42 @@
+# ema_fan_bot/config/settings.yaml
+# EMA Fan Strategy — Mean-Reversion на веере EMA50/100/150
+
+data:
+  raw_dir: data/storage/raw
+  timeframes:
+    - "4h"
+    - "1d"
+
+strategy:
+  # Параметры веера EMA
+  ema_fast: 50         # EMA быстрая
+  ema_mid: 100         # EMA средняя
+  ema_slow: 150        # EMA медленная (опорный уровень для входа)
+  atr_period: 14       # Период ATR
+  # Минимальный зазор между EMA для подтверждения веера (в % от цены)
+  # 0.0 = строгое неравенство без минимального расстояния
+  fan_gap_min_pct: 0.5  # Мин. расстояние между EMA в % (фильтр слабых вееров)
+  # Direction filter: "both" | "long_only" | "short_only"
+  direction: short_only
+
+risk:
+  trade_size_usdt: 10.0     # Размер позиции в USDT
+  stop_loss_atr_mult: 2.0   # Стоп-лосс: N × ATR от цены входа
+  trailing_atr_mult: 2.5    # Chandelier Exit: N × ATR от экстремума
+
+backtest:
+  taker_fee: 0.0005         # Комиссия Bybit taker (0.05%)
+  slippage: 0.0003          # Проскальзывание (0.03%)
+  max_concurrent_positions: 20  # Макс. одновременных позиций
+
+# BTC исключён: используется как рыночный индикатор, не торгуем
+global_exclude_symbols:
+  - "BTC/USDT:USDT"
+
+# Монеты, исключённые конкретно для EMA Fan Bot (плохо работают со стратегией)
+exclude_symbols:
+  - "1000PEPE/USDT:USDT"   # WR 26.8%, PnL -$12.52
+  - "SOL/USDT:USDT"        # WR 33.3%, PnL -$7.71
+  - "TAO/USDT:USDT"        # WR 35.6%, PnL -$6.43
+  - "BCH/USDT:USDT"        # WR 28.3%, PnL -$5.81
+  - "ORDI/USDT:USDT"       # WR 32.4%, PnL -$3.76

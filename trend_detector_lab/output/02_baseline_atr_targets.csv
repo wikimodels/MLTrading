@@ -1,0 +1,8 @@
+target,probability,count
+reached_2atr,0.6548,7298
+reached_3atr,0.5145,5735
+reached_5atr,0.3179,3543
+reached_8atr,0.1469,1637
+bars_gt_15,0.537,5985
+bars_gt_25,0.3534,3939
+bars_gt_50,0.1112,1239

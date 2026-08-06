@@ -1,0 +1,12 @@
+﻿# Промежуточные данные (пересчитываются)
+data/ohlcv/
+data/raw_signals.parquet
+data/trades.parquet
+data/features.parquet
+data/download.log
+
+# Результаты (оставляем в git для истории)
+# output/*.xlsx  <- НЕ игнорируем
+
+# Эксперименты
+experiments/*.json

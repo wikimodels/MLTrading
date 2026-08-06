@@ -1,55 +1,53 @@
-# Fat Tails D1 Trading Bot Configuration
-# Based on Mathematical Theory of Heavy Tails and Volatility Phase Transitions
+# Fat Tails 4H Trading Bot Configuration
+# Validated Grail Architecture (Chandelier + Donchian Compression + Trailing Exit)
 
 symbol_universe:
   active_group: "main"
   groups:
     main:
-      description: "Automatically screened universe of coins with heavy tails and persistence"
-      top_n: "all"
-      min_volume_usdt: 3000000
-      history_days_required: 365
+      description: "Automatically screened Universe of top 20 trending coins"
+      top_n: 20
 
 data:
   raw_dir: "data/storage/raw"
-  timeframe: "1d"
-  fallback_to_4h_resample: true
+  timeframe: "4h"
   history_days: 1095
 
 exchange:
   rate_limit_ms: 50
 
 strategy:
-  # Quantitative screening thresholds (adaptive, see teoria.md v2)
-  hurst_min: 0.35         # Trend persistence H(180) > 0.35 (relaxed from 0.65: strict threshold yields ~0 trades in volatile crypto)
-  kurtosis_min: 5.0       # Heavy tails property in return distribution K(365) > 5.0
-  filter_valid_days: 60   # Asset qualifies if K/H passed at any point in the last 60 days (decouples screening from entry)
+  # Quantitative screening thresholds
+  screener_lookback_days: 180
   
-  # Entry trigger thresholds on D1 close
-  tr_percentile: 0.85     # Adaptive volatility trigger: TR_t > 85th percentile of trailing TR (robust to regime shifts)
-  tr_perc_window: 180     # Trailing window (days) for the percentile threshold
-  clv_short_max: 0.15     # Close Location Value at bottom CLV <= 0.15
-  clv_long_min: 0.85      # Reversal close near top CLV >= 0.85
+  # Donchian Compression Filter
+  donchian_period: 20
+  donchian_threshold: 0.05
+  donchian_percentile_window: 100
+  
+  # Chandelier Exit Trigger
+  chandelier_period: 22
+  chandelier_atr_mult: 3.0
   
   allow_short: true
-  allow_long: false       # Keep short-focused by default per overall project philosophy
+  allow_long: true
 
 risk:
   trade_size_usdt: 10.0   # Fixed $10 position size per trade
   max_leverage: 1
-  stop_loss_atr_mult: 1.5 # Initial Stop Loss based on ATR
-  trailing_atr_mult: 2.0  # Dynamic trailing exit without static Target Profit
+  trailing_atr_mult: 2.5  # Dynamic trailing exit from absolute extreme
 
 backtest:
-  initial_capital: 200.0
-  maker_fee: 0.0002
-  taker_fee: 0.0005
-  slippage: 0.0003
-  start_date: "2024-01-01"
+  initial_capital: 500.0
+  maker_fee: 0.0015       # Taker/Taker simulation
+  taker_fee: 0.0015
+  slippage: 0.0000
+  start_date: "2023-01-01"
   end_date: "2026-07-27"
 
 global_exclude_symbols:
   - "BTC/USDT:USDT"
+  - "ETH/USDT:USDT"
   - "USDC/USDT:USDT"
   - "BUSD/USDT:USDT"
   - "DAI/USDT:USDT"

@@ -1,4 +1,4 @@
-"""Signal generation based on Volatility Phase Transitions and Close Location Value."""
+"""Signal generation based on Chandelier Exit Flip and Donchian Compression."""
 
 from __future__ import annotations
 
@@ -8,44 +8,37 @@ from loguru import logger
 
 from shared.config_loader import get_config
 from shared.indicators import (
-    compute_clv, 
-    compute_true_range, 
-    compute_excess_kurtosis,
-    get_hurst_exponent
+    compute_chandelier_exit,
+    compute_donchian_channel
 )
 
 
 class SignalGenerator:
-    """Generates trading signals for Fat Tails D1 breakout strategy."""
+    """Generates trading signals for Fat Tails 4H breakout strategy."""
 
     def __init__(self):
         self.cfg = get_config()
         strat_cfg = self.cfg.get("strategy", {})
-        self.clv_short_max = strat_cfg.get("clv_short_max", 0.15)
-        self.clv_long_min = strat_cfg.get("clv_long_min", 0.85)
+        
+        self.donchian_period = strat_cfg.get("donchian_period", 20)
+        self.donchian_threshold = strat_cfg.get("donchian_threshold", 0.05)
+        self.donchian_pct_window = strat_cfg.get("donchian_percentile_window", 100)
+        
+        self.chandelier_period = strat_cfg.get("chandelier_period", 22)
+        self.chandelier_mult = strat_cfg.get("chandelier_atr_mult", 3.0)
+        
         self.allow_short = strat_cfg.get("allow_short", True)
-        self.allow_long = strat_cfg.get("allow_long", False)
-        self.sl_mult = self.cfg.get("risk", {}).get("stop_loss_atr_mult", 1.5)
+        self.allow_long = strat_cfg.get("allow_long", True)
         
-        self.kurtosis_min = strat_cfg.get("kurtosis_min", 5.0)
-        self.hurst_min = strat_cfg.get("hurst_min", 0.35)
-        self.turnover_min = strat_cfg.get("turnover_min", 3_000_000)
+        # Initial SL distance is strictly 1 ATR for risk sizing
+        self.sl_mult = 1.0 
         
-        # Adaptive volatility trigger: True Range above trailing percentile (not fixed Z-score)
-        self.tr_percentile = strat_cfg.get("tr_percentile", 0.90)
-        self.tr_perc_window = strat_cfg.get("tr_perc_window", 180)
-        
-        # Look-ahead bias prevention
+        # Look-ahead bias prevention: conditions checked on shifted bars
         self.screen_lag = 1
-        self.min_history_days = max(365, strat_cfg.get("min_history_days", 365))
-        self.kurt_window = 365
-        self.hurst_window = 180
-        # Asset filter is evaluated on a trailing window and stays valid for this many days
-        self.filter_valid_days = strat_cfg.get("filter_valid_days", 60)
 
     def compute_signals(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Appends technical indicators, ATR, signals, and dynamic stop loss bounds to DataFrame."""
-        if df is None or len(df) < self.min_history_days:
+        """Appends technical indicators, signals, and SL/TP bounds to DataFrame."""
+        if df is None or len(df) < max(self.chandelier_period, self.donchian_pct_window) + 10:
             if df is not None:
                 df = df.copy()
                 df["entry_signal"] = False
@@ -54,72 +47,45 @@ class SignalGenerator:
 
         df = df.copy()
 
-        # 1. Rolling Screen (Kurtosis & Hurst) — shifted by 1 bar to avoid look-ahead
-        df['log_ret'] = np.log(df['close'] / df['close'].shift(1))
-        df['kurtosis'] = compute_excess_kurtosis(df['log_ret'], window=self.kurt_window).shift(self.screen_lag)
-        df['hurst'] = df['close'].rolling(window=self.hurst_window).apply(
-            lambda x: get_hurst_exponent(x, min_lag=8, max_lag=20), raw=True
-        ).shift(self.screen_lag)
+        # 1. Compute Donchian Channel
+        df = compute_donchian_channel(df, period=self.donchian_period)
         
-        df['passes_filter_raw'] = (df['kurtosis'] >= self.kurtosis_min) & (df['hurst'] >= self.hurst_min)
+        # Compute Donchian compression percentile
+        df["donchian_width_percentile"] = df["donchian_width_pct"].rolling(
+            window=self.donchian_pct_window, min_periods=self.donchian_pct_window // 2
+        ).apply(lambda x: pd.Series(x).rank(pct=True).iloc[-1], raw=False)
         
-        # Anti-look-ahead: shift the filter result
-        df['passes_filter'] = df['passes_filter_raw'].shift(self.screen_lag).fillna(False)
-
-        # Asset filter is valid for a trailing window (not only the exact bar):
-        # if the coin qualified at any point in the last `filter_valid_days`, it is tradable.
-        df['passes_filter'] = (
-            df['passes_filter_raw'].shift(self.screen_lag)
-            .rolling(window=self.filter_valid_days, min_periods=1).max()
-            .fillna(False).astype(bool)
-        )
-
-        # 2. Compute Core Indicators for Trigger
-        tr = compute_true_range(df)
-        df["tr"] = tr
-        df["atr_14"] = tr.rolling(14, min_periods=7).mean().replace(0, 1e-8)
-        # Adaptive volatility trigger: percentile of TR over trailing window (robust to regime shifts)
-        df["tr_perc_threshold"] = df["tr"].rolling(window=self.tr_perc_window, min_periods=30).quantile(self.tr_percentile).shift(self.screen_lag)
-        df["tr_trigger"] = df["tr"] > df["tr_perc_threshold"]
-        df["clv"] = compute_clv(df["high"], df["low"], df["close"])
-        df["q01"] = df["close"].rolling(window=90, min_periods=30).apply(lambda x: np.quantile(x, 0.01), raw=True).shift(self.screen_lag)
-        df["ema5"] = df["close"].ewm(span=5, adjust=False).mean()
-
+        # The compression condition must be met on the PREVIOUS closed bar (lag = 1)
+        df["is_compressed"] = df["donchian_width_percentile"].shift(self.screen_lag) <= self.donchian_threshold
+        
+        # 2. Compute Chandelier Exit
+        df = compute_chandelier_exit(df, period=self.chandelier_period, mult=self.chandelier_mult)
+        
         # Initialize signal columns
         df["signal_short"] = 0
         df["signal_long"] = 0
         df["initial_sl"] = np.nan
         df["entry_signal"] = False
-        df["exit_signal"] = False
 
-        # 3. Triggers
-        c1 = df['passes_filter']
-        c2 = df['tr_trigger']
-        c3 = df['clv'] <= self.clv_short_max
-        c4 = df['close'] < df['q01']
+        # 3. Triggers: Chandelier flipped on THIS bar + Compression on PREV bar
+        # In live trading, we check this at the CLOSE of the 4H bar, and enter on NEXT open.
+        # ce_signal is True if ce_dir != ce_dir.shift(1)
         
-        if self.turnover_min is not None and 'volume' in df.columns:
-            # Turnover = base volume * price
-            c5 = (df['volume'] * df['close']) >= self.turnover_min
-        else:
-            c5 = True
-
+        c_flip = df["ce_signal"] == True
+        c_comp = df["is_compressed"] == True
+        
         if self.allow_short:
-            cond_short = c1 & c2 & c3 & c4 & c5
+            cond_short = c_flip & c_comp & (df["ce_dir"] == -1)
             df.loc[cond_short, "signal_short"] = 1
             df.loc[cond_short, "entry_signal"] = True
-            df.loc[cond_short, "initial_sl"] = df.loc[cond_short, "close"] + self.sl_mult * df.loc[cond_short, "atr_14"]
+            # SL is 1 ATR above entry (close of flip bar)
+            df.loc[cond_short, "initial_sl"] = df.loc[cond_short, "close"] + df.loc[cond_short, "atr"]
 
-        # Long Trigger (optional reversal - logic not heavily defined in theory, left for future if allow_long is True)
         if self.allow_long:
-            c3_long = df['clv'] >= self.clv_long_min
-            c4_long = df['close'] >= df['close'].rolling(window=90, min_periods=30).apply(lambda x: np.quantile(x, 0.99), raw=True)
-            cond_long = c1 & c2 & c3_long & c4_long & c5
+            cond_long = c_flip & c_comp & (df["ce_dir"] == 1)
             df.loc[cond_long, "signal_long"] = 1
             df.loc[cond_long, "entry_signal"] = True
-            df.loc[cond_long, "initial_sl"] = df.loc[cond_long, "close"] - self.sl_mult * df.loc[cond_long, "atr_14"]
-
-        # Exit signal
-        df['exit_signal'] = (df['close'] > df['ema5']) | (df['clv'] >= self.clv_long_min)
+            # SL is 1 ATR below entry
+            df.loc[cond_long, "initial_sl"] = df.loc[cond_long, "close"] - df.loc[cond_long, "atr"]
 
         return df

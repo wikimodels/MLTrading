@@ -1,0 +1,29 @@
+# Market Breadth short-on-dump bot: Chandelier(21, 2.5) signals on 1h for coins
+# correlated to BTC, aggregated into hourly market breadth. Entry only when >=50%
+# of the market shows the same directional signal.
+
+data:
+  raw_dir: "data/storage/raw"
+  timeframe: "1h"
+  history_days: 1095
+
+screener:
+  timeframe: "1h"
+  btc_symbol: "BTC/USDT:USDT"
+  correlation_min: 0.4        # only coins whose 1h log-return correlation with BTC exceeds this
+  correlation_window_days: 365 # window for the correlation estimate
+
+strategy:
+  atr_period: 21
+  chandelier_mult: 2.5
+  breadth_min: 0.5            # fraction of market with same-direction signal required to act
+  allow_short: true
+  allow_long: false
+
+risk:
+  trade_size_usdt: 10.0
+
+backtest:
+  initial_capital: 10000.0
+  taker_fee: 0.0005
+  slippage: 0.0003

@@ -1,0 +1,23 @@
+﻿name: "streak_basic"
+description: "Grid search over N x X for streak_le_X. How many consecutive short trades before a big move?"
+
+grid:
+  streak_threshold: [4, 5, 6, 8, 10, 12]
+  streak_count: [2, 3, 4, 5, 6, 7]
+
+filters:
+  min_count: 30
+
+targets:
+  - bars_gt_15
+  - bars_gt_25
+  - reached_3atr
+  - reached_5atr
+
+random_baseline:
+  iterations: 1000
+
+walk_forward:
+  window_months: 6
+
+output: "output/streak_basic.xlsx"

@@ -1,0 +1,562 @@
+{
+  "meta": {
+    "timeframe": "4h",
+    "breadth_min": 0.5,
+    "universe_size": 45,
+    "hours": 2190,
+    "range": "2025-08-03 -> 2026-08-02"
+  },
+  "events": [
+    {
+      "time": "2025-08-14 12:00",
+      "short": {
+        "breadth": 0.6222,
+        "count": 28,
+        "coins": [
+          "1000BONK/USDT:USDT",
+          "1000PEPE/USDT:USDT",
+          "ALGO/USDT:USDT",
+          "APT/USDT:USDT",
+          "ATOM/USDT:USDT",
+          "AVAX/USDT:USDT",
+          "BOME/USDT:USDT",
+          "BTC/USDT:USDT",
+          "DOGE/USDT:USDT",
+          "DOT/USDT:USDT",
+          "HBAR/USDT:USDT",
+          "HYPE/USDT:USDT",
+          "LTC/USDT:USDT",
+          "ONDO/USDT:USDT",
+          "OP/USDT:USDT",
+          "ORDI/USDT:USDT",
+          "PUMPFUN/USDT:USDT",
+          "SHIB1000/USDT:USDT",
+          "STRK/USDT:USDT",
+          "SUI/USDT:USDT",
+          "TAO/USDT:USDT",
+          "TIA/USDT:USDT",
+          "TRUMP/USDT:USDT",
+          "UNI/USDT:USDT",
+          "WIF/USDT:USDT",
+          "XLM/USDT:USDT",
+          "XRP/USDT:USDT",
+          "ZEC/USDT:USDT"
+        ]
+      },
+      "long": {
+        "breadth": 0.0,
+        "count": 0,
+        "coins": []
+      }
+    },
+    {
+      "time": "2025-08-22 12:00",
+      "short": {
+        "breadth": 0.0,
+        "count": 0,
+        "coins": []
+      },
+      "long": {
+        "breadth": 0.7111,
+        "count": 32,
+        "coins": [
+          "1000BONK/USDT:USDT",
+          "1000PEPE/USDT:USDT",
+          "ADA/USDT:USDT",
+          "ALGO/USDT:USDT",
+          "APT/USDT:USDT",
+          "ARB/USDT:USDT",
+          "ATOM/USDT:USDT",
+          "AVAX/USDT:USDT",
+          "BCH/USDT:USDT",
+          "BOME/USDT:USDT",
+          "BTC/USDT:USDT",
+          "DOGE/USDT:USDT",
+          "DOT/USDT:USDT",
+          "ENA/USDT:USDT",
+          "HBAR/USDT:USDT",
+          "INJ/USDT:USDT",
+          "LDO/USDT:USDT",
+          "LTC/USDT:USDT",
+          "NEAR/USDT:USDT",
+          "ONDO/USDT:USDT",
+          "OP/USDT:USDT",
+          "ORDI/USDT:USDT",
+          "PENGU/USDT:USDT",
+          "SHIB1000/USDT:USDT",
+          "SOL/USDT:USDT",
+          "SUI/USDT:USDT",
+          "TAO/USDT:USDT",
+          "TIA/USDT:USDT",
+          "UNI/USDT:USDT",
+          "VIRTUAL/USDT:USDT",
+          "XLM/USDT:USDT",
+          "XRP/USDT:USDT"
+        ]
+      }
+    },
+    {
+      "time": "2025-08-25 04:00",
+      "short": {
+        "breadth": 0.6667,
+        "count": 30,
+        "coins": [
+          "1000BONK/USDT:USDT",
+          "1000PEPE/USDT:USDT",
+          "AERO/USDT:USDT",
+          "APT/USDT:USDT",
+          "ATOM/USDT:USDT",
+          "AVAX/USDT:USDT",
+          "BCH/USDT:USDT",
+          "BNB/USDT:USDT",
+          "DOGE/USDT:USDT",
+          "DOT/USDT:USDT",
+          "HBAR/USDT:USDT",
+          "INJ/USDT:USDT",
+          "LDO/USDT:USDT",
+          "LINK/USDT:USDT",
+          "LTC/USDT:USDT",
+          "NEAR/USDT:USDT",
+          "ONDO/USDT:USDT",
+          "OP/USDT:USDT",
+          "ORDI/USDT:USDT",
+          "PENGU/USDT:USDT",
+          "PUMPFUN/USDT:USDT",
+          "SHIB1000/USDT:USDT",
+          "STRK/USDT:USDT",
+          "SUI/USDT:USDT",
+          "TAO/USDT:USDT",
+          "TIA/USDT:USDT",
+          "TRUMP/USDT:USDT",
+          "WIF/USDT:USDT",
+          "XLM/USDT:USDT",
+          "ZEC/USDT:USDT"
+        ]
+      },
+      "long": {
+        "breadth": 0.0,
+        "count": 0,
+        "coins": []
+      }
+    },
+    {
+      "time": "2025-10-07 12:00",
+      "short": {
+        "breadth": 0.6889,
+        "count": 31,
+        "coins": [
+          "1000BONK/USDT:USDT",
+          "1000PEPE/USDT:USDT",
+          "AAVE/USDT:USDT",
+          "ADA/USDT:USDT",
+          "AERO/USDT:USDT",
+          "ARB/USDT:USDT",
+          "ATOM/USDT:USDT",
+          "AVAX/USDT:USDT",
+          "BCH/USDT:USDT",
+          "BOME/USDT:USDT",
+          "BTC/USDT:USDT",
+          "DOGE/USDT:USDT",
+          "DOT/USDT:USDT",
+          "ETH/USDT:USDT",
+          "HBAR/USDT:USDT",
+          "INJ/USDT:USDT",
+          "LINK/USDT:USDT",
+          "LTC/USDT:USDT",
+          "ONDO/USDT:USDT",
+          "OP/USDT:USDT",
+          "ORDI/USDT:USDT",
+          "SHIB1000/USDT:USDT",
+          "SOL/USDT:USDT",
+          "SUI/USDT:USDT",
+          "TIA/USDT:USDT",
+          "TRUMP/USDT:USDT",
+          "UNI/USDT:USDT",
+          "VIRTUAL/USDT:USDT",
+          "WIF/USDT:USDT",
+          "XLM/USDT:USDT",
+          "ZEC/USDT:USDT"
+        ]
+      },
+      "long": {
+        "breadth": 0.0,
+        "count": 0,
+        "coins": []
+      }
+    },
+    {
+      "time": "2025-10-14 04:00",
+      "short": {
+        "breadth": 0.5333,
+        "count": 24,
+        "coins": [
+          "AAVE/USDT:USDT",
+          "ADA/USDT:USDT",
+          "AERO/USDT:USDT",
+          "ALGO/USDT:USDT",
+          "ARB/USDT:USDT",
+          "BCH/USDT:USDT",
+          "BNB/USDT:USDT",
+          "BOME/USDT:USDT",
+          "ENA/USDT:USDT",
+          "ETH/USDT:USDT",
+          "HBAR/USDT:USDT",
+          "HYPE/USDT:USDT",
+          "HYPER/USDT:USDT",
+          "LDO/USDT:USDT",
+          "ONDO/USDT:USDT",
+          "ORDI/USDT:USDT",
+          "PENGU/USDT:USDT",
+          "SHIB1000/USDT:USDT",
+          "SOL/USDT:USDT",
+          "TIA/USDT:USDT",
+          "UNI/USDT:USDT",
+          "VIRTUAL/USDT:USDT",
+          "WIF/USDT:USDT",
+          "ZEC/USDT:USDT"
+        ]
+      },
+      "long": {
+        "breadth": 0.0,
+        "count": 0,
+        "coins": []
+      }
+    },
+    {
+      "time": "2025-11-03 00:00",
+      "short": {
+        "breadth": 0.5333,
+        "count": 24,
+        "coins": [
+          "1000BONK/USDT:USDT",
+          "1000PEPE/USDT:USDT",
+          "AAVE/USDT:USDT",
+          "APT/USDT:USDT",
+          "ARB/USDT:USDT",
+          "ATOM/USDT:USDT",
+          "AVAX/USDT:USDT",
+          "BOME/USDT:USDT",
+          "BTC/USDT:USDT",
+          "DOGE/USDT:USDT",
+          "DOT/USDT:USDT",
+          "ETH/USDT:USDT",
+          "HYPER/USDT:USDT",
+          "LDO/USDT:USDT",
+          "LINK/USDT:USDT",
+          "LTC/USDT:USDT",
+          "NEAR/USDT:USDT",
+          "OP/USDT:USDT",
+          "ORDI/USDT:USDT",
+          "SHIB1000/USDT:USDT",
+          "STRK/USDT:USDT",
+          "TIA/USDT:USDT",
+          "VIRTUAL/USDT:USDT",
+          "WIF/USDT:USDT"
+        ]
+      },
+      "long": {
+        "breadth": 0.0,
+        "count": 0,
+        "coins": []
+      }
+    },
+    {
+      "time": "2025-12-02 12:00",
+      "short": {
+        "breadth": 0.0,
+        "count": 0,
+        "coins": []
+      },
+      "long": {
+        "breadth": 0.9111,
+        "count": 41,
+        "coins": [
+          "1000BONK/USDT:USDT",
+          "1000PEPE/USDT:USDT",
+          "AAVE/USDT:USDT",
+          "ADA/USDT:USDT",
+          "AERO/USDT:USDT",
+          "ALGO/USDT:USDT",
+          "APT/USDT:USDT",
+          "ARB/USDT:USDT",
+          "ATOM/USDT:USDT",
+          "AVAX/USDT:USDT",
+          "BNB/USDT:USDT",
+          "BOME/USDT:USDT",
+          "BTC/USDT:USDT",
+          "DOGE/USDT:USDT",
+          "DOT/USDT:USDT",
+          "ETH/USDT:USDT",
+          "HBAR/USDT:USDT",
+          "HYPE/USDT:USDT",
+          "HYPER/USDT:USDT",
+          "INJ/USDT:USDT",
+          "LDO/USDT:USDT",
+          "LINK/USDT:USDT",
+          "LTC/USDT:USDT",
+          "NEAR/USDT:USDT",
+          "ONDO/USDT:USDT",
+          "OP/USDT:USDT",
+          "ORDI/USDT:USDT",
+          "PENGU/USDT:USDT",
+          "PUMPFUN/USDT:USDT",
+          "SHIB1000/USDT:USDT",
+          "SOL/USDT:USDT",
+          "STRK/USDT:USDT",
+          "SUI/USDT:USDT",
+          "TAO/USDT:USDT",
+          "TIA/USDT:USDT",
+          "TRUMP/USDT:USDT",
+          "UNI/USDT:USDT",
+          "VIRTUAL/USDT:USDT",
+          "WIF/USDT:USDT",
+          "XLM/USDT:USDT",
+          "XRP/USDT:USDT"
+        ]
+      }
+    },
+    {
+      "time": "2025-12-11 00:00",
+      "short": {
+        "breadth": 0.6889,
+        "count": 31,
+        "coins": [
+          "AAVE/USDT:USDT",
+          "ADA/USDT:USDT",
+          "ALGO/USDT:USDT",
+          "APT/USDT:USDT",
+          "ARB/USDT:USDT",
+          "ATOM/USDT:USDT",
+          "AVAX/USDT:USDT",
+          "BNB/USDT:USDT",
+          "BTC/USDT:USDT",
+          "DOGE/USDT:USDT",
+          "DOT/USDT:USDT",
+          "ETH/USDT:USDT",
+          "FARTCOIN/USDT:USDT",
+          "HBAR/USDT:USDT",
+          "INJ/USDT:USDT",
+          "LDO/USDT:USDT",
+          "LINK/USDT:USDT",
+          "LTC/USDT:USDT",
+          "NEAR/USDT:USDT",
+          "ONDO/USDT:USDT",
+          "OP/USDT:USDT",
+          "PENGU/USDT:USDT",
+          "SHIB1000/USDT:USDT",
+          "SOL/USDT:USDT",
+          "SUI/USDT:USDT",
+          "TAO/USDT:USDT",
+          "TIA/USDT:USDT",
+          "TRUMP/USDT:USDT",
+          "UNI/USDT:USDT",
+          "XLM/USDT:USDT",
+          "XRP/USDT:USDT"
+        ]
+      },
+      "long": {
+        "breadth": 0.0,
+        "count": 0,
+        "coins": []
+      }
+    },
+    {
+      "time": "2026-02-25 12:00",
+      "short": {
+        "breadth": 0.0,
+        "count": 0,
+        "coins": []
+      },
+      "long": {
+        "breadth": 0.5111,
+        "count": 23,
+        "coins": [
+          "1000BONK/USDT:USDT",
+          "1000PEPE/USDT:USDT",
+          "AAVE/USDT:USDT",
+          "ADA/USDT:USDT",
+          "ALGO/USDT:USDT",
+          "ARB/USDT:USDT",
+          "BCH/USDT:USDT",
+          "BNB/USDT:USDT",
+          "BOME/USDT:USDT",
+          "BTC/USDT:USDT",
+          "DOGE/USDT:USDT",
+          "ENA/USDT:USDT",
+          "LDO/USDT:USDT",
+          "ONDO/USDT:USDT",
+          "ORDI/USDT:USDT",
+          "PUMPFUN/USDT:USDT",
+          "SHIB1000/USDT:USDT",
+          "STRK/USDT:USDT",
+          "SUI/USDT:USDT",
+          "TAO/USDT:USDT",
+          "WIF/USDT:USDT",
+          "XLM/USDT:USDT",
+          "XRP/USDT:USDT"
+        ]
+      }
+    },
+    {
+      "time": "2026-03-06 12:00",
+      "short": {
+        "breadth": 0.6,
+        "count": 27,
+        "coins": [
+          "1000BONK/USDT:USDT",
+          "AAVE/USDT:USDT",
+          "ALGO/USDT:USDT",
+          "ATOM/USDT:USDT",
+          "AVAX/USDT:USDT",
+          "BCH/USDT:USDT",
+          "BNB/USDT:USDT",
+          "BTC/USDT:USDT",
+          "ENA/USDT:USDT",
+          "ETH/USDT:USDT",
+          "FARTCOIN/USDT:USDT",
+          "HBAR/USDT:USDT",
+          "INJ/USDT:USDT",
+          "LDO/USDT:USDT",
+          "LINK/USDT:USDT",
+          "LTC/USDT:USDT",
+          "ONDO/USDT:USDT",
+          "OP/USDT:USDT",
+          "ORDI/USDT:USDT",
+          "PENGU/USDT:USDT",
+          "PUMPFUN/USDT:USDT",
+          "SHIB1000/USDT:USDT",
+          "SOL/USDT:USDT",
+          "SUI/USDT:USDT",
+          "TAO/USDT:USDT",
+          "XLM/USDT:USDT",
+          "XRP/USDT:USDT"
+        ]
+      },
+      "long": {
+        "breadth": 0.0,
+        "count": 0,
+        "coins": []
+      }
+    },
+    {
+      "time": "2026-04-07 20:00",
+      "short": {
+        "breadth": 0.0,
+        "count": 0,
+        "coins": []
+      },
+      "long": {
+        "breadth": 0.6,
+        "count": 27,
+        "coins": [
+          "1000PEPE/USDT:USDT",
+          "AAVE/USDT:USDT",
+          "ADA/USDT:USDT",
+          "AERO/USDT:USDT",
+          "APT/USDT:USDT",
+          "AVAX/USDT:USDT",
+          "BOME/USDT:USDT",
+          "DOGE/USDT:USDT",
+          "DOT/USDT:USDT",
+          "ETH/USDT:USDT",
+          "HBAR/USDT:USDT",
+          "HYPER/USDT:USDT",
+          "INJ/USDT:USDT",
+          "LDO/USDT:USDT",
+          "LINK/USDT:USDT",
+          "ONDO/USDT:USDT",
+          "OP/USDT:USDT",
+          "ORDI/USDT:USDT",
+          "SHIB1000/USDT:USDT",
+          "SOL/USDT:USDT",
+          "STRK/USDT:USDT",
+          "TIA/USDT:USDT",
+          "TRUMP/USDT:USDT",
+          "UNI/USDT:USDT",
+          "VIRTUAL/USDT:USDT",
+          "XLM/USDT:USDT",
+          "XRP/USDT:USDT"
+        ]
+      }
+    },
+    {
+      "time": "2026-04-12 00:00",
+      "short": {
+        "breadth": 0.6,
+        "count": 27,
+        "coins": [
+          "1000BONK/USDT:USDT",
+          "1000PEPE/USDT:USDT",
+          "AAVE/USDT:USDT",
+          "APT/USDT:USDT",
+          "ATOM/USDT:USDT",
+          "AVAX/USDT:USDT",
+          "BCH/USDT:USDT",
+          "BNB/USDT:USDT",
+          "BOME/USDT:USDT",
+          "DOGE/USDT:USDT",
+          "DOT/USDT:USDT",
+          "ETH/USDT:USDT",
+          "INJ/USDT:USDT",
+          "LDO/USDT:USDT",
+          "LINK/USDT:USDT",
+          "LTC/USDT:USDT",
+          "ORDI/USDT:USDT",
+          "PENGU/USDT:USDT",
+          "PUMPFUN/USDT:USDT",
+          "SHIB1000/USDT:USDT",
+          "SOL/USDT:USDT",
+          "SUI/USDT:USDT",
+          "TIA/USDT:USDT",
+          "UNI/USDT:USDT",
+          "VIRTUAL/USDT:USDT",
+          "WIF/USDT:USDT",
+          "XRP/USDT:USDT"
+        ]
+      },
+      "long": {
+        "breadth": 0.0,
+        "count": 0,
+        "coins": []
+      }
+    },
+    {
+      "time": "2026-04-13 20:00",
+      "short": {
+        "breadth": 0.0,
+        "count": 0,
+        "coins": []
+      },
+      "long": {
+        "breadth": 0.5333,
+        "count": 24,
+        "coins": [
+          "1000BONK/USDT:USDT",
+          "1000PEPE/USDT:USDT",
+          "ADA/USDT:USDT",
+          "ALGO/USDT:USDT",
+          "AVAX/USDT:USDT",
+          "BCH/USDT:USDT",
+          "DOGE/USDT:USDT",
+          "ETH/USDT:USDT",
+          "FARTCOIN/USDT:USDT",
+          "INJ/USDT:USDT",
+          "LINK/USDT:USDT",
+          "LTC/USDT:USDT",
+          "ONDO/USDT:USDT",
+          "OP/USDT:USDT",
+          "PUMPFUN/USDT:USDT",
+          "SHIB1000/USDT:USDT",
+          "SOL/USDT:USDT",
+          "SUI/USDT:USDT",
+          "TIA/USDT:USDT",
+          "UNI/USDT:USDT",
+          "VIRTUAL/USDT:USDT",
+          "WIF/USDT:USDT",
+          "XLM/USDT:USDT",
+          "XRP/USDT:USDT"
+        ]
+      }
+    }
+  ]
+}
