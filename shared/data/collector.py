@@ -24,6 +24,7 @@ class BybitCollector:
         "15m": 900_000,
         "1h": 3_600_000,
         "4h": 14_400_000,
+        "12h": 43_200_000,
         "1d": 86_400_000,
         "1w": 604_800_000,   # 7 days — required for incremental 1W updates
     }
@@ -350,10 +351,11 @@ class BybitCollector:
 
             all_records.extend(records)
 
-            if len(records) < limit:
-                break
-
-            since_ts = records[-1]["timestamp"] + 1
+            # пагинация по времени: страницы бывают короче лимита — идём до пустой
+            last_ts = records[-1]["timestamp"]
+            if last_ts <= since_ts - 1:
+                break  # защита от зацикливания
+            since_ts = last_ts + 1
             time.sleep(self.cfg["exchange"]["rate_limit_ms"] / 1000)
 
         if not all_records:
@@ -376,37 +378,61 @@ class BybitCollector:
         symbol: str,
         timeframes: Optional[list[str]] = None,
         incremental: bool = True,
+        since_days: Optional[int] = None,
     ) -> None:
-        """Collect OHLCV for all required timeframes (4h, 1h, 1d, optionally 1w)."""
+        """Collect OHLCV for all required timeframes (4h, 1h, 1d, 1w, 12h, etc.)."""
         if timeframes is None:
             timeframes = ["4h", "1h", "1d"]
             if self.cfg.get("features", {}).get("use_weekly_tf", False):
                 timeframes.append("1w")
 
+        days_back = since_days or self.cfg.get("data", {}).get("history_days", 1095)
+        target_start_ts = int(
+            (datetime.now(timezone.utc).timestamp() - days_back * 86400) * 1000
+        )
+
         for tf in timeframes:
-            since_ts = None
+            tf_ms = self.TIMEFRAME_MS.get(tf, 14_400_000)
+            df_parts = []
+            existing = self.storage.load_ohlcv(symbol, tf) if incremental else None
 
-            if incremental:
-                existing = self.storage.load_ohlcv(symbol, tf)
-                if existing is not None and len(existing) > 0:
-                    last_ts = existing["timestamp"].iloc[-1]
-                    since_ts = int(last_ts.timestamp() * 1000) + self.TIMEFRAME_MS[tf]
-                    logger.info(f"{symbol} {tf}: incremental update from {last_ts}")
+            if existing is not None and len(existing) > 0:
+                df_parts.append(existing)
+                first_ts = int(existing["timestamp"].iloc[0].timestamp() * 1000)
+                # If existing data starts later than requested history, backfill earlier bars
+                if first_ts > target_start_ts + tf_ms * 2:
+                    logger.info(
+                        f"{symbol} {tf}: backfilling earlier history from "
+                        f"{pd.to_datetime(target_start_ts, unit='ms', utc=True).date()} to {existing['timestamp'].iloc[0].date()}"
+                    )
+                    df_older = self.fetch_ohlcv(symbol, tf, since_ts=target_start_ts)
+                    if not df_older.empty:
+                        df_parts.append(df_older)
 
-            df_new = self.fetch_ohlcv(symbol, tf, since_ts=since_ts)
+                # Incremental forward update to today
+                last_ts = existing["timestamp"].iloc[-1]
+                forward_since_ts = int(last_ts.timestamp() * 1000) + tf_ms
+                logger.info(f"{symbol} {tf}: incremental update from {last_ts}")
+                df_newer = self.fetch_ohlcv(symbol, tf, since_ts=forward_since_ts)
+                if not df_newer.empty:
+                    df_parts.append(df_newer)
+            else:
+                # No existing data: fetch complete history from target_start_ts
+                df_new = self.fetch_ohlcv(symbol, tf, since_ts=target_start_ts)
+                if not df_new.empty:
+                    df_parts.append(df_new)
 
-            if df_new.empty:
-                continue
+            if df_parts:
+                df_combined = pd.concat(df_parts, ignore_index=True)
+                df_combined = df_combined.drop_duplicates("timestamp").sort_values("timestamp").reset_index(drop=True)
+                self.storage.save_ohlcv(df_combined, symbol, tf)
 
-            if incremental:
-                existing = self.storage.load_ohlcv(symbol, tf)
-                if existing is not None and len(existing) > 0:
-                    df_new = pd.concat([existing, df_new], ignore_index=True)
-                    df_new = df_new.drop_duplicates("timestamp").sort_values("timestamp")
-
-            self.storage.save_ohlcv(df_new, symbol, tf)
-        df_funding = self.fetch_funding_rate_history(symbol)
+        df_funding = self.fetch_funding_rate_history(symbol, since_days=days_back)
         if not df_funding.empty:
+            existing_funding = self.storage.load_funding(symbol) if incremental else None
+            if existing_funding is not None and not existing_funding.empty:
+                df_funding = pd.concat([existing_funding, df_funding], ignore_index=True)
+                df_funding = df_funding.drop_duplicates("timestamp").sort_values("timestamp").reset_index(drop=True)
             self.storage.save_funding(df_funding, symbol)
 
     # ──────────────────────────────────────────────
@@ -415,7 +441,9 @@ class BybitCollector:
     def collect_all(
         self,
         symbols: Optional[list[str]] = None,
+        timeframes: Optional[list[str]] = None,
         incremental: bool = True,
+        since_days: Optional[int] = None,
     ) -> list[str]:
         """Collect all symbols from the active group (or provided list)."""
         if symbols is None:
@@ -425,7 +453,12 @@ class BybitCollector:
         for i, symbol in enumerate(symbols, 1):
             logger.info(f"[{i}/{len(symbols)}] Collecting {symbol}...")
             try:
-                self.collect_symbol(symbol, incremental=incremental)
+                self.collect_symbol(
+                    symbol,
+                    timeframes=timeframes,
+                    incremental=incremental,
+                    since_days=since_days,
+                )
                 success.append(symbol)
             except Exception as e:
                 logger.error(f"Network error fetching {symbol}: {e}")

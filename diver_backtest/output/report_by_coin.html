@@ -1,0 +1,4418 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Квант-отчет: Разбор по Монетам</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 40px; background-color: #1e1e1e; color: #d4d4d4; }
+        h1, h2, h3 { color: #569cd6; }
+        h2.coin-title { color: #f39c12; border-bottom: 2px solid #f39c12; padding-bottom: 5px; margin-top: 40px; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 30px; font-size: 14px; }
+        th, td { border: 1px solid #444; padding: 8px 12px; text-align: right; }
+        th { background-color: #2d2d2d; color: #4ec9b0; font-weight: bold; text-align: center; }
+        tr:nth-child(even) { background-color: #252526; }
+        tr:hover { background-color: #333; }
+        .positive { color: #6a9955; font-weight: bold; }
+        .negative { color: #f44747; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .highlight { background: #2d2d2d; padding: 15px; border-left: 5px solid #569cd6; margin-bottom: 20px; }
+        hr { border: 1px solid #333; margin: 40px 0; }
+    </style>
+</head>
+<body>
+<div class='container'>
+    <h1>Полный Отчет: Разбор по Монетам (Топ-20)</h1>
+    <div class='highlight'>
+        <p>Отфильтровано: минимум 10 сделок за весь период.</p>
+    </div>
+    
+    <div class='coin-section' id='coin-BTC'><h2 class='coin-title'>🪙 Монета: BTC</h2><h3>Топ-20 Стратегий по Кластерам</h3><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>exec_coin</th>
+      <th>tf</th>
+      <th>direction</th>
+      <th>lookback</th>
+      <th>vol_filter</th>
+      <th>N_dir</th>
+      <th>sl_mult</th>
+      <th>tp_rr</th>
+      <th>trades</th>
+      <th>win_rate</th>
+      <th>avg_net</th>
+      <th>total_net</th>
+      <th>trades_per_month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BTC</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>31</td>
+      <td>51.6%</td>
+      <td><span class="positive">3.61%</span></td>
+      <td><span class="positive">111.79%</span></td>
+      <td>0.5</td>
+    </tr>
+    <tr>
+      <td>BTC</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>31</td>
+      <td>51.6%</td>
+      <td><span class="positive">3.59%</span></td>
+      <td><span class="positive">111.28%</span></td>
+      <td>0.5</td>
+    </tr>
+    <tr>
+      <td>BTC</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>31</td>
+      <td>51.6%</td>
+      <td><span class="positive">3.52%</span></td>
+      <td><span class="positive">109.19%</span></td>
+      <td>0.5</td>
+    </tr>
+    <tr>
+      <td>BTC</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>31</td>
+      <td>51.6%</td>
+      <td><span class="positive">3.16%</span></td>
+      <td><span class="positive">98.02%</span></td>
+      <td>0.5</td>
+    </tr>
+    <tr>
+      <td>BTC</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>4</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>58</td>
+      <td>48.3%</td>
+      <td><span class="positive">1.66%</span></td>
+      <td><span class="positive">96.03%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>BTC</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>31</td>
+      <td>48.4%</td>
+      <td><span class="positive">3.02%</span></td>
+      <td><span class="positive">93.65%</span></td>
+      <td>0.5</td>
+    </tr>
+    <tr>
+      <td>BTC</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>4</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>58</td>
+      <td>48.3%</td>
+      <td><span class="positive">1.60%</span></td>
+      <td><span class="positive">93.04%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>BTC</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>4</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>34</td>
+      <td>55.9%</td>
+      <td><span class="positive">2.69%</span></td>
+      <td><span class="positive">91.62%</span></td>
+      <td>0.6</td>
+    </tr>
+    <tr>
+      <td>BTC</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>31</td>
+      <td>51.6%</td>
+      <td><span class="positive">2.96%</span></td>
+      <td><span class="positive">91.61%</span></td>
+      <td>0.5</td>
+    </tr>
+    <tr>
+      <td>BTC</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>31</td>
+      <td>48.4%</td>
+      <td><span class="positive">2.95%</span></td>
+      <td><span class="positive">91.50%</span></td>
+      <td>0.5</td>
+    </tr>
+    <tr>
+      <td>BTC</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>2.0</td>
+      <td>31</td>
+      <td>51.6%</td>
+      <td><span class="positive">2.94%</span></td>
+      <td><span class="positive">91.09%</span></td>
+      <td>0.5</td>
+    </tr>
+    <tr>
+      <td>BTC</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>4</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>58</td>
+      <td>46.5%</td>
+      <td><span class="positive">1.48%</span></td>
+      <td><span class="positive">85.78%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>BTC</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>4</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>58</td>
+      <td>46.5%</td>
+      <td><span class="positive">1.47%</span></td>
+      <td><span class="positive">85.43%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>BTC</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>gt_30</td>
+      <td>4</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>34</td>
+      <td>52.9%</td>
+      <td><span class="positive">2.51%</span></td>
+      <td><span class="positive">85.34%</span></td>
+      <td>0.6</td>
+    </tr>
+    <tr>
+      <td>BTC</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>4</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>34</td>
+      <td>55.9%</td>
+      <td><span class="positive">2.50%</span></td>
+      <td><span class="positive">85.13%</span></td>
+      <td>0.6</td>
+    </tr>
+    <tr>
+      <td>BTC</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>4</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>34</td>
+      <td>55.9%</td>
+      <td><span class="positive">2.50%</span></td>
+      <td><span class="positive">85.06%</span></td>
+      <td>0.6</td>
+    </tr>
+    <tr>
+      <td>BTC</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>4</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>58</td>
+      <td>48.3%</td>
+      <td><span class="positive">1.44%</span></td>
+      <td><span class="positive">83.51%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>BTC</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>4</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>34</td>
+      <td>55.9%</td>
+      <td><span class="positive">2.45%</span></td>
+      <td><span class="positive">83.19%</span></td>
+      <td>0.6</td>
+    </tr>
+    <tr>
+      <td>BTC</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>4</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>58</td>
+      <td>44.8%</td>
+      <td><span class="positive">1.42%</span></td>
+      <td><span class="positive">82.13%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>BTC</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>4</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>66</td>
+      <td>48.5%</td>
+      <td><span class="positive">1.24%</span></td>
+      <td><span class="positive">81.67%</span></td>
+      <td>1.1</td>
+    </tr>
+  </tbody>
+</table><h3>Топ-20 Одиночных Индикаторов</h3><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>indicator</th>
+      <th>exec_coin</th>
+      <th>tf</th>
+      <th>direction</th>
+      <th>lookback</th>
+      <th>vol_filter</th>
+      <th>sl_mult</th>
+      <th>tp_rr</th>
+      <th>trades</th>
+      <th>win_rate</th>
+      <th>avg_net</th>
+      <th>trades_per_month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>RSI</td>
+      <td>BTC</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>70.0%</td>
+      <td><span class="positive">10.50%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>RSI</td>
+      <td>BTC</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>gt_50</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>70.0%</td>
+      <td><span class="positive">10.42%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>RSI</td>
+      <td>BTC</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>70.0%</td>
+      <td><span class="positive">10.34%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>RSI</td>
+      <td>BTC</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>10</td>
+      <td>70.0%</td>
+      <td><span class="positive">9.33%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>RSI</td>
+      <td>BTC</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>gt_50</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>10</td>
+      <td>70.0%</td>
+      <td><span class="positive">9.25%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>RSI</td>
+      <td>BTC</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>10</td>
+      <td>70.0%</td>
+      <td><span class="positive">9.17%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>BTC</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>21</td>
+      <td>61.9%</td>
+      <td><span class="positive">8.88%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>KVO</td>
+      <td>BTC</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>25</td>
+      <td>64.0%</td>
+      <td><span class="positive">8.86%</span></td>
+      <td>0.4</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>BTC</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>gt_50</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>21</td>
+      <td>61.9%</td>
+      <td><span class="positive">8.84%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>KVO</td>
+      <td>BTC</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>gt_50</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>25</td>
+      <td>64.0%</td>
+      <td><span class="positive">8.83%</span></td>
+      <td>0.4</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>BTC</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>21</td>
+      <td>61.9%</td>
+      <td><span class="positive">8.80%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>KVO</td>
+      <td>BTC</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>25</td>
+      <td>64.0%</td>
+      <td><span class="positive">8.80%</span></td>
+      <td>0.4</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>BTC</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>20</td>
+      <td>75.0%</td>
+      <td><span class="positive">8.73%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>BTC</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>gt_50</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>20</td>
+      <td>75.0%</td>
+      <td><span class="positive">8.71%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>BTC</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>20</td>
+      <td>75.0%</td>
+      <td><span class="positive">8.69%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>RSI</td>
+      <td>BTC</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>gt_30</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>15</td>
+      <td>66.7%</td>
+      <td><span class="positive">8.39%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>RSI</td>
+      <td>BTC</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>32</td>
+      <td>78.1%</td>
+      <td><span class="positive">8.32%</span></td>
+      <td>0.5</td>
+    </tr>
+    <tr>
+      <td>RSI</td>
+      <td>BTC</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>gt_50</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>32</td>
+      <td>78.1%</td>
+      <td><span class="positive">8.28%</span></td>
+      <td>0.5</td>
+    </tr>
+    <tr>
+      <td>RSI</td>
+      <td>BTC</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>32</td>
+      <td>78.1%</td>
+      <td><span class="positive">8.24%</span></td>
+      <td>0.5</td>
+    </tr>
+    <tr>
+      <td>RSI</td>
+      <td>BTC</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>gt_30</td>
+      <td>2.5</td>
+      <td>2.0</td>
+      <td>15</td>
+      <td>66.7%</td>
+      <td><span class="positive">8.22%</span></td>
+      <td>0.2</td>
+    </tr>
+  </tbody>
+</table></div><hr><div class='coin-section' id='coin-DOGE'><h2 class='coin-title'>🪙 Монета: DOGE</h2><h3>Топ-20 Стратегий по Кластерам</h3><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>exec_coin</th>
+      <th>tf</th>
+      <th>direction</th>
+      <th>lookback</th>
+      <th>vol_filter</th>
+      <th>N_dir</th>
+      <th>sl_mult</th>
+      <th>tp_rr</th>
+      <th>trades</th>
+      <th>win_rate</th>
+      <th>avg_net</th>
+      <th>total_net</th>
+      <th>trades_per_month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>82</td>
+      <td>52.4%</td>
+      <td><span class="positive">2.73%</span></td>
+      <td><span class="positive">223.92%</span></td>
+      <td>1.4</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>82</td>
+      <td>50.0%</td>
+      <td><span class="positive">2.70%</span></td>
+      <td><span class="positive">221.10%</span></td>
+      <td>1.4</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>82</td>
+      <td>53.7%</td>
+      <td><span class="positive">2.60%</span></td>
+      <td><span class="positive">212.93%</span></td>
+      <td>1.4</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>64</td>
+      <td>51.6%</td>
+      <td><span class="positive">3.33%</span></td>
+      <td><span class="positive">212.81%</span></td>
+      <td>1.1</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>70</td>
+      <td>50.0%</td>
+      <td><span class="positive">3.03%</span></td>
+      <td><span class="positive">211.92%</span></td>
+      <td>1.2</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>70</td>
+      <td>48.6%</td>
+      <td><span class="positive">3.00%</span></td>
+      <td><span class="positive">209.77%</span></td>
+      <td>1.2</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>70</td>
+      <td>47.1%</td>
+      <td><span class="positive">2.97%</span></td>
+      <td><span class="positive">207.74%</span></td>
+      <td>1.2</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>82</td>
+      <td>48.8%</td>
+      <td><span class="positive">2.50%</span></td>
+      <td><span class="positive">205.22%</span></td>
+      <td>1.4</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.0</td>
+      <td>82</td>
+      <td>53.7%</td>
+      <td><span class="positive">2.50%</span></td>
+      <td><span class="positive">205.06%</span></td>
+      <td>1.4</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>82</td>
+      <td>52.4%</td>
+      <td><span class="positive">2.43%</span></td>
+      <td><span class="positive">199.06%</span></td>
+      <td>1.4</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>82</td>
+      <td>53.7%</td>
+      <td><span class="positive">2.41%</span></td>
+      <td><span class="positive">197.90%</span></td>
+      <td>1.4</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>64</td>
+      <td>53.1%</td>
+      <td><span class="positive">3.05%</span></td>
+      <td><span class="positive">195.33%</span></td>
+      <td>1.1</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>82</td>
+      <td>53.7%</td>
+      <td><span class="positive">2.36%</span></td>
+      <td><span class="positive">193.14%</span></td>
+      <td>1.4</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>30</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>89</td>
+      <td>49.4%</td>
+      <td><span class="positive">2.17%</span></td>
+      <td><span class="positive">192.79%</span></td>
+      <td>1.5</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>30</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>89</td>
+      <td>48.3%</td>
+      <td><span class="positive">2.16%</span></td>
+      <td><span class="positive">192.41%</span></td>
+      <td>1.5</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>64</td>
+      <td>50.0%</td>
+      <td><span class="positive">2.99%</span></td>
+      <td><span class="positive">191.43%</span></td>
+      <td>1.1</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>64</td>
+      <td>53.1%</td>
+      <td><span class="positive">2.89%</span></td>
+      <td><span class="positive">185.04%</span></td>
+      <td>1.1</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>70</td>
+      <td>50.0%</td>
+      <td><span class="positive">2.62%</span></td>
+      <td><span class="positive">183.46%</span></td>
+      <td>1.2</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>70</td>
+      <td>50.0%</td>
+      <td><span class="positive">2.60%</span></td>
+      <td><span class="positive">182.25%</span></td>
+      <td>1.2</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.0</td>
+      <td>70</td>
+      <td>50.0%</td>
+      <td><span class="positive">2.59%</span></td>
+      <td><span class="positive">181.53%</span></td>
+      <td>1.2</td>
+    </tr>
+  </tbody>
+</table><h3>Топ-20 Одиночных Индикаторов</h3><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>indicator</th>
+      <th>exec_coin</th>
+      <th>tf</th>
+      <th>direction</th>
+      <th>lookback</th>
+      <th>vol_filter</th>
+      <th>sl_mult</th>
+      <th>tp_rr</th>
+      <th>trades</th>
+      <th>win_rate</th>
+      <th>avg_net</th>
+      <th>trades_per_month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>AO</td>
+      <td>DOGE</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>30_50</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>20</td>
+      <td>60.0%</td>
+      <td><span class="positive">12.71%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>DOGE</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>26</td>
+      <td>69.2%</td>
+      <td><span class="positive">12.50%</span></td>
+      <td>0.4</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>DOGE</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>21</td>
+      <td>66.7%</td>
+      <td><span class="positive">11.62%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>DOGE</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>gt_50</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>26</td>
+      <td>65.4%</td>
+      <td><span class="positive">11.57%</span></td>
+      <td>0.4</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>DOGE</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>26</td>
+      <td>65.4%</td>
+      <td><span class="positive">11.39%</span></td>
+      <td>0.4</td>
+    </tr>
+    <tr>
+      <td>RSI</td>
+      <td>DOGE</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>19</td>
+      <td>68.4%</td>
+      <td><span class="positive">11.38%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>AO</td>
+      <td>DOGE</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>30_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">11.29%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>DOGE</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>38</td>
+      <td>68.4%</td>
+      <td><span class="positive">11.29%</span></td>
+      <td>0.6</td>
+    </tr>
+    <tr>
+      <td>AO</td>
+      <td>DOGE</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>30_50</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">11.19%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>DOGE</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>gt_50</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>21</td>
+      <td>61.9%</td>
+      <td><span class="positive">11.14%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>DOGE</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>21</td>
+      <td>61.9%</td>
+      <td><span class="positive">11.13%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>AO</td>
+      <td>DOGE</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>30_50</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">10.99%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>DOGE</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>26</td>
+      <td>69.2%</td>
+      <td><span class="positive">10.89%</span></td>
+      <td>0.4</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>DOGE</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>30_50</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>11</td>
+      <td>100.0%</td>
+      <td><span class="positive">10.80%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>DOGE</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>30_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>20</td>
+      <td>60.0%</td>
+      <td><span class="positive">10.60%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>DOGE</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>38</td>
+      <td>68.4%</td>
+      <td><span class="positive">10.58%</span></td>
+      <td>0.6</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>DOGE</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>30_50</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>20</td>
+      <td>60.0%</td>
+      <td><span class="positive">10.48%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>DOGE</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>30_50</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>20</td>
+      <td>60.0%</td>
+      <td><span class="positive">10.46%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>DOGE</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>58</td>
+      <td>51.7%</td>
+      <td><span class="positive">10.35%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>DOGE</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>30_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>70.0%</td>
+      <td><span class="positive">10.26%</span></td>
+      <td>0.2</td>
+    </tr>
+  </tbody>
+</table></div><hr><div class='coin-section' id='coin-ETH'><h2 class='coin-title'>🪙 Монета: ETH</h2><h3>Топ-20 Стратегий по Кластерам</h3><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>exec_coin</th>
+      <th>tf</th>
+      <th>direction</th>
+      <th>lookback</th>
+      <th>vol_filter</th>
+      <th>N_dir</th>
+      <th>sl_mult</th>
+      <th>tp_rr</th>
+      <th>trades</th>
+      <th>win_rate</th>
+      <th>avg_net</th>
+      <th>total_net</th>
+      <th>trades_per_month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ETH</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>67</td>
+      <td>50.8%</td>
+      <td><span class="positive">1.86%</span></td>
+      <td><span class="positive">124.53%</span></td>
+      <td>1.1</td>
+    </tr>
+    <tr>
+      <td>ETH</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>60</td>
+      <td>56.7%</td>
+      <td><span class="positive">2.03%</span></td>
+      <td><span class="positive">121.52%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>ETH</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>67</td>
+      <td>50.8%</td>
+      <td><span class="positive">1.80%</span></td>
+      <td><span class="positive">120.50%</span></td>
+      <td>1.1</td>
+    </tr>
+    <tr>
+      <td>ETH</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>60</td>
+      <td>56.7%</td>
+      <td><span class="positive">1.89%</span></td>
+      <td><span class="positive">113.15%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>ETH</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>67</td>
+      <td>47.8%</td>
+      <td><span class="positive">1.62%</span></td>
+      <td><span class="positive">108.56%</span></td>
+      <td>1.1</td>
+    </tr>
+    <tr>
+      <td>ETH</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>60</td>
+      <td>53.3%</td>
+      <td><span class="positive">1.74%</span></td>
+      <td><span class="positive">104.25%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>ETH</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>67</td>
+      <td>47.8%</td>
+      <td><span class="positive">1.51%</span></td>
+      <td><span class="positive">100.84%</span></td>
+      <td>1.1</td>
+    </tr>
+    <tr>
+      <td>ETH</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>67</td>
+      <td>52.2%</td>
+      <td><span class="positive">1.50%</span></td>
+      <td><span class="positive">100.27%</span></td>
+      <td>1.1</td>
+    </tr>
+    <tr>
+      <td>ETH</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>2.0</td>
+      <td>67</td>
+      <td>50.8%</td>
+      <td><span class="positive">1.42%</span></td>
+      <td><span class="positive">94.94%</span></td>
+      <td>1.1</td>
+    </tr>
+    <tr>
+      <td>ETH</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>60</td>
+      <td>56.7%</td>
+      <td><span class="positive">1.58%</span></td>
+      <td><span class="positive">94.92%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>ETH</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>60</td>
+      <td>53.3%</td>
+      <td><span class="positive">1.54%</span></td>
+      <td><span class="positive">92.66%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>ETH</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>2.0</td>
+      <td>60</td>
+      <td>55.0%</td>
+      <td><span class="positive">1.46%</span></td>
+      <td><span class="positive">87.81%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>ETH</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>10</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>63</td>
+      <td>46.0%</td>
+      <td><span class="positive">1.28%</span></td>
+      <td><span class="positive">80.72%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>ETH</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>47</td>
+      <td>51.1%</td>
+      <td><span class="positive">1.71%</span></td>
+      <td><span class="positive">80.29%</span></td>
+      <td>0.8</td>
+    </tr>
+    <tr>
+      <td>ETH</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>10</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>2.0</td>
+      <td>63</td>
+      <td>49.2%</td>
+      <td><span class="positive">1.25%</span></td>
+      <td><span class="positive">79.05%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>ETH</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>56</td>
+      <td>50.0%</td>
+      <td><span class="positive">1.35%</span></td>
+      <td><span class="positive">75.76%</span></td>
+      <td>0.9</td>
+    </tr>
+    <tr>
+      <td>ETH</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.0</td>
+      <td>47</td>
+      <td>53.2%</td>
+      <td><span class="positive">1.61%</span></td>
+      <td><span class="positive">75.75%</span></td>
+      <td>0.8</td>
+    </tr>
+    <tr>
+      <td>ETH</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>47</td>
+      <td>48.9%</td>
+      <td><span class="positive">1.52%</span></td>
+      <td><span class="positive">71.52%</span></td>
+      <td>0.8</td>
+    </tr>
+    <tr>
+      <td>ETH</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>gt_30</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>17</td>
+      <td>64.7%</td>
+      <td><span class="positive">4.16%</span></td>
+      <td><span class="positive">70.70%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>ETH</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>gt_30</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>17</td>
+      <td>64.7%</td>
+      <td><span class="positive">4.09%</span></td>
+      <td><span class="positive">69.60%</span></td>
+      <td>0.3</td>
+    </tr>
+  </tbody>
+</table><h3>Топ-20 Одиночных Индикаторов</h3><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>indicator</th>
+      <th>exec_coin</th>
+      <th>tf</th>
+      <th>direction</th>
+      <th>lookback</th>
+      <th>vol_filter</th>
+      <th>sl_mult</th>
+      <th>tp_rr</th>
+      <th>trades</th>
+      <th>win_rate</th>
+      <th>avg_net</th>
+      <th>trades_per_month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>MACD</td>
+      <td>ETH</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>30_50</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>13</td>
+      <td>69.2%</td>
+      <td><span class="positive">12.33%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>EFI</td>
+      <td>ETH</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>30_50</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>70.0%</td>
+      <td><span class="positive">12.23%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>ETH</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>30_50</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>13</td>
+      <td>69.2%</td>
+      <td><span class="positive">12.20%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>ETH</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>30_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>13</td>
+      <td>69.2%</td>
+      <td><span class="positive">12.20%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>EFI</td>
+      <td>ETH</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>30_50</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>70.0%</td>
+      <td><span class="positive">12.09%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>EFI</td>
+      <td>ETH</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>30_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>70.0%</td>
+      <td><span class="positive">12.09%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>ETH</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>15</td>
+      <td>86.7%</td>
+      <td><span class="positive">10.79%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>ETH</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>15</td>
+      <td>86.7%</td>
+      <td><span class="positive">10.69%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>ETH</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>15</td>
+      <td>86.7%</td>
+      <td><span class="positive">10.69%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>ETH</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>30</td>
+      <td>gt_30</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>13</td>
+      <td>76.9%</td>
+      <td><span class="positive">10.11%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>ETH</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>30_50</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>13</td>
+      <td>69.2%</td>
+      <td><span class="positive">9.86%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>ETH</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>30</td>
+      <td>gt_30</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>13</td>
+      <td>76.9%</td>
+      <td><span class="positive">9.85%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>ETH</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>30_50</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>13</td>
+      <td>69.2%</td>
+      <td><span class="positive">9.74%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>ETH</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>30_50</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>13</td>
+      <td>69.2%</td>
+      <td><span class="positive">9.74%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>EFI</td>
+      <td>ETH</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>30_50</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>10</td>
+      <td>70.0%</td>
+      <td><span class="positive">9.72%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>ETH</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>30_50</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>60.0%</td>
+      <td><span class="positive">9.69%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>ETH</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>30</td>
+      <td>gt_30</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>13</td>
+      <td>76.9%</td>
+      <td><span class="positive">9.68%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>EFI</td>
+      <td>ETH</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>30_50</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>10</td>
+      <td>70.0%</td>
+      <td><span class="positive">9.61%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>EFI</td>
+      <td>ETH</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>30_50</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>10</td>
+      <td>70.0%</td>
+      <td><span class="positive">9.61%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>ETH</td>
+      <td>1d</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>30_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>60.0%</td>
+      <td><span class="positive">9.57%</span></td>
+      <td>0.2</td>
+    </tr>
+  </tbody>
+</table></div><hr><div class='coin-section' id='coin-HYPE'><h2 class='coin-title'>🪙 Монета: HYPE</h2><h3>Топ-20 Стратегий по Кластерам</h3><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>exec_coin</th>
+      <th>tf</th>
+      <th>direction</th>
+      <th>lookback</th>
+      <th>vol_filter</th>
+      <th>N_dir</th>
+      <th>sl_mult</th>
+      <th>tp_rr</th>
+      <th>trades</th>
+      <th>win_rate</th>
+      <th>avg_net</th>
+      <th>total_net</th>
+      <th>trades_per_month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>20</td>
+      <td>70.0%</td>
+      <td><span class="positive">7.47%</span></td>
+      <td><span class="positive">149.35%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>20</td>
+      <td>70.0%</td>
+      <td><span class="positive">7.47%</span></td>
+      <td><span class="positive">149.35%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>20</td>
+      <td>70.0%</td>
+      <td><span class="positive">7.41%</span></td>
+      <td><span class="positive">148.10%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>20</td>
+      <td>70.0%</td>
+      <td><span class="positive">7.41%</span></td>
+      <td><span class="positive">148.10%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>20</td>
+      <td>65.0%</td>
+      <td><span class="positive">7.23%</span></td>
+      <td><span class="positive">144.62%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>20</td>
+      <td>65.0%</td>
+      <td><span class="positive">7.23%</span></td>
+      <td><span class="positive">144.62%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>10</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>27</td>
+      <td>59.3%</td>
+      <td><span class="positive">5.22%</span></td>
+      <td><span class="positive">141.07%</span></td>
+      <td>0.4</td>
+    </tr>
+    <tr>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>10</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>2.0</td>
+      <td>27</td>
+      <td>59.3%</td>
+      <td><span class="positive">5.19%</span></td>
+      <td><span class="positive">140.16%</span></td>
+      <td>0.4</td>
+    </tr>
+    <tr>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>10</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>27</td>
+      <td>59.3%</td>
+      <td><span class="positive">5.19%</span></td>
+      <td><span class="positive">140.11%</span></td>
+      <td>0.4</td>
+    </tr>
+    <tr>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>20</td>
+      <td>65.0%</td>
+      <td><span class="positive">6.64%</span></td>
+      <td><span class="positive">132.79%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>20</td>
+      <td>65.0%</td>
+      <td><span class="positive">6.64%</span></td>
+      <td><span class="positive">132.79%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>20</td>
+      <td>70.0%</td>
+      <td><span class="positive">6.50%</span></td>
+      <td><span class="positive">129.95%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>20</td>
+      <td>70.0%</td>
+      <td><span class="positive">6.50%</span></td>
+      <td><span class="positive">129.95%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>30</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>19</td>
+      <td>63.2%</td>
+      <td><span class="positive">6.43%</span></td>
+      <td><span class="positive">122.24%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>20</td>
+      <td>60.0%</td>
+      <td><span class="positive">6.11%</span></td>
+      <td><span class="positive">122.19%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>20</td>
+      <td>60.0%</td>
+      <td><span class="positive">6.11%</span></td>
+      <td><span class="positive">122.19%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>19</td>
+      <td>57.9%</td>
+      <td><span class="positive">6.40%</span></td>
+      <td><span class="positive">121.63%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>30</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>19</td>
+      <td>63.2%</td>
+      <td><span class="positive">6.36%</span></td>
+      <td><span class="positive">120.81%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>10</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>27</td>
+      <td>55.6%</td>
+      <td><span class="positive">4.44%</span></td>
+      <td><span class="positive">119.97%</span></td>
+      <td>0.4</td>
+    </tr>
+    <tr>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>30</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>19</td>
+      <td>57.9%</td>
+      <td><span class="positive">6.23%</span></td>
+      <td><span class="positive">118.30%</span></td>
+      <td>0.3</td>
+    </tr>
+  </tbody>
+</table><h3>Топ-20 Одиночных Индикаторов</h3><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>indicator</th>
+      <th>exec_coin</th>
+      <th>tf</th>
+      <th>direction</th>
+      <th>lookback</th>
+      <th>vol_filter</th>
+      <th>sl_mult</th>
+      <th>tp_rr</th>
+      <th>trades</th>
+      <th>win_rate</th>
+      <th>avg_net</th>
+      <th>trades_per_month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>VZO</td>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>40.0%</td>
+      <td><span class="positive">18.55%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>HYPE</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>16</td>
+      <td>81.2%</td>
+      <td><span class="positive">18.26%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>gt_50</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>40.0%</td>
+      <td><span class="positive">17.82%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>40.0%</td>
+      <td><span class="positive">17.08%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>HYPE</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2.5</td>
+      <td>2.0</td>
+      <td>16</td>
+      <td>81.2%</td>
+      <td><span class="positive">16.48%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>HYPE</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>16</td>
+      <td>81.2%</td>
+      <td><span class="positive">16.47%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>RSI</td>
+      <td>HYPE</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>12</td>
+      <td>83.3%</td>
+      <td><span class="positive">16.14%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>AO</td>
+      <td>HYPE</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>all</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>14</td>
+      <td>85.7%</td>
+      <td><span class="positive">16.13%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>AO</td>
+      <td>HYPE</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>19</td>
+      <td>84.2%</td>
+      <td><span class="positive">16.04%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>HYPE</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>16</td>
+      <td>81.2%</td>
+      <td><span class="positive">15.94%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>gt_30</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>12</td>
+      <td>50.0%</td>
+      <td><span class="positive">15.91%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>RSI</td>
+      <td>HYPE</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>12</td>
+      <td>83.3%</td>
+      <td><span class="positive">15.81%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>HYPE</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>14</td>
+      <td>78.6%</td>
+      <td><span class="positive">15.66%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>HYPE</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>16</td>
+      <td>81.2%</td>
+      <td><span class="positive">15.60%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>AO</td>
+      <td>HYPE</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>all</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>14</td>
+      <td>85.7%</td>
+      <td><span class="positive">15.55%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>RSI</td>
+      <td>HYPE</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>12</td>
+      <td>83.3%</td>
+      <td><span class="positive">15.50%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>AO</td>
+      <td>HYPE</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>19</td>
+      <td>84.2%</td>
+      <td><span class="positive">15.46%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>RSI</td>
+      <td>HYPE</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>12</td>
+      <td>83.3%</td>
+      <td><span class="positive">15.46%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>HYPE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>gt_30</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>12</td>
+      <td>50.0%</td>
+      <td><span class="positive">15.30%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>AO</td>
+      <td>HYPE</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>all</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>14</td>
+      <td>85.7%</td>
+      <td><span class="positive">15.29%</span></td>
+      <td>0.2</td>
+    </tr>
+  </tbody>
+</table></div><hr><div class='coin-section' id='coin-MNT'><h2 class='coin-title'>🪙 Монета: MNT</h2><h3>Топ-20 Стратегий по Кластерам</h3><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>exec_coin</th>
+      <th>tf</th>
+      <th>direction</th>
+      <th>lookback</th>
+      <th>vol_filter</th>
+      <th>N_dir</th>
+      <th>sl_mult</th>
+      <th>tp_rr</th>
+      <th>trades</th>
+      <th>win_rate</th>
+      <th>avg_net</th>
+      <th>total_net</th>
+      <th>trades_per_month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>58</td>
+      <td>51.7%</td>
+      <td><span class="positive">2.48%</span></td>
+      <td><span class="positive">143.63%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>2.0</td>
+      <td>58</td>
+      <td>53.5%</td>
+      <td><span class="positive">2.40%</span></td>
+      <td><span class="positive">139.45%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>58</td>
+      <td>51.7%</td>
+      <td><span class="positive">2.40%</span></td>
+      <td><span class="positive">139.35%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>58</td>
+      <td>50.0%</td>
+      <td><span class="positive">2.38%</span></td>
+      <td><span class="positive">138.02%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>58</td>
+      <td>51.7%</td>
+      <td><span class="positive">2.36%</span></td>
+      <td><span class="positive">136.66%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>58</td>
+      <td>51.7%</td>
+      <td><span class="positive">2.22%</span></td>
+      <td><span class="positive">128.78%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>59</td>
+      <td>42.4%</td>
+      <td><span class="positive">2.11%</span></td>
+      <td><span class="positive">124.76%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>58</td>
+      <td>50.0%</td>
+      <td><span class="positive">2.11%</span></td>
+      <td><span class="positive">122.24%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>58</td>
+      <td>51.7%</td>
+      <td><span class="positive">2.10%</span></td>
+      <td><span class="positive">121.77%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>58</td>
+      <td>51.7%</td>
+      <td><span class="positive">2.06%</span></td>
+      <td><span class="positive">119.20%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>2.0</td>
+      <td>58</td>
+      <td>50.0%</td>
+      <td><span class="positive">1.95%</span></td>
+      <td><span class="positive">113.10%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>58</td>
+      <td>51.7%</td>
+      <td><span class="positive">1.85%</span></td>
+      <td><span class="positive">107.05%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>58</td>
+      <td>46.5%</td>
+      <td><span class="positive">1.80%</span></td>
+      <td><span class="positive">104.31%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>58</td>
+      <td>50.0%</td>
+      <td><span class="positive">1.78%</span></td>
+      <td><span class="positive">103.52%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>2.0</td>
+      <td>53</td>
+      <td>50.9%</td>
+      <td><span class="positive">1.91%</span></td>
+      <td><span class="positive">101.45%</span></td>
+      <td>0.9</td>
+    </tr>
+    <tr>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>58</td>
+      <td>51.7%</td>
+      <td><span class="positive">1.75%</span></td>
+      <td><span class="positive">101.39%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>58</td>
+      <td>50.0%</td>
+      <td><span class="positive">1.69%</span></td>
+      <td><span class="positive">97.76%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>MNT</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>16</td>
+      <td>62.5%</td>
+      <td><span class="positive">5.99%</span></td>
+      <td><span class="positive">95.83%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>MNT</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>16</td>
+      <td>56.2%</td>
+      <td><span class="positive">5.81%</span></td>
+      <td><span class="positive">92.96%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>MNT</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>10</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>18</td>
+      <td>61.1%</td>
+      <td><span class="positive">5.14%</span></td>
+      <td><span class="positive">92.43%</span></td>
+      <td>0.3</td>
+    </tr>
+  </tbody>
+</table><h3>Топ-20 Одиночных Индикаторов</h3><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>indicator</th>
+      <th>exec_coin</th>
+      <th>tf</th>
+      <th>direction</th>
+      <th>lookback</th>
+      <th>vol_filter</th>
+      <th>sl_mult</th>
+      <th>tp_rr</th>
+      <th>trades</th>
+      <th>win_rate</th>
+      <th>avg_net</th>
+      <th>trades_per_month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>MACD</td>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>13</td>
+      <td>76.9%</td>
+      <td><span class="positive">13.08%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>gt_50</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>13</td>
+      <td>69.2%</td>
+      <td><span class="positive">12.06%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>13</td>
+      <td>69.2%</td>
+      <td><span class="positive">11.50%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>13</td>
+      <td>76.9%</td>
+      <td><span class="positive">11.05%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>gt_30</td>
+      <td>2.5</td>
+      <td>2.0</td>
+      <td>11</td>
+      <td>81.8%</td>
+      <td><span class="positive">10.64%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>gt_30</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>11</td>
+      <td>81.8%</td>
+      <td><span class="positive">10.49%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>gt_30</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>11</td>
+      <td>81.8%</td>
+      <td><span class="positive">10.09%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>gt_50</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>13</td>
+      <td>69.2%</td>
+      <td><span class="positive">10.01%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>13</td>
+      <td>84.6%</td>
+      <td><span class="positive">10.00%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>MNT</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>30</td>
+      <td>gt_30</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>12</td>
+      <td>91.7%</td>
+      <td><span class="positive">10.00%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>13</td>
+      <td>76.9%</td>
+      <td><span class="positive">9.94%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>gt_30</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>19</td>
+      <td>73.7%</td>
+      <td><span class="positive">9.78%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>MNT</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>gt_30</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>16</td>
+      <td>87.5%</td>
+      <td><span class="positive">9.61%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>MACD</td>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>13</td>
+      <td>69.2%</td>
+      <td><span class="positive">9.55%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>MNT</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>30</td>
+      <td>gt_30</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>12</td>
+      <td>91.7%</td>
+      <td><span class="positive">9.50%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>MNT</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>17</td>
+      <td>88.2%</td>
+      <td><span class="positive">9.40%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>MNT</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>gt_30</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>16</td>
+      <td>87.5%</td>
+      <td><span class="positive">9.24%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>MNT</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>14</td>
+      <td>64.3%</td>
+      <td><span class="positive">9.16%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>MNT</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>19</td>
+      <td>84.2%</td>
+      <td><span class="positive">9.12%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>MNT</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>30</td>
+      <td>gt_30</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>12</td>
+      <td>91.7%</td>
+      <td><span class="positive">9.07%</span></td>
+      <td>0.2</td>
+    </tr>
+  </tbody>
+</table></div><hr><div class='coin-section' id='coin-SOL'><h2 class='coin-title'>🪙 Монета: SOL</h2><h3>Топ-20 Стратегий по Кластерам</h3><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>exec_coin</th>
+      <th>tf</th>
+      <th>direction</th>
+      <th>lookback</th>
+      <th>vol_filter</th>
+      <th>N_dir</th>
+      <th>sl_mult</th>
+      <th>tp_rr</th>
+      <th>trades</th>
+      <th>win_rate</th>
+      <th>avg_net</th>
+      <th>total_net</th>
+      <th>trades_per_month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>SOL</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>70</td>
+      <td>47.1%</td>
+      <td><span class="positive">2.99%</span></td>
+      <td><span class="positive">209.06%</span></td>
+      <td>1.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>12</td>
+      <td>91.7%</td>
+      <td><span class="positive">17.28%</span></td>
+      <td><span class="positive">207.34%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>12</td>
+      <td>91.7%</td>
+      <td><span class="positive">16.19%</span></td>
+      <td><span class="positive">194.29%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>70</td>
+      <td>47.1%</td>
+      <td><span class="positive">2.74%</span></td>
+      <td><span class="positive">191.65%</span></td>
+      <td>1.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>12</td>
+      <td>91.7%</td>
+      <td><span class="positive">15.64%</span></td>
+      <td><span class="positive">187.68%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>13</td>
+      <td>92.3%</td>
+      <td><span class="positive">14.06%</span></td>
+      <td><span class="positive">182.78%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>12</td>
+      <td>91.7%</td>
+      <td><span class="positive">14.73%</span></td>
+      <td><span class="positive">176.80%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>13</td>
+      <td>92.3%</td>
+      <td><span class="positive">13.56%</span></td>
+      <td><span class="positive">176.24%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>30</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>90.9%</td>
+      <td><span class="positive">14.90%</span></td>
+      <td><span class="positive">163.86%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>56</td>
+      <td>50.0%</td>
+      <td><span class="positive">2.85%</span></td>
+      <td><span class="positive">159.58%</span></td>
+      <td>0.9</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>13</td>
+      <td>92.3%</td>
+      <td><span class="positive">12.23%</span></td>
+      <td><span class="positive">158.93%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>30</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>90.9%</td>
+      <td><span class="positive">14.40%</span></td>
+      <td><span class="positive">158.36%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>10</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>61</td>
+      <td>44.3%</td>
+      <td><span class="positive">2.58%</span></td>
+      <td><span class="positive">157.68%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>90.0%</td>
+      <td><span class="positive">15.45%</span></td>
+      <td><span class="positive">154.47%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>70</td>
+      <td>42.9%</td>
+      <td><span class="positive">2.21%</span></td>
+      <td><span class="positive">154.42%</span></td>
+      <td>1.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>13</td>
+      <td>92.3%</td>
+      <td><span class="positive">11.82%</span></td>
+      <td><span class="positive">153.70%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>12</td>
+      <td>91.7%</td>
+      <td><span class="positive">12.78%</span></td>
+      <td><span class="positive">153.36%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>30</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>11</td>
+      <td>90.9%</td>
+      <td><span class="positive">13.92%</span></td>
+      <td><span class="positive">153.11%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>90.0%</td>
+      <td><span class="positive">14.90%</span></td>
+      <td><span class="positive">148.97%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>30</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>11</td>
+      <td>90.9%</td>
+      <td><span class="positive">13.50%</span></td>
+      <td><span class="positive">148.52%</span></td>
+      <td>0.2</td>
+    </tr>
+  </tbody>
+</table><h3>Топ-20 Одиночных Индикаторов</h3><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>indicator</th>
+      <th>exec_coin</th>
+      <th>tf</th>
+      <th>direction</th>
+      <th>lookback</th>
+      <th>vol_filter</th>
+      <th>sl_mult</th>
+      <th>tp_rr</th>
+      <th>trades</th>
+      <th>win_rate</th>
+      <th>avg_net</th>
+      <th>trades_per_month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">27.45%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">27.45%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">27.09%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_50</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">27.09%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">26.73%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">26.73%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_50</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>60.0%</td>
+      <td><span class="positive">26.47%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>60.0%</td>
+      <td><span class="positive">26.47%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>60.0%</td>
+      <td><span class="positive">26.37%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>60.0%</td>
+      <td><span class="positive">26.37%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>60.0%</td>
+      <td><span class="positive">25.54%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>60.0%</td>
+      <td><span class="positive">25.54%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>gt_30</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>50.0%</td>
+      <td><span class="positive">24.40%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>50.0%</td>
+      <td><span class="positive">24.40%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>gt_50</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>50.0%</td>
+      <td><span class="positive">24.00%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>gt_30</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>50.0%</td>
+      <td><span class="positive">24.00%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>gt_30</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>50.0%</td>
+      <td><span class="positive">23.60%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>50.0%</td>
+      <td><span class="positive">23.60%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">22.15%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">22.15%</span></td>
+      <td>0.2</td>
+    </tr>
+  </tbody>
+</table></div><hr><div class='coin-section' id='coin-XRP'><h2 class='coin-title'>🪙 Монета: XRP</h2><h3>Топ-20 Стратегий по Кластерам</h3><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>exec_coin</th>
+      <th>tf</th>
+      <th>direction</th>
+      <th>lookback</th>
+      <th>vol_filter</th>
+      <th>N_dir</th>
+      <th>sl_mult</th>
+      <th>tp_rr</th>
+      <th>trades</th>
+      <th>win_rate</th>
+      <th>avg_net</th>
+      <th>total_net</th>
+      <th>trades_per_month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>XRP</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>5</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>37</td>
+      <td>48.6%</td>
+      <td><span class="positive">2.08%</span></td>
+      <td><span class="positive">76.93%</span></td>
+      <td>0.6</td>
+    </tr>
+    <tr>
+      <td>XRP</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>5</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>37</td>
+      <td>48.6%</td>
+      <td><span class="positive">2.07%</span></td>
+      <td><span class="positive">76.43%</span></td>
+      <td>0.6</td>
+    </tr>
+    <tr>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>10</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>20</td>
+      <td>50.0%</td>
+      <td><span class="positive">3.77%</span></td>
+      <td><span class="positive">75.31%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>14</td>
+      <td>64.3%</td>
+      <td><span class="positive">5.00%</span></td>
+      <td><span class="positive">69.99%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>XRP</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>5</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>37</td>
+      <td>46.0%</td>
+      <td><span class="positive">1.82%</span></td>
+      <td><span class="positive">67.39%</span></td>
+      <td>0.6</td>
+    </tr>
+    <tr>
+      <td>XRP</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>gt_50</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>2.0</td>
+      <td>15</td>
+      <td>60.0%</td>
+      <td><span class="positive">4.26%</span></td>
+      <td><span class="positive">63.92%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>14</td>
+      <td>64.3%</td>
+      <td><span class="positive">4.51%</span></td>
+      <td><span class="positive">63.17%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>XRP</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>5</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>37</td>
+      <td>48.6%</td>
+      <td><span class="positive">1.68%</span></td>
+      <td><span class="positive">62.15%</span></td>
+      <td>0.6</td>
+    </tr>
+    <tr>
+      <td>XRP</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>5</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>37</td>
+      <td>48.6%</td>
+      <td><span class="positive">1.65%</span></td>
+      <td><span class="positive">60.95%</span></td>
+      <td>0.6</td>
+    </tr>
+    <tr>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>22</td>
+      <td>54.5%</td>
+      <td><span class="positive">2.74%</span></td>
+      <td><span class="positive">60.32%</span></td>
+      <td>0.4</td>
+    </tr>
+    <tr>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>14</td>
+      <td>64.3%</td>
+      <td><span class="positive">4.31%</span></td>
+      <td><span class="positive">60.29%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>10</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>20</td>
+      <td>50.0%</td>
+      <td><span class="positive">3.01%</span></td>
+      <td><span class="positive">60.12%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>XRP</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>5</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>2.0</td>
+      <td>37</td>
+      <td>48.6%</td>
+      <td><span class="positive">1.61%</span></td>
+      <td><span class="positive">59.45%</span></td>
+      <td>0.6</td>
+    </tr>
+    <tr>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>14</td>
+      <td>64.3%</td>
+      <td><span class="positive">4.14%</span></td>
+      <td><span class="positive">57.90%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>XRP</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>gt_50</td>
+      <td>1</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>70.0%</td>
+      <td><span class="positive">5.76%</span></td>
+      <td><span class="positive">57.59%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>XRP</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>5</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>37</td>
+      <td>48.6%</td>
+      <td><span class="positive">1.52%</span></td>
+      <td><span class="positive">56.34%</span></td>
+      <td>0.6</td>
+    </tr>
+    <tr>
+      <td>XRP</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>gt_50</td>
+      <td>1</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>15</td>
+      <td>60.0%</td>
+      <td><span class="positive">3.69%</span></td>
+      <td><span class="positive">55.31%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>XRP</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>10</td>
+      <td>gt_50</td>
+      <td>1</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>15</td>
+      <td>60.0%</td>
+      <td><span class="positive">3.62%</span></td>
+      <td><span class="positive">54.34%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>XRP</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>gt_50</td>
+      <td>1</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>10</td>
+      <td>70.0%</td>
+      <td><span class="positive">5.36%</span></td>
+      <td><span class="positive">53.59%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>XRP</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>gt_50</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>70.0%</td>
+      <td><span class="positive">5.36%</span></td>
+      <td><span class="positive">53.56%</span></td>
+      <td>0.2</td>
+    </tr>
+  </tbody>
+</table><h3>Топ-20 Одиночных Индикаторов</h3><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>indicator</th>
+      <th>exec_coin</th>
+      <th>tf</th>
+      <th>direction</th>
+      <th>lookback</th>
+      <th>vol_filter</th>
+      <th>sl_mult</th>
+      <th>tp_rr</th>
+      <th>trades</th>
+      <th>win_rate</th>
+      <th>avg_net</th>
+      <th>trades_per_month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>VZO</td>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>90.0%</td>
+      <td><span class="positive">13.17%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>90.0%</td>
+      <td><span class="positive">11.99%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>90.0%</td>
+      <td><span class="positive">11.71%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>10</td>
+      <td>90.0%</td>
+      <td><span class="positive">10.96%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>XRP</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>all</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>72.7%</td>
+      <td><span class="positive">10.52%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>KVO</td>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>17</td>
+      <td>94.1%</td>
+      <td><span class="positive">10.38%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>10</td>
+      <td>90.0%</td>
+      <td><span class="positive">10.01%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>KVO</td>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>all</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>15</td>
+      <td>93.3%</td>
+      <td><span class="positive">10.01%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>XRP</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>all</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>72.7%</td>
+      <td><span class="positive">9.91%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>XRP</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>all</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>72.7%</td>
+      <td><span class="positive">9.91%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>30</td>
+      <td>all</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>70.0%</td>
+      <td><span class="positive">9.84%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>KVO</td>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>10</td>
+      <td>all</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>12</td>
+      <td>75.0%</td>
+      <td><span class="positive">9.81%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>10</td>
+      <td>90.0%</td>
+      <td><span class="positive">9.80%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>KVO</td>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>17</td>
+      <td>94.1%</td>
+      <td><span class="positive">9.59%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>KVO</td>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>17</td>
+      <td>94.1%</td>
+      <td><span class="positive">9.33%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>KVO</td>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>all</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>15</td>
+      <td>93.3%</td>
+      <td><span class="positive">9.24%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>14</td>
+      <td>71.4%</td>
+      <td><span class="positive">9.11%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>KVO</td>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>17</td>
+      <td>94.1%</td>
+      <td><span class="positive">9.08%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>KVO</td>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>all</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>15</td>
+      <td>93.3%</td>
+      <td><span class="positive">8.94%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>XRP</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>30</td>
+      <td>all</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>70.0%</td>
+      <td><span class="positive">8.93%</span></td>
+      <td>0.2</td>
+    </tr>
+  </tbody>
+</table></div><hr>
+    
+    <h2 style='color:#569cd6'>📊 Влияние Таймфрейма (Средний Return по всем сценариям)</h2>
+    <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>tf</th>
+      <th>total_net</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1d</td>
+      <td><span class="negative">-1.46%</span></td>
+    </tr>
+    <tr>
+      <td>12h</td>
+      <td><span class="negative">-3.67%</span></td>
+    </tr>
+    <tr>
+      <td>4h</td>
+      <td><span class="negative">-4.73%</span></td>
+    </tr>
+  </tbody>
+</table>
+    
+    <h2 style='color:#569cd6'>📊 Влияние Фильтра Объема (Средний Return по всем сценариям)</h2>
+    <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>vol_filter</th>
+      <th>total_net</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>gt_30</td>
+      <td><span class="negative">-3.33%</span></td>
+    </tr>
+    <tr>
+      <td>all</td>
+      <td><span class="negative">-3.54%</span></td>
+    </tr>
+    <tr>
+      <td>30_50</td>
+      <td><span class="negative">-3.82%</span></td>
+    </tr>
+    <tr>
+      <td>gt_50</td>
+      <td><span class="negative">-6.53%</span></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</body>
+</html>

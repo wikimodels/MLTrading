@@ -1,0 +1,1576 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Квант-отчет: Матрица Дивергенций</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 40px; background-color: #1e1e1e; color: #d4d4d4; }
+        h1, h2, h3 { color: #569cd6; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 30px; font-size: 14px; }
+        th, td { border: 1px solid #444; padding: 8px 12px; text-align: right; }
+        th { background-color: #2d2d2d; color: #4ec9b0; font-weight: bold; text-align: center; }
+        tr:nth-child(even) { background-color: #252526; }
+        tr:hover { background-color: #333; }
+        .positive { color: #6a9955; font-weight: bold; }
+        .negative { color: #f44747; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .highlight { background: #2d2d2d; padding: 15px; border-left: 5px solid #569cd6; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+<div class='container'>
+    <h1>Полный Отчет: Оптимизация 1152 Сценариев</h1>
+    <div class='highlight'>
+        <p>Отфильтровано: минимум 10 сделок за весь период.</p>
+    </div>
+    
+    <h2>🏆 Топ-50 Стратегий по Кластерам (Суммарный Net Return)</h2>
+    <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>exec_coin</th>
+      <th>tf</th>
+      <th>direction</th>
+      <th>lookback</th>
+      <th>vol_filter</th>
+      <th>N_dir</th>
+      <th>sl_mult</th>
+      <th>tp_rr</th>
+      <th>trades</th>
+      <th>win_rate</th>
+      <th>avg_net</th>
+      <th>total_net</th>
+      <th>trades_per_month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>82</td>
+      <td>52.4%</td>
+      <td><span class="positive">2.73%</span></td>
+      <td><span class="positive">223.92%</span></td>
+      <td>1.4</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>82</td>
+      <td>50.0%</td>
+      <td><span class="positive">2.70%</span></td>
+      <td><span class="positive">221.10%</span></td>
+      <td>1.4</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>82</td>
+      <td>53.7%</td>
+      <td><span class="positive">2.60%</span></td>
+      <td><span class="positive">212.93%</span></td>
+      <td>1.4</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>64</td>
+      <td>51.6%</td>
+      <td><span class="positive">3.33%</span></td>
+      <td><span class="positive">212.81%</span></td>
+      <td>1.1</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>70</td>
+      <td>50.0%</td>
+      <td><span class="positive">3.03%</span></td>
+      <td><span class="positive">211.92%</span></td>
+      <td>1.2</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>70</td>
+      <td>48.6%</td>
+      <td><span class="positive">3.00%</span></td>
+      <td><span class="positive">209.77%</span></td>
+      <td>1.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>70</td>
+      <td>47.1%</td>
+      <td><span class="positive">2.99%</span></td>
+      <td><span class="positive">209.06%</span></td>
+      <td>1.2</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>70</td>
+      <td>47.1%</td>
+      <td><span class="positive">2.97%</span></td>
+      <td><span class="positive">207.74%</span></td>
+      <td>1.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>12</td>
+      <td>91.7%</td>
+      <td><span class="positive">17.28%</span></td>
+      <td><span class="positive">207.34%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>82</td>
+      <td>48.8%</td>
+      <td><span class="positive">2.50%</span></td>
+      <td><span class="positive">205.22%</span></td>
+      <td>1.4</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.0</td>
+      <td>82</td>
+      <td>53.7%</td>
+      <td><span class="positive">2.50%</span></td>
+      <td><span class="positive">205.06%</span></td>
+      <td>1.4</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>82</td>
+      <td>52.4%</td>
+      <td><span class="positive">2.43%</span></td>
+      <td><span class="positive">199.06%</span></td>
+      <td>1.4</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>82</td>
+      <td>53.7%</td>
+      <td><span class="positive">2.41%</span></td>
+      <td><span class="positive">197.90%</span></td>
+      <td>1.4</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>64</td>
+      <td>53.1%</td>
+      <td><span class="positive">3.05%</span></td>
+      <td><span class="positive">195.33%</span></td>
+      <td>1.1</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>12</td>
+      <td>91.7%</td>
+      <td><span class="positive">16.19%</span></td>
+      <td><span class="positive">194.29%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>82</td>
+      <td>53.7%</td>
+      <td><span class="positive">2.36%</span></td>
+      <td><span class="positive">193.14%</span></td>
+      <td>1.4</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>30</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>89</td>
+      <td>49.4%</td>
+      <td><span class="positive">2.17%</span></td>
+      <td><span class="positive">192.79%</span></td>
+      <td>1.5</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>30</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>89</td>
+      <td>48.3%</td>
+      <td><span class="positive">2.16%</span></td>
+      <td><span class="positive">192.41%</span></td>
+      <td>1.5</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>70</td>
+      <td>47.1%</td>
+      <td><span class="positive">2.74%</span></td>
+      <td><span class="positive">191.65%</span></td>
+      <td>1.2</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>64</td>
+      <td>50.0%</td>
+      <td><span class="positive">2.99%</span></td>
+      <td><span class="positive">191.43%</span></td>
+      <td>1.1</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>12</td>
+      <td>91.7%</td>
+      <td><span class="positive">15.64%</span></td>
+      <td><span class="positive">187.68%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>64</td>
+      <td>53.1%</td>
+      <td><span class="positive">2.89%</span></td>
+      <td><span class="positive">185.04%</span></td>
+      <td>1.1</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>70</td>
+      <td>50.0%</td>
+      <td><span class="positive">2.62%</span></td>
+      <td><span class="positive">183.46%</span></td>
+      <td>1.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>13</td>
+      <td>92.3%</td>
+      <td><span class="positive">14.06%</span></td>
+      <td><span class="positive">182.78%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>70</td>
+      <td>50.0%</td>
+      <td><span class="positive">2.60%</span></td>
+      <td><span class="positive">182.25%</span></td>
+      <td>1.2</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.0</td>
+      <td>70</td>
+      <td>50.0%</td>
+      <td><span class="positive">2.59%</span></td>
+      <td><span class="positive">181.53%</span></td>
+      <td>1.2</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>70</td>
+      <td>48.6%</td>
+      <td><span class="positive">2.59%</span></td>
+      <td><span class="positive">181.01%</span></td>
+      <td>1.2</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>70</td>
+      <td>45.7%</td>
+      <td><span class="positive">2.57%</span></td>
+      <td><span class="positive">179.90%</span></td>
+      <td>1.2</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>30</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>89</td>
+      <td>50.6%</td>
+      <td><span class="positive">2.01%</span></td>
+      <td><span class="positive">179.04%</span></td>
+      <td>1.5</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>1</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>63</td>
+      <td>49.2%</td>
+      <td><span class="positive">2.83%</span></td>
+      <td><span class="positive">178.55%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>30</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>89</td>
+      <td>47.2%</td>
+      <td><span class="positive">2.00%</span></td>
+      <td><span class="positive">177.62%</span></td>
+      <td>1.5</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>12</td>
+      <td>91.7%</td>
+      <td><span class="positive">14.73%</span></td>
+      <td><span class="positive">176.80%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>25</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>82</td>
+      <td>50.0%</td>
+      <td><span class="positive">2.15%</span></td>
+      <td><span class="positive">176.58%</span></td>
+      <td>1.4</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>13</td>
+      <td>92.3%</td>
+      <td><span class="positive">13.56%</span></td>
+      <td><span class="positive">176.24%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.0</td>
+      <td>64</td>
+      <td>51.6%</td>
+      <td><span class="positive">2.75%</span></td>
+      <td><span class="positive">176.11%</span></td>
+      <td>1.1</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>30</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.0</td>
+      <td>89</td>
+      <td>50.6%</td>
+      <td><span class="positive">1.94%</span></td>
+      <td><span class="positive">172.57%</span></td>
+      <td>1.5</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>97</td>
+      <td>45.4%</td>
+      <td><span class="positive">1.76%</span></td>
+      <td><span class="positive">170.28%</span></td>
+      <td>1.6</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>30</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>89</td>
+      <td>49.4%</td>
+      <td><span class="positive">1.90%</span></td>
+      <td><span class="positive">169.28%</span></td>
+      <td>1.5</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>97</td>
+      <td>46.4%</td>
+      <td><span class="positive">1.70%</span></td>
+      <td><span class="positive">165.25%</span></td>
+      <td>1.6</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>64</td>
+      <td>50.0%</td>
+      <td><span class="positive">2.57%</span></td>
+      <td><span class="positive">164.45%</span></td>
+      <td>1.1</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>30</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>90.9%</td>
+      <td><span class="positive">14.90%</span></td>
+      <td><span class="positive">163.86%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>30</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>89</td>
+      <td>50.6%</td>
+      <td><span class="positive">1.82%</span></td>
+      <td><span class="positive">162.39%</span></td>
+      <td>1.5</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>30</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>89</td>
+      <td>50.6%</td>
+      <td><span class="positive">1.81%</span></td>
+      <td><span class="positive">160.87%</span></td>
+      <td>1.5</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>56</td>
+      <td>50.0%</td>
+      <td><span class="positive">2.85%</span></td>
+      <td><span class="positive">159.58%</span></td>
+      <td>0.9</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>13</td>
+      <td>92.3%</td>
+      <td><span class="positive">12.23%</span></td>
+      <td><span class="positive">158.93%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>30</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>90.9%</td>
+      <td><span class="positive">14.40%</span></td>
+      <td><span class="positive">158.36%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>SOL</td>
+      <td>4h</td>
+      <td>Long</td>
+      <td>10</td>
+      <td>all</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>61</td>
+      <td>44.3%</td>
+      <td><span class="positive">2.58%</span></td>
+      <td><span class="positive">157.68%</span></td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>97</td>
+      <td>44.3%</td>
+      <td><span class="positive">1.62%</span></td>
+      <td><span class="positive">157.01%</span></td>
+      <td>1.6</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>15</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>64</td>
+      <td>51.6%</td>
+      <td><span class="positive">2.45%</span></td>
+      <td><span class="positive">156.78%</span></td>
+      <td>1.1</td>
+    </tr>
+    <tr>
+      <td>DOGE</td>
+      <td>4h</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>all</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>2.0</td>
+      <td>97</td>
+      <td>48.5%</td>
+      <td><span class="positive">1.61%</span></td>
+      <td><span class="positive">156.29%</span></td>
+      <td>1.6</td>
+    </tr>
+  </tbody>
+</table>
+    
+    <h2>🥇 Топ-50 Одиночных Индикаторов (По Avg Net / Винрейту)</h2>
+    <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>indicator</th>
+      <th>exec_coin</th>
+      <th>tf</th>
+      <th>direction</th>
+      <th>lookback</th>
+      <th>vol_filter</th>
+      <th>sl_mult</th>
+      <th>tp_rr</th>
+      <th>trades</th>
+      <th>win_rate</th>
+      <th>avg_net</th>
+      <th>trades_per_month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">27.45%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">27.45%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">27.09%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_50</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">27.09%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">26.73%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">26.73%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_50</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>60.0%</td>
+      <td><span class="positive">26.47%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>60.0%</td>
+      <td><span class="positive">26.47%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>60.0%</td>
+      <td><span class="positive">26.37%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>60.0%</td>
+      <td><span class="positive">26.37%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>60.0%</td>
+      <td><span class="positive">25.54%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>60.0%</td>
+      <td><span class="positive">25.54%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>50.0%</td>
+      <td><span class="positive">24.40%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>gt_30</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>50.0%</td>
+      <td><span class="positive">24.40%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>gt_30</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>50.0%</td>
+      <td><span class="positive">24.00%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>gt_50</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>50.0%</td>
+      <td><span class="positive">24.00%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>50.0%</td>
+      <td><span class="positive">23.60%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>gt_30</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>50.0%</td>
+      <td><span class="positive">23.60%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">22.15%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">22.15%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">21.79%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_50</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">21.79%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>AO</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>all</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>15</td>
+      <td>86.7%</td>
+      <td><span class="positive">21.77%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>gt_30</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>11</td>
+      <td>90.9%</td>
+      <td><span class="positive">21.47%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">21.43%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>11</td>
+      <td>54.5%</td>
+      <td><span class="positive">21.43%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_50</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>10</td>
+      <td>60.0%</td>
+      <td><span class="positive">21.41%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>10</td>
+      <td>60.0%</td>
+      <td><span class="positive">21.41%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>gt_30</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>11</td>
+      <td>90.9%</td>
+      <td><span class="positive">21.37%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>10</td>
+      <td>60.0%</td>
+      <td><span class="positive">21.36%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_50</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>10</td>
+      <td>60.0%</td>
+      <td><span class="positive">21.36%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>10</td>
+      <td>60.0%</td>
+      <td><span class="positive">21.32%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>STC</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>40</td>
+      <td>gt_30</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>10</td>
+      <td>60.0%</td>
+      <td><span class="positive">21.32%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>1d</td>
+      <td>Long</td>
+      <td>15</td>
+      <td>gt_30</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>11</td>
+      <td>90.9%</td>
+      <td><span class="positive">21.27%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>AO</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>22</td>
+      <td>72.7%</td>
+      <td><span class="positive">20.97%</span></td>
+      <td>0.4</td>
+    </tr>
+    <tr>
+      <td>AO</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>all</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>18</td>
+      <td>72.2%</td>
+      <td><span class="positive">20.31%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>all</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>36</td>
+      <td>75.0%</td>
+      <td><span class="positive">20.18%</span></td>
+      <td>0.6</td>
+    </tr>
+    <tr>
+      <td>AO</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>all</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>15</td>
+      <td>86.7%</td>
+      <td><span class="positive">19.99%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>AO</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>22</td>
+      <td>72.7%</td>
+      <td><span class="positive">19.98%</span></td>
+      <td>0.4</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>all</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>36</td>
+      <td>75.0%</td>
+      <td><span class="positive">19.75%</span></td>
+      <td>0.6</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>gt_50</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>10</td>
+      <td>50.0%</td>
+      <td><span class="positive">19.54%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>gt_30</td>
+      <td>2.0</td>
+      <td>2.5</td>
+      <td>10</td>
+      <td>50.0%</td>
+      <td><span class="positive">19.54%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>EFI</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>all</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>20</td>
+      <td>75.0%</td>
+      <td><span class="positive">19.34%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>gt_30</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>10</td>
+      <td>50.0%</td>
+      <td><span class="positive">19.14%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>CMF</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Short</td>
+      <td>35</td>
+      <td>gt_50</td>
+      <td>2.5</td>
+      <td>2.5</td>
+      <td>10</td>
+      <td>50.0%</td>
+      <td><span class="positive">19.14%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>all</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>30</td>
+      <td>76.7%</td>
+      <td><span class="positive">19.09%</span></td>
+      <td>0.5</td>
+    </tr>
+    <tr>
+      <td>AO</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>35</td>
+      <td>all</td>
+      <td>2.5</td>
+      <td>3.0</td>
+      <td>18</td>
+      <td>72.2%</td>
+      <td><span class="positive">19.05%</span></td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <td>AO</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>25</td>
+      <td>all</td>
+      <td>3.0</td>
+      <td>2.5</td>
+      <td>15</td>
+      <td>86.7%</td>
+      <td><span class="positive">18.96%</span></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>40</td>
+      <td>all</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>46</td>
+      <td>71.7%</td>
+      <td><span class="positive">18.96%</span></td>
+      <td>0.8</td>
+    </tr>
+    <tr>
+      <td>VZO</td>
+      <td>SOL</td>
+      <td>12h</td>
+      <td>Long</td>
+      <td>20</td>
+      <td>all</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>24</td>
+      <td>79.2%</td>
+      <td><span class="positive">18.87%</span></td>
+      <td>0.4</td>
+    </tr>
+  </tbody>
+</table>
+    
+    <h2>📊 Влияние Таймфрейма (Средний Return по всем сценариям)</h2>
+    <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>tf</th>
+      <th>total_net</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1d</td>
+      <td><span class="negative">-1.46%</span></td>
+    </tr>
+    <tr>
+      <td>12h</td>
+      <td><span class="negative">-3.67%</span></td>
+    </tr>
+    <tr>
+      <td>4h</td>
+      <td><span class="negative">-4.73%</span></td>
+    </tr>
+  </tbody>
+</table>
+    
+    <h2>📊 Влияние Фильтра Объема (Средний Return по всем сценариям)</h2>
+    <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>vol_filter</th>
+      <th>total_net</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>gt_30</td>
+      <td><span class="negative">-3.33%</span></td>
+    </tr>
+    <tr>
+      <td>all</td>
+      <td><span class="negative">-3.54%</span></td>
+    </tr>
+    <tr>
+      <td>30_50</td>
+      <td><span class="negative">-3.82%</span></td>
+    </tr>
+    <tr>
+      <td>gt_50</td>
+      <td><span class="negative">-6.53%</span></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</body>
+</html>

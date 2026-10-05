@@ -1,0 +1,11 @@
+exec_coin  tf  trades  total_net
+      BTC 12h      31     111.79
+     DOGE  4h      82     223.92
+      ETH  4h      67     124.53
+     HYPE  4h      20     149.35
+      MNT  4h      58     143.63
+      SOL  4h      70     209.06
+      XRP  4h      37      76.93
+
+Total portfolio trades over 5 years: 365
+Average trades per month: 6.08
