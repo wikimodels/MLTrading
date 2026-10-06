@@ -107,15 +107,7 @@ def zscore_ema(close: pd.Series, ma_n: int = 200, std_n: int = 20) -> pd.Series:
 
 INDICATOR_MAP = {
     "RSI":     lambda df: rsi(df["close"]),
-    "VZO":     lambda df: vzo(df),
-    "KVO":     lambda df: kvo(df),
-    "CMF":     lambda df: cmf(df),
-    "Fisher":  lambda df: fisher(df),
-    "STC":     lambda df: stc(df),
-    "MACD":    lambda df: macd_hist(df["close"]),
-    "EFI":     lambda df: efi(df),
-    "AO":      lambda df: ao(df),
-    "Zscore":  lambda df: zscore_ema(df["close"])
+    "VZO":     lambda df: vzo(df)
 }
 
 def add_indicators(df: pd.DataFrame) -> pd.DataFrame:

@@ -32,8 +32,8 @@ def run_grid_search(
     cfg: Config,
     sl_options: List[float] = [2.0, 2.5, 3.0],
     tp_options: List[float] = [2.0, 2.5, 3.0],
-    lookback_options: List[int] = [5, 10, 15, 20, 25, 30, 35, 40],
-    vol_options: List[str] = ["all", "gt_30", "30_50", "gt_50"],
+    lookback_options: List[int] = [15, 25, 35, 45],
+    vol_options: List[str] = ["all"],
     progress_callback: Optional[Callable[[float, str], None]] = None
 ) -> pd.DataFrame:
     """

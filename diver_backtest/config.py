@@ -13,7 +13,7 @@ class Config:
     ])
 
     # Timeframes
-    timeframes: List[str] = field(default_factory=lambda: ["4h", "12h", "1d", "1w"])
+    timeframes: List[str] = field(default_factory=lambda: ["4h", "12h"])
 
     # Data Source (единая база Parquet)
     raw_storage_dir: Path = ROOT_DIR / "data" / "storage" / "raw"
