@@ -7,13 +7,25 @@ ROOT_DIR = Path(__file__).resolve().parent.parent
 
 @dataclass
 class Config:
+    def __post_init__(self):
+        if self.raw_storage_dir.exists():
+            found = set()
+            for p in self.raw_storage_dir.iterdir():
+                if p.is_dir() and p.name.endswith("_USDT_USDT"):
+                    found.add(p.name.replace("_USDT_USDT", ""))
+                elif p.is_file() and p.name.endswith(".csv"):
+                    name = p.name.split("_")[0]
+                    found.add(name)
+            if found:
+                self.coins = sorted(list(found))
+
     # Target Coins (те самые 7 монет)
     coins: List[str] = field(default_factory=lambda: [
         "BTC", "ETH", "SOL", "XRP", "DOGE", "HYPE", "MNT"
     ])
 
     # Timeframes
-    timeframes: List[str] = field(default_factory=lambda: ["4h", "12h"])
+    timeframes: List[str] = field(default_factory=lambda: ["4h", "12h", "1d"])
 
     # Data Source (единая база Parquet)
     raw_storage_dir: Path = ROOT_DIR / "data" / "storage" / "raw"

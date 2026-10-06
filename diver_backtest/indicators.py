@@ -106,8 +106,10 @@ def zscore_ema(close: pd.Series, ma_n: int = 200, std_n: int = 20) -> pd.Series:
 # (Removed dead code for bbw, kc_width, anchored_vwap)
 
 INDICATOR_MAP = {
-    "RSI":     lambda df: rsi(df["close"]),
-    "VZO":     lambda df: vzo(df)
+    "RSI_10": lambda df: rsi(df["close"], n=10),
+    "RSI_14": lambda df: rsi(df["close"], n=14),
+    "VZO_10": lambda df: vzo(df, n=10),
+    "VZO_14": lambda df: vzo(df, n=14)
 }
 
 def add_indicators(df: pd.DataFrame) -> pd.DataFrame:
