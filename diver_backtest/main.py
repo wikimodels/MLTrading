@@ -11,6 +11,8 @@ if str(_root) not in sys.path:
 from diver_backtest.config import Config
 from diver_backtest.engine import run_backtest
 from diver_backtest.grid_search import run_grid_search
+from diver_backtest.wfo_matrix import run_wfo_matrix
+
 
 def run():
     parser = argparse.ArgumentParser(description="Multi-coin Divergence Backtester")
@@ -25,6 +27,11 @@ def run():
         cfg.start_date = args.start
     if args.end:
         cfg.end_date = args.end
+
+    if args.mode == "wfo":
+        logger.info(f"Запуск Walk-Forward Optimization... Период: {cfg.start_date} -> {cfg.end_date}")
+        run_wfo_matrix()
+        return
 
     if args.mode == "grid":
         logger.info(f"Запуск Grid Search... Период: {cfg.start_date} -> {cfg.end_date}")
