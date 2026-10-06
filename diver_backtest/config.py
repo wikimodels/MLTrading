@@ -28,7 +28,7 @@ class Config:
     timeframes: List[str] = field(default_factory=lambda: ["4h", "12h", "1d"])
 
     # Data Source (единая база Parquet)
-    raw_storage_dir: Path = ROOT_DIR / "data" / "storage" / "raw"
+    raw_storage_dir: Path = ROOT_DIR / "diver_backtest" / "kline_data"
     start_date: str = "2021-10-01"
     end_date: str = "2026-10-06"
 
